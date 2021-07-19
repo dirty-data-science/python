@@ -296,6 +296,22 @@ plt.legend()
 # distribution of all the data
 
 # %%
+# Standard imputation fails to recover the distribution
+# --------------------------------------------------------
+
+iterative_imputer = impute.IterativeImputer()
+
+X_imputed = iterative_imputer.fit_transform(X)
+
+plt.figure()
+plt.scatter(X_full[:, 0], X_full[:, 1], color='.8', ec='.5',
+            label='All data', alpha=.5)
+plt.scatter(X_imputed[:, 0], X_imputed[:, 1], c=y, marker='X',
+            label='Imputed')
+plt.colorbar(label='y')
+plt.legend()
+
+# %%
 # Using a predictor for the fully-observed case
 # ==============================================
 #
