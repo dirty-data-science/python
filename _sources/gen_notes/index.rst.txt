@@ -8,6 +8,27 @@ Notebooks:
 
 
 
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Here we use simulated data to illustrate the fundamentals of statistical learning with missing ...">
+
+.. only:: html
+
+ .. figure:: /gen_notes/images/thumb/sphx_glr_missing_values_thumb.png
+     :alt: Machine learning with missing values
+
+     :ref:`sphx_glr_gen_notes_missing_values.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /gen_notes/missing_values
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

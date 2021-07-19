@@ -1,0 +1,12 @@
+
+:orphan:
+
+.. _sphx_glr_gen_notes_sg_execution_times:
+
+Computation times
+=================
+**00:00.113** total execution time for **gen_notes** files:
+
++---------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_gen_notes_missing_values.py` (``missing_values.py``) | 00:00.113 | 0.0 MB |
++---------------------------------------------------------------------+-----------+--------+
