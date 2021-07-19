@@ -3,8 +3,12 @@
 Machine learning with missing values
 =========================================
 
-Here we use simulated data to illustrate the fundamentals of statistical
+Here we use simulated data to understanding the fundamentals of statistical
 learning with missing values.
+
+This notebook reveals why a HistGradientBoostingRegressor (
+:class:`sklearn.ensemble.HistGradientBoostingRegressor` ) is a choice to
+predict with missing values.
 """
 
 import numpy as np
@@ -77,6 +81,15 @@ plt.legend()
 # %%
 # We can see that the distribution of the fully-observed data is the same
 # than that of the original data
+#
+# Building a predictive model: imputation and simple model
+# --------------------------------------------------------
+#
+# Here, the relationship between the fully-observed X and y is a linear
+# relationship. We can adapt a linear model to missing values using
+# imputation.
+from sklearn.linear_model import RidgeCV # Good default linear model
+from sklearn.impute import IterativeImputive # Good imputer
 
 # %%
 # Missing not at random: censoring
@@ -115,4 +128,21 @@ plt.legend()
 # %%
 # Here the full-observed data does not reflect well at all the
 # distribution of all the data
+
+# %%
+# Using a predictor for the fully-observed case
+# ==============================================
+#
+# Let us go back to the "easy" case of the missing completely at random
+# settings with plenty of data
+n_samples = 10000
+
+X, y = generate_mcar(n_samples, missing_rate=.5)
+
+# %%
+# Suppose we have been able to train a predictive model that works on
+# fully-observed data:
+
+X_full, y_full = generate_without_missing_values(n_samples)
+
 

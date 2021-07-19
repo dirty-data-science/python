@@ -178,7 +178,7 @@ sphinx_gallery_conf = {
     'within_subsection_order': FileNameSortKey,
     'download_all_examples': True,
     'binder': {
-        'org': ' dirty-data-science ',
+        'org': 'dirty-data-science',
         'repo': 'python',
         'binderhub_url': 'https://mybinder.org',
         'branch': 'gh-pages',
