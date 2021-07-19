@@ -52,7 +52,7 @@
 
 
 <p>
-<iframe src="https://ghbtns.com/github-btn.html?user= dirty-data-science&repo=python&type=star&count=true&size=large&v=2"
+<iframe src="https://ghbtns.com/github-btn.html?user=dirty-data-science&repo=python&type=star&count=true&size=large&v=2"
   allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
 </p>
 
@@ -70,10 +70,10 @@
 </li>
 <li><a class="reference internal" href="#missing-completely-at-random-settings">Missing completely at random settings</a><ul>
 <li><a class="reference internal" href="#the-missing-values-mechanism">The missing-values mechanism</a></li>
-<li><a class="reference internal" href="#predictive-modeling-imputation-and-linear-model">Predictive modeling: imputation and linear model</a><ul>
-<li><a class="reference internal" href="#rich-imputation-iterativeimputer">Rich imputation IterativeImputer</a></li>
+<li><a class="reference internal" href="#conditional-imputation-with-the-iterativeimputer">Conditional Imputation with the IterativeImputer</a></li>
+<li><a class="reference internal" href="#supervised-learning-with-a-linear-model">Supervised learning with a linear model</a></li>
 <li><a class="reference internal" href="#mean-imputation-simpleimputer">Mean imputation: SimpleImputer</a></li>
-<li><a class="reference internal" href="#a-model-without-imputation">A model without imputation</a></li>
+<li><a class="reference internal" href="#supervised-without-imputation">Supervised without imputation</a><ul>
 <li><a class="reference internal" href="#recap-which-pipeline-predicts-well-on-our-small-data">Recap: which pipeline predicts well on our small data?</a></li>
 </ul>
 </li>
@@ -154,7 +154,7 @@ coordinate, with noise.</p>
 </div>
 <img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7fa468b80730&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f8089a34940&gt;
 </pre></div>
 </div>
 </div>
@@ -189,19 +189,17 @@ the values.</p>
 </div>
 <img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_002.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fa4689e0b20&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f808989da00&gt;
 </pre></div>
 </div>
 <p>We can see that the distribution of the fully-observed data is the same
 than that of the original data</p>
 </div>
-<div class="section" id="predictive-modeling-imputation-and-linear-model">
-<h3>Predictive modeling: imputation and linear model<a class="headerlink" href="#predictive-modeling-imputation-and-linear-model" title="Permalink to this headline">¶</a></h3>
-<p>Given that the relationship between the fully-observed X and y is a
-linear relationship, it seems natural to use a linear model for
-prediction, which must be adapted to missing values using imputation.</p>
-<div class="section" id="rich-imputation-iterativeimputer">
-<h4>Rich imputation IterativeImputer<a class="headerlink" href="#rich-imputation-iterativeimputer" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="conditional-imputation-with-the-iterativeimputer">
+<h3>Conditional Imputation with the IterativeImputer<a class="headerlink" href="#conditional-imputation-with-the-iterativeimputer" title="Permalink to this headline">¶</a></h3>
+<p>As the data is MAR (missing at random), an imputer can use the
+conditional dependencies between the observed and the missing values to
+impute the missing values.</p>
 <p>We’ll use the IterativeImputer, a good imputer, but it needs to be enabled</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.experimental</span> <span class="kn">import</span> <span class="n">enable_iterative_imputer</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">impute</span>
@@ -234,11 +232,17 @@ missing values</strong></p>
 </div>
 <img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_003.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fa459de0400&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f805f545ee0&gt;
 </pre></div>
 </div>
 <p>We can see that the imputer did a fairly good job of recovering the
 data distribution</p>
+</div>
+<div class="section" id="supervised-learning-with-a-linear-model">
+<h3>Supervised learning with a linear model<a class="headerlink" href="#supervised-learning-with-a-linear-model" title="Permalink to this headline">¶</a></h3>
+<p>Given that the relationship between the fully-observed X and y is a
+linear relationship, it seems natural to use a linear model for
+prediction, which must be adapted to missing values using imputation.</p>
 <p>To use it in supervised setting, we will pipeline it with a linear
 model, using a ridge, which is a good default linear model</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline" title="sklearn.pipeline.make_pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-function"><span class="n">make_pipeline</span></a>
@@ -267,7 +271,7 @@ mind is that its computational cost can become prohibitive of large
 datasets (it has a bad computation scalability).</p>
 </div>
 <div class="section" id="mean-imputation-simpleimputer">
-<h4>Mean imputation: SimpleImputer<a class="headerlink" href="#mean-imputation-simpleimputer" title="Permalink to this headline">¶</a></h4>
+<h3>Mean imputation: SimpleImputer<a class="headerlink" href="#mean-imputation-simpleimputer" title="Permalink to this headline">¶</a></h3>
 <p>We can try a simple imputer: imputation by the mean</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.impute.SimpleImputer.html#sklearn.impute.SimpleImputer" title="sklearn.impute.SimpleImputer" class="sphx-glr-backref-module-sklearn-impute sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mean_imputer</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.impute.SimpleImputer.html#sklearn.impute.SimpleImputer" title="sklearn.impute.SimpleImputer" class="sphx-glr-backref-module-sklearn-impute sphx-glr-backref-type-py-class"><span class="n">impute</span><span class="o">.</span><span class="n">SimpleImputer</span></a><span class="p">()</span>
 </pre></div>
@@ -284,7 +288,7 @@ datasets (it has a bad computation scalability).</p>
 </div>
 <img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7fa459d71310&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f805f4d8850&gt;
 </pre></div>
 </div>
 <p>Evaluating in prediction pipeline</p>
@@ -301,8 +305,8 @@ datasets (it has a bad computation scalability).</p>
 </pre></div>
 </div>
 </div>
-<div class="section" id="a-model-without-imputation">
-<h4>A model without imputation<a class="headerlink" href="#a-model-without-imputation" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="supervised-without-imputation">
+<h3>Supervised without imputation<a class="headerlink" href="#supervised-without-imputation" title="Permalink to this headline">¶</a></h3>
 <p>The HistGradientBoosting models are based on trees, which can be
 adapted to model directly missing values</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.experimental</span> <span class="kn">import</span> <span class="n">enable_hist_gradient_boosting</span>
@@ -320,7 +324,6 @@ adapted to model directly missing values</p>
 array([0.42146113, 0.53116648, 0.57722118, 0.53856405, 0.43267917,
        0.58560551, 0.47514251, 0.59526762])
 </pre></div>
-</div>
 </div>
 <div class="section" id="recap-which-pipeline-predicts-well-on-our-small-data">
 <h4>Recap: which pipeline predicts well on our small data?<a class="headerlink" href="#recap-which-pipeline-predicts-well-on-our-small-data" title="Permalink to this headline">¶</a></h4>
@@ -378,8 +381,8 @@ analysis would be necessary, with more cross-validation runs.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.56868735, 0.58025469, 0.53195298, 0.53393026, 0.54472193,
-       0.59211468, 0.54999947, 0.58399399])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.56847278, 0.58032214, 0.53119849, 0.53398777, 0.54629368,
+       0.59251254, 0.55017255, 0.58326278])
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
@@ -430,7 +433,7 @@ missing.</p>
 </div>
 <img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_007.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fa455276df0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f8056a096d0&gt;
 </pre></div>
 </div>
 <p>Here the full-observed data does not reflect well at all the
@@ -451,7 +454,7 @@ fully-observed data:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_full</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y_full</span></a> <span class="o">=</span> <span class="n">generate_without_missing_values</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_samples</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.073 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  4.783 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gen-notes-missing-values-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/missing_values.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>

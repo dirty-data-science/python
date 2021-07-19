@@ -91,15 +91,12 @@ plt.legend()
 # We can see that the distribution of the fully-observed data is the same
 # than that of the original data
 #
-# Predictive modeling: imputation and linear model
-# -------------------------------------------------
+# Conditional Imputation with the IterativeImputer
+# ------------------------------------------------
 #
-# Given that the relationship between the fully-observed X and y is a
-# linear relationship, it seems natural to use a linear model for
-# prediction, which must be adapted to missing values using imputation.
-#
-# Rich imputation IterativeImputer
-# .................................
+# As the data is MAR (missing at random), an imputer can use the
+# conditional dependencies between the observed and the missing values to
+# impute the missing values.
 #
 # We'll use the IterativeImputer, a good imputer, but it needs to be enabled
 from sklearn.experimental import enable_iterative_imputer
@@ -131,6 +128,13 @@ plt.legend()
 # We can see that the imputer did a fairly good job of recovering the
 # data distribution
 #
+# Supervised learning with a linear model
+# ----------------------------------------
+#
+# Given that the relationship between the fully-observed X and y is a
+# linear relationship, it seems natural to use a linear model for
+# prediction, which must be adapted to missing values using imputation.
+#
 # To use it in supervised setting, we will pipeline it with a linear
 # model, using a ridge, which is a good default linear model
 from sklearn.pipeline import make_pipeline
@@ -155,7 +159,7 @@ scores_iterative_and_ridge
 
 # %%
 # Mean imputation: SimpleImputer
-# ...............................
+# -------------------------------
 #
 # We can try a simple imputer: imputation by the mean
 mean_imputer = impute.SimpleImputer()
@@ -179,8 +183,8 @@ scores_mean_and_ridge = model_selection.cross_val_score(
 scores_mean_and_ridge
 
 # %%
-# A model without imputation
-# ...........................
+# Supervised without imputation
+# -----------------------------
 #
 # The HistGradientBoosting models are based on trees, which can be
 # adapted to model directly missing values
