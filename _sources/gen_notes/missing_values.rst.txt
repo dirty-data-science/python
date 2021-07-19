@@ -25,13 +25,12 @@ Machine learning with missing values
 Here we use simulated data to illustrate the fundamentals of statistical
 learning with missing values.
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-16
+.. GENERATED FROM PYTHON SOURCE LINES 9-15
 
 .. code-block:: default
 
 
     import numpy as np
-    np.random.seed(42)
 
     import matplotlib.pyplot as plt
     plt.rcParams['figure.figsize'] = (5, 4) # Smaller default figure size
@@ -43,7 +42,7 @@ learning with missing values.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-23
+.. GENERATED FROM PYTHON SOURCE LINES 16-25
 
 The fully-observed data: a toy regression problem
 ==================================================
@@ -52,17 +51,22 @@ We consider a simple regression problem where X (the data) is bivariate
 gaussian, and y (the prediction target)  is a linear function of the first
 coordinate, with noise.
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-34
+The missing-values mechanism
+------------------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 25-38
 
 .. code-block:: default
 
 
-    def generate_without_missing_values(n_samples):
+    def generate_without_missing_values(n_samples, rng=42):
         mean = [0, 0]
         cov = [[1, 0.5], [0.5, 1]]
-        X = np.random.multivariate_normal(mean, cov, size=n_samples)
+        if not isinstance(rng, np.random.RandomState):
+            rng = np.random.RandomState(rng)
+        X = rng.multivariate_normal(mean, cov, size=n_samples)
 
-        epsilon = 0.1 * np.random.randn(n_samples)
+        epsilon = 0.1 * rng.randn(n_samples)
         y = X[:, 0] + epsilon
 
         return X, y
@@ -74,17 +78,18 @@ coordinate, with noise.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-36
+.. GENERATED FROM PYTHON SOURCE LINES 39-40
 
 A quick plot reveals what the data looks like
 
-.. GENERATED FROM PYTHON SOURCE LINES 36-41
+.. GENERATED FROM PYTHON SOURCE LINES 40-46
 
 .. code-block:: default
 
 
-    X, y = generate_without_missing_values(500)
-    plt.scatter(X[:, 0], X[:, 1], c=y)
+    plt.figure()
+    X_full, y_full = generate_without_missing_values(500)
+    plt.scatter(X_full[:, 0], X_full[:, 1], c=y_full)
     plt.colorbar(label='y')
 
 
@@ -102,21 +107,32 @@ A quick plot reveals what the data looks like
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f25551353a0>
+    <matplotlib.colorbar.Colorbar object at 0x7fd6c952fd00>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-44
+.. GENERATED FROM PYTHON SOURCE LINES 47-52
 
 Missing completely at random setting
 ======================================
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-47
+We now consider missing completely at random settings (a special case
+of missing at random).
+
+.. GENERATED FROM PYTHON SOURCE LINES 52-63
 
 .. code-block:: default
 
 
-    X_full, y_full = X.copy(), y.copy()
+    def generate_mcar(n_samples, missing_rate=0.2, rng=42):
+        X, y = generate_without_missing_values(n_samples, rng=rng)
+        if not isinstance(rng, np.random.RandomState):
+            rng = np.random.RandomState(rng)
+
+        M = rng.binomial(1, missing_rate, (n_samples, 2))
+        np.putmask(X, M, np.nan)
+
+        return X, y
 
 
 
@@ -124,11 +140,129 @@ Missing completely at random setting
 
 
 
+
+.. GENERATED FROM PYTHON SOURCE LINES 64-65
+
+A quick plot to look at the data
+
+.. GENERATED FROM PYTHON SOURCE LINES 65-74
+
+.. code-block:: default
+
+    X, y = generate_mcar(500, missing_rate=.5)
+
+    plt.figure()
+    plt.scatter(X_full[:, 0], X_full[:, 1], color='.8', ec='.5',
+                label='All data')
+    plt.colorbar(label='y')
+    plt.scatter(X[:, 0], X[:, 1], c=y, label='Fully observed')
+    plt.legend()
+
+
+
+
+.. image:: /gen_notes/images/sphx_glr_missing_values_002.png
+    :alt: missing values
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    <matplotlib.legend.Legend object at 0x7fd6c93a8400>
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 75-77
+
+We can see that the distribution of the fully-observed data is the same
+than that of the original data
+
+.. GENERATED FROM PYTHON SOURCE LINES 79-88
+
+Missing not at random: censoring
+======================================
+
+We now consider missing not at random settings, in particular
+self-masking or censoring, where large values are more likely to be
+missing.
+
+The missing-values mechanism
+-----------------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 88-101
+
+.. code-block:: default
+
+
+    def generate_censored(n_samples, missing_rate=0.2, rng=42):
+        X, y = generate_without_missing_values(n_samples, rng=rng)
+        if not isinstance(rng, np.random.RandomState):
+            rng = np.random.RandomState(rng)
+
+        B = np.random.binomial(1, 2 * missing_rate, (n_samples, 2))
+        M = (X > 0.5) * B
+
+        np.putmask(X, M, np.nan)
+
+        return X, y
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 102-103
+
+A quick plot to look at the data
+
+.. GENERATED FROM PYTHON SOURCE LINES 103-112
+
+.. code-block:: default
+
+    X, y = generate_censored(500, missing_rate=.4)
+
+    plt.figure()
+    plt.scatter(X_full[:, 0], X_full[:, 1], color='.8', ec='.5',
+                label='All data')
+    plt.colorbar(label='y')
+    plt.scatter(X[:, 0], X[:, 1], c=y, label='Fully observed')
+    plt.legend()
+
+
+
+
+.. image:: /gen_notes/images/sphx_glr_missing_values_003.png
+    :alt: missing values
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    <matplotlib.legend.Legend object at 0x7fd6c92db520>
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 113-115
+
+Here the full-observed data does not reflect well at all the
+distribution of all the data
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.113 seconds)
+   **Total running time of the script:** ( 0 minutes  0.305 seconds)
 
 
 .. _sphx_glr_download_gen_notes_missing_values.py:
