@@ -95,7 +95,8 @@ html_theme = 'alabaster'
 html_sidebars = {
     '**': [
         'about.html',
-        'globallinks.html',
+        #'globallinks.html',
+        'localtoc.html',
         'relations.html',
         #'searchbox.html',
     ],
