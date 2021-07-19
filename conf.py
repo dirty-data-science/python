@@ -180,7 +180,7 @@ sphinx_gallery_conf = {
         'org': ' dirty-data-science ',
         'repo': 'python',
         'binderhub_url': 'https://mybinder.org',
-        'branch': 'main',
+        'branch': 'gh-pages',
         'dependencies': ['requirements.txt',],
         'notebooks_dir': 'notes'
     }
