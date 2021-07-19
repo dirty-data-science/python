@@ -79,7 +79,7 @@ def generate_mcar(n_samples, missing_rate=.5, rng=42):
 
 # %%
 # A quick plot to look at the data
-X, y = generate_mcar(1000)
+X, y = generate_mcar(500)
 
 plt.figure()
 plt.scatter(X_full[:, 0], X_full[:, 1], color='.8', ec='.5', label='All data')
@@ -145,10 +145,10 @@ iterative_and_ridge = make_pipeline(impute.IterativeImputer(), RidgeCV())
 # %%
 # We can evaluate the model performance in a cross-validation loop
 # (for better evaluation accuracy, we increase slightly the number of
-# folds to 7)
+# folds to 10)
 from sklearn import model_selection
 scores_iterative_and_ridge = model_selection.cross_val_score(
-    iterative_and_ridge, X, y, cv=8)
+    iterative_and_ridge, X, y, cv=10)
 
 scores_iterative_and_ridge
 
@@ -178,26 +178,26 @@ plt.colorbar(label='y')
 # Evaluating in prediction pipeline
 mean_and_ridge = make_pipeline(impute.SimpleImputer(), RidgeCV())
 scores_mean_and_ridge = model_selection.cross_val_score(
-    mean_and_ridge, X, y, cv=8)
+    mean_and_ridge, X, y, cv=10)
 
 scores_mean_and_ridge
 
 # %%
-# Supervised without imputation
-# -----------------------------
+# Supervised learning without imputation
+# ----------------------------------------
 #
 # The HistGradientBoosting models are based on trees, which can be
 # adapted to model directly missing values
 from sklearn.experimental import enable_hist_gradient_boosting
 from sklearn.ensemble import HistGradientBoostingRegressor
 score_hist_gradient_boosting = model_selection.cross_val_score(
-    HistGradientBoostingRegressor(), X, y, cv=8)
+    HistGradientBoostingRegressor(), X, y, cv=10)
 
 score_hist_gradient_boosting
 
 # %%
 # Recap: which pipeline predicts well on our small data?
-# .......................................................
+# -------------------------------------------------------
 #
 # Let's plot the scores to see things better
 import pandas as pd
@@ -221,37 +221,39 @@ plt.tight_layout()
 # Prediction performance with large datasets
 # -------------------------------------------
 #
-# Let us consider large datasets, to compare models in such regimes
+# Let us compare models in regimes where there is plenty of data
 
 X, y = generate_mcar(n_samples=20000)
 
-scores_mean_and_ridge = model_selection.cross_val_score(
-    mean_and_ridge, X, y, cv=8)
-scores_mean_and_ridge
-
 # %%
+# Iterative imputation and linear model
 scores_iterative_and_ridge= model_selection.cross_val_score(
-    iterative_and_ridge, X, y, cv=8)
+    iterative_and_ridge, X, y, cv=10)
 scores_iterative_and_ridge
 
 # %%
-from sklearn.experimental import enable_hist_gradient_boosting
-from sklearn.ensemble import HistGradientBoostingRegressor
+# Mean imputation and linear model
+scores_mean_and_ridge = model_selection.cross_val_score(
+    mean_and_ridge, X, y, cv=10)
+scores_mean_and_ridge
 
+# %%
+# And now the HistGradientBoostingRegressor, which does not need
+# imputation
 score_hist_gradient_boosting = model_selection.cross_val_score(
-    HistGradientBoostingRegressor(), X, y, cv=8)
+    HistGradientBoostingRegressor(), X, y, cv=10)
 score_hist_gradient_boosting
 
 # %%
-import seaborn as sns
-import pandas as pd
-
+# We plot the results
 scores = pd.DataFrame({'Mean imputation + Ridge': scores_mean_and_ridge,
              'IterativeImputer + Ridge': scores_iterative_and_ridge,
              'HistGradientBoostingRegressor': score_hist_gradient_boosting,
     })
 
 sns.boxplot(data=scores, orient='h')
+plt.title('Prediction accuracy\n linear and large data\n'
+          'Missing Completely at Random')
 plt.tight_layout()
 
 

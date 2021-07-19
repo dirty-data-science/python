@@ -21,6 +21,10 @@ div.body h4 {
     margin-top: 1.5em;
 }
 
+div.body h3, div.body h4 {
+    color: #000;
+}
+
 /* More horizontal space in pre (to fit 80char lines) */
 div.body pre {
     padding: 7px 30px 7px 10px;

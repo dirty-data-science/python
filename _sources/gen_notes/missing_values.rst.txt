@@ -107,7 +107,7 @@ A quick plot reveals what the data looks like
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f8089a34940>
+    <matplotlib.colorbar.Colorbar object at 0x7f0f33a0f7c0>
 
 
 
@@ -153,7 +153,7 @@ A quick plot to look at the data
 
 .. code-block:: default
 
-    X, y = generate_mcar(1000)
+    X, y = generate_mcar(500)
 
     plt.figure()
     plt.scatter(X_full[:, 0], X_full[:, 1], color='.8', ec='.5', label='All data')
@@ -176,7 +176,7 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f808989da00>
+    <matplotlib.legend.Legend object at 0x7f0f3386fbe0>
 
 
 
@@ -285,7 +285,7 @@ We can display the imputed data as our previous visualization
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f805f545ee0>
+    <matplotlib.legend.Legend object at 0x7f0f158de490>
 
 
 
@@ -324,7 +324,7 @@ model, using a ridge, which is a good default linear model
 
 We can evaluate the model performance in a cross-validation loop
 (for better evaluation accuracy, we increase slightly the number of
-folds to 7)
+folds to 10)
 
 .. GENERATED FROM PYTHON SOURCE LINES 149-155
 
@@ -332,7 +332,7 @@ folds to 7)
 
     from sklearn import model_selection
     scores_iterative_and_ridge = model_selection.cross_val_score(
-        iterative_and_ridge, X, y, cv=8)
+        iterative_and_ridge, X, y, cv=10)
 
     scores_iterative_and_ridge
 
@@ -347,8 +347,8 @@ folds to 7)
  .. code-block:: none
 
 
-    array([0.47517732, 0.54350564, 0.59814448, 0.53083948, 0.39253505,
-           0.58998889, 0.52351262, 0.62932822])
+    array([0.46386365, 0.31905505, 0.62796809, 0.50172353, 0.5526797 ,
+           0.52067976, 0.66790152, 0.71185873, 0.52386641, 0.45218862])
 
 
 
@@ -409,7 +409,7 @@ A quick visualization reveals a larger disortion of the distribution
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f805f4d8850>
+    <matplotlib.colorbar.Colorbar object at 0x7f0f1586d460>
 
 
 
@@ -423,7 +423,7 @@ Evaluating in prediction pipeline
 
     mean_and_ridge = make_pipeline(impute.SimpleImputer(), RidgeCV())
     scores_mean_and_ridge = model_selection.cross_val_score(
-        mean_and_ridge, X, y, cv=8)
+        mean_and_ridge, X, y, cv=10)
 
     scores_mean_and_ridge
 
@@ -438,15 +438,15 @@ Evaluating in prediction pipeline
  .. code-block:: none
 
 
-    array([0.51891859, 0.52407599, 0.58132305, 0.54413239, 0.44286911,
-           0.56337226, 0.50719829, 0.58385359])
+    array([0.54614659, 0.43926104, 0.59187943, 0.44029222, 0.53507246,
+           0.41132337, 0.67374847, 0.79018856, 0.48898176, 0.46854395])
 
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 186-191
 
-Supervised without imputation
------------------------------
+Supervised learning without imputation
+----------------------------------------
 
 The HistGradientBoosting models are based on trees, which can be
 adapted to model directly missing values
@@ -458,7 +458,7 @@ adapted to model directly missing values
     from sklearn.experimental import enable_hist_gradient_boosting
     from sklearn.ensemble import HistGradientBoostingRegressor
     score_hist_gradient_boosting = model_selection.cross_val_score(
-        HistGradientBoostingRegressor(), X, y, cv=8)
+        HistGradientBoostingRegressor(), X, y, cv=10)
 
     score_hist_gradient_boosting
 
@@ -475,15 +475,15 @@ adapted to model directly missing values
     /home/varoquau/dev/scikit-learn/sklearn/experimental/enable_hist_gradient_boosting.py:16: UserWarning: Since version 1.0, it is not needed to import enable_hist_gradient_boosting anymore. HistGradientBoostingClassifier and HistGradientBoostingRegressor are now stable and can be normally imported from sklearn.ensemble.
       warnings.warn(
 
-    array([0.42146113, 0.53116648, 0.57722118, 0.53856405, 0.43267917,
-           0.58560551, 0.47514251, 0.59526762])
+    array([0.48104853, 0.3676542 , 0.54779672, 0.43052366, 0.53230889,
+           0.31475748, 0.66549077, 0.70964002, 0.5001503 , 0.43511816])
 
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 199-203
 
 Recap: which pipeline predicts well on our small data?
-.......................................................
+-------------------------------------------------------
 
 Let's plot the scores to see things better
 
@@ -524,41 +524,32 @@ analysis would be necessary, with more cross-validation runs.
 Prediction performance with large datasets
 -------------------------------------------
 
-Let us consider large datasets, to compare models in such regimes
+Let us compare models in regimes where there is plenty of data
 
-.. GENERATED FROM PYTHON SOURCE LINES 225-232
+.. GENERATED FROM PYTHON SOURCE LINES 225-228
 
 .. code-block:: default
 
 
     X, y = generate_mcar(n_samples=20000)
 
-    scores_mean_and_ridge = model_selection.cross_val_score(
-        mean_and_ridge, X, y, cv=8)
-    scores_mean_and_ridge
 
 
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
 
 
-    array([0.54063996, 0.54322845, 0.50881331, 0.51294466, 0.51704218,
-           0.57207233, 0.52928182, 0.55564578])
+.. GENERATED FROM PYTHON SOURCE LINES 229-230
 
+Iterative imputation and linear model
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 233-237
+.. GENERATED FROM PYTHON SOURCE LINES 230-234
 
 .. code-block:: default
 
     scores_iterative_and_ridge= model_selection.cross_val_score(
-        iterative_and_ridge, X, y, cv=8)
+        iterative_and_ridge, X, y, cv=10)
     scores_iterative_and_ridge
 
 
@@ -572,20 +563,50 @@ Let us consider large datasets, to compare models in such regimes
  .. code-block:: none
 
 
-    array([0.56209218, 0.57559607, 0.52566364, 0.52163367, 0.54051034,
-           0.57700454, 0.53517521, 0.57484487])
+    array([0.56285628, 0.56629022, 0.54287485, 0.54440354, 0.5131173 ,
+           0.53812876, 0.53808635, 0.59017208, 0.52860526, 0.59019199])
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 238-245
+.. GENERATED FROM PYTHON SOURCE LINES 235-236
+
+Mean imputation and linear model
+
+.. GENERATED FROM PYTHON SOURCE LINES 236-240
 
 .. code-block:: default
 
-    from sklearn.experimental import enable_hist_gradient_boosting
-    from sklearn.ensemble import HistGradientBoostingRegressor
+    scores_mean_and_ridge = model_selection.cross_val_score(
+        mean_and_ridge, X, y, cv=10)
+    scores_mean_and_ridge
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    array([0.54044989, 0.53588731, 0.52461719, 0.52562038, 0.50379387,
+           0.51241996, 0.54008036, 0.57123571, 0.5225978 , 0.5729993 ])
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 241-243
+
+And now the HistGradientBoostingRegressor, which does not need
+imputation
+
+.. GENERATED FROM PYTHON SOURCE LINES 243-247
+
+.. code-block:: default
 
     score_hist_gradient_boosting = model_selection.cross_val_score(
-        HistGradientBoostingRegressor(), X, y, cv=8)
+        HistGradientBoostingRegressor(), X, y, cv=10)
     score_hist_gradient_boosting
 
 
@@ -599,17 +620,18 @@ Let us consider large datasets, to compare models in such regimes
  .. code-block:: none
 
 
-    array([0.56847278, 0.58032214, 0.53119849, 0.53398777, 0.54629368,
-           0.59251254, 0.55017255, 0.58326278])
+    array([0.57156313, 0.57063407, 0.55248645, 0.552128  , 0.52246108,
+           0.54209931, 0.55694803, 0.60000661, 0.54179656, 0.60075522])
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 246-258
+.. GENERATED FROM PYTHON SOURCE LINES 248-249
+
+We plot the results
+
+.. GENERATED FROM PYTHON SOURCE LINES 249-260
 
 .. code-block:: default
-
-    import seaborn as sns
-    import pandas as pd
 
     scores = pd.DataFrame({'Mean imputation + Ridge': scores_mean_and_ridge,
                  'IterativeImputer + Ridge': scores_iterative_and_ridge,
@@ -617,6 +639,8 @@ Let us consider large datasets, to compare models in such regimes
         })
 
     sns.boxplot(data=scores, orient='h')
+    plt.title('Prediction accuracy\n linear and large data\n'
+              'Missing Completely at Random')
     plt.tight_layout()
 
 
@@ -624,14 +648,14 @@ Let us consider large datasets, to compare models in such regimes
 
 
 .. image:: /gen_notes/images/sphx_glr_missing_values_006.png
-    :alt: missing values
+    :alt: Prediction accuracy  linear and large data Missing Completely at Random
     :class: sphx-glr-single-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 259-268
+.. GENERATED FROM PYTHON SOURCE LINES 261-270
 
 Missing not at random: censoring
 ======================================
@@ -643,7 +667,7 @@ missing.
 The missing-values mechanism
 -----------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 268-281
+.. GENERATED FROM PYTHON SOURCE LINES 270-283
 
 .. code-block:: default
 
@@ -667,11 +691,11 @@ The missing-values mechanism
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 282-283
+.. GENERATED FROM PYTHON SOURCE LINES 284-285
 
 A quick plot to look at the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 283-292
+.. GENERATED FROM PYTHON SOURCE LINES 285-294
 
 .. code-block:: default
 
@@ -699,16 +723,16 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f8056a096d0>
+    <matplotlib.legend.Legend object at 0x7f0f10d9da00>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 293-295
+.. GENERATED FROM PYTHON SOURCE LINES 295-297
 
 Here the full-observed data does not reflect well at all the
 distribution of all the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 297-302
+.. GENERATED FROM PYTHON SOURCE LINES 299-304
 
 Using a predictor for the fully-observed case
 ==============================================
@@ -716,7 +740,7 @@ Using a predictor for the fully-observed case
 Let us go back to the "easy" case of the missing completely at random
 settings with plenty of data
 
-.. GENERATED FROM PYTHON SOURCE LINES 302-306
+.. GENERATED FROM PYTHON SOURCE LINES 304-308
 
 .. code-block:: default
 
@@ -731,12 +755,12 @@ settings with plenty of data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 307-309
+.. GENERATED FROM PYTHON SOURCE LINES 309-311
 
 Suppose we have been able to train a predictive model that works on
 fully-observed data:
 
-.. GENERATED FROM PYTHON SOURCE LINES 309-313
+.. GENERATED FROM PYTHON SOURCE LINES 311-315
 
 .. code-block:: default
 
@@ -754,7 +778,7 @@ fully-observed data:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.783 seconds)
+   **Total running time of the script:** ( 0 minutes  4.748 seconds)
 
 
 .. _sphx_glr_download_gen_notes_missing_values.py:

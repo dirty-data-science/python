@@ -14,6 +14,10 @@ div.body h2 {
 }
 
 div.body h3 {
+    margin-top: 2em;
+}
+
+div.body h4 {
     margin-top: 1.5em;
 }
 
