@@ -22,10 +22,14 @@
 Machine learning with missing values
 =========================================
 
-Here we use simulated data to illustrate the fundamentals of statistical
+Here we use simulated data to understanding the fundamentals of statistical
 learning with missing values.
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-15
+This notebook reveals why a HistGradientBoostingRegressor (
+:class:`sklearn.ensemble.HistGradientBoostingRegressor` ) is a choice to
+predict with missing values.
+
+.. GENERATED FROM PYTHON SOURCE LINES 13-19
 
 .. code-block:: default
 
@@ -42,7 +46,7 @@ learning with missing values.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-25
+.. GENERATED FROM PYTHON SOURCE LINES 20-29
 
 The fully-observed data: a toy regression problem
 ==================================================
@@ -51,10 +55,10 @@ We consider a simple regression problem where X (the data) is bivariate
 gaussian, and y (the prediction target)  is a linear function of the first
 coordinate, with noise.
 
-The missing-values mechanism
+The data-generating mechanism
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-38
+.. GENERATED FROM PYTHON SOURCE LINES 29-42
 
 .. code-block:: default
 
@@ -78,11 +82,11 @@ The missing-values mechanism
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 39-40
+.. GENERATED FROM PYTHON SOURCE LINES 43-44
 
 A quick plot reveals what the data looks like
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-46
+.. GENERATED FROM PYTHON SOURCE LINES 44-50
 
 .. code-block:: default
 
@@ -107,11 +111,11 @@ A quick plot reveals what the data looks like
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7fd6c952fd00>
+    <matplotlib.colorbar.Colorbar object at 0x7f010b9ff400>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-52
+.. GENERATED FROM PYTHON SOURCE LINES 51-59
 
 Missing completely at random setting
 ======================================
@@ -119,7 +123,10 @@ Missing completely at random setting
 We now consider missing completely at random settings (a special case
 of missing at random).
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-63
+The missing-values mechanism
+-----------------------------
+
+.. GENERATED FROM PYTHON SOURCE LINES 59-70
 
 .. code-block:: default
 
@@ -141,11 +148,11 @@ of missing at random).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-65
+.. GENERATED FROM PYTHON SOURCE LINES 71-72
 
 A quick plot to look at the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-74
+.. GENERATED FROM PYTHON SOURCE LINES 72-81
 
 .. code-block:: default
 
@@ -173,16 +180,44 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7fd6c93a8400>
+    <matplotlib.legend.Legend object at 0x7f010b857af0>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-77
+.. GENERATED FROM PYTHON SOURCE LINES 82-91
 
 We can see that the distribution of the fully-observed data is the same
 than that of the original data
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-88
+Building a predictive model: imputation and simple model
+--------------------------------------------------------
+
+Here, the relationship between the fully-observed X and y is a linear
+relationship. We can adapt a linear model to missing values using
+imputation.
+
+.. GENERATED FROM PYTHON SOURCE LINES 91-94
+
+.. code-block:: default
+
+    from sklearn.linear_model import RidgeCV # Good default linear model
+    from sklearn.impute import IterativeImputive # Good imputer
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+.. code-block:: pytb
+
+    Traceback (most recent call last):
+      File "/home/varoquau/dev/dirty_data_tutorial/notes/missing_values.py", line 92, in <module>
+        from sklearn.impute import IterativeImputive # Good imputer
+    ImportError: cannot import name 'IterativeImputive' from 'sklearn.impute' (/usr/lib/python3/dist-packages/sklearn/impute/__init__.py)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 95-104
 
 Missing not at random: censoring
 ======================================
@@ -194,7 +229,7 @@ missing.
 The missing-values mechanism
 -----------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-101
+.. GENERATED FROM PYTHON SOURCE LINES 104-117
 
 .. code-block:: default
 
@@ -212,17 +247,11 @@ The missing-values mechanism
         return X, y
 
 
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 102-103
+.. GENERATED FROM PYTHON SOURCE LINES 118-119
 
 A quick plot to look at the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-112
+.. GENERATED FROM PYTHON SOURCE LINES 119-128
 
 .. code-block:: default
 
@@ -236,33 +265,46 @@ A quick plot to look at the data
     plt.legend()
 
 
-
-
-.. image:: /gen_notes/images/sphx_glr_missing_values_003.png
-    :alt: missing values
-    :class: sphx-glr-single-img
-
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-
-    <matplotlib.legend.Legend object at 0x7fd6c92db520>
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 113-115
+.. GENERATED FROM PYTHON SOURCE LINES 129-131
 
 Here the full-observed data does not reflect well at all the
 distribution of all the data
 
+.. GENERATED FROM PYTHON SOURCE LINES 133-138
+
+Using a predictor for the fully-observed case
+==============================================
+
+Let us go back to the "easy" case of the missing completely at random
+settings with plenty of data
+
+.. GENERATED FROM PYTHON SOURCE LINES 138-142
+
+.. code-block:: default
+
+    n_samples = 10000
+
+    X, y = generate_mcar(n_samples, missing_rate=.5)
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 143-145
+
+Suppose we have been able to train a predictive model that works on
+fully-observed data:
+
+.. GENERATED FROM PYTHON SOURCE LINES 145-149
+
+.. code-block:: default
+
+
+    X_full, y_full = generate_without_missing_values(n_samples)
+
+
+
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.305 seconds)
+   **Total running time of the script:** ( 0 minutes  0.444 seconds)
 
 
 .. _sphx_glr_download_gen_notes_missing_values.py:
@@ -277,7 +319,7 @@ distribution of all the data
   .. container:: binder-badge
 
     .. image:: images/binder_badge_logo.svg
-      :target: https://mybinder.org/v2/gh/ dirty-data-science /python/gh-pages?filepath=notes/gen_notes/missing_values.ipynb
+      :target: https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/missing_values.ipynb
       :alt: Launch binder
       :width: 150 px
 

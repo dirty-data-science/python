@@ -10,6 +10,7 @@ div.body h1 {
 /* Secondary sections title */
 div.body h2 {
     color: #055100;
+    margin-top: 2em;
 }
 
 /* More horizontal space in pre (to fit 80char lines) */
@@ -88,8 +89,8 @@ div.sphinxsidebarwrapper li li a {
 }
 
 /* Online one level of titles */
-div.sphinxsidebarwrapper li li a {
-    display: inline;
+div.sphinxsidebarwrapper li li li {
+    display: none;
 }
 
 

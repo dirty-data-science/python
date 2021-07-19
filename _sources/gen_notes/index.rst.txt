@@ -11,7 +11,7 @@ Notebooks:
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Here we use simulated data to illustrate the fundamentals of statistical learning with missing ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Here we use simulated data to understanding the fundamentals of statistical learning with missi...">
 
 .. only:: html
 
