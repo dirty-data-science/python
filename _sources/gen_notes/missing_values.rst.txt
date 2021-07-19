@@ -29,24 +29,15 @@ This notebook reveals why a HistGradientBoostingRegressor (
 :class:`sklearn.ensemble.HistGradientBoostingRegressor` ) is a choice to
 predict with missing values.
 
-.. GENERATED FROM PYTHON SOURCE LINES 13-19
+Simulations are very useful to control the missing-value mechanism, and
+inspect it's impact on predictive models. In particular, standard
+imputation procedures can reconstruct missing values with distortion only
+if the data is *missing at random*.
 
-.. code-block:: default
+The mathematical details behind this notebook can be found in
+https://arxiv.org/abs/1902.06931
 
-
-    import numpy as np
-
-    import matplotlib.pyplot as plt
-    plt.rcParams['figure.figsize'] = (5, 4) # Smaller default figure size
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 20-29
+.. GENERATED FROM PYTHON SOURCE LINES 24-33
 
 The fully-observed data: a toy regression problem
 ==================================================
@@ -58,10 +49,12 @@ coordinate, with noise.
 The data-generating mechanism
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-42
+.. GENERATED FROM PYTHON SOURCE LINES 33-48
 
 .. code-block:: default
 
+
+    import numpy as np
 
     def generate_without_missing_values(n_samples, rng=42):
         mean = [0, 0]
@@ -82,17 +75,20 @@ The data-generating mechanism
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-44
+.. GENERATED FROM PYTHON SOURCE LINES 49-50
 
 A quick plot reveals what the data looks like
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-50
+.. GENERATED FROM PYTHON SOURCE LINES 50-59
 
 .. code-block:: default
 
 
+    import matplotlib.pyplot as plt
+    plt.rcParams['figure.figsize'] = (5, 4) # Smaller default figure size
+
     plt.figure()
-    X_full, y_full = generate_without_missing_values(500)
+    X_full, y_full = generate_without_missing_values(1000)
     plt.scatter(X_full[:, 0], X_full[:, 1], c=y_full)
     plt.colorbar(label='y')
 
@@ -111,27 +107,28 @@ A quick plot reveals what the data looks like
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7fa47d221550>
+    <matplotlib.colorbar.Colorbar object at 0x7fa468b80730>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-59
+.. GENERATED FROM PYTHON SOURCE LINES 60-69
 
-Missing completely at random setting
+Missing completely at random settings
 ======================================
 
 We now consider missing completely at random settings (a special case
-of missing at random).
+of missing at random): the missingness is completely independent from
+the values.
 
 The missing-values mechanism
 -----------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-70
+.. GENERATED FROM PYTHON SOURCE LINES 69-80
 
 .. code-block:: default
 
 
-    def generate_mcar(n_samples, missing_rate=0.2, rng=42):
+    def generate_mcar(n_samples, missing_rate=.5, rng=42):
         X, y = generate_without_missing_values(n_samples, rng=rng)
         if not isinstance(rng, np.random.RandomState):
             rng = np.random.RandomState(rng)
@@ -148,19 +145,18 @@ The missing-values mechanism
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-72
+.. GENERATED FROM PYTHON SOURCE LINES 81-82
 
 A quick plot to look at the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 72-81
+.. GENERATED FROM PYTHON SOURCE LINES 82-90
 
 .. code-block:: default
 
-    X, y = generate_mcar(500, missing_rate=.5)
+    X, y = generate_mcar(1000)
 
     plt.figure()
-    plt.scatter(X_full[:, 0], X_full[:, 1], color='.8', ec='.5',
-                label='All data')
+    plt.scatter(X_full[:, 0], X_full[:, 1], color='.8', ec='.5', label='All data')
     plt.colorbar(label='y')
     plt.scatter(X[:, 0], X[:, 1], c=y, label='Fully observed')
     plt.legend()
@@ -180,45 +176,458 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7fa47d07cc40>
+    <matplotlib.legend.Legend object at 0x7fa4689e0b20>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-91
+.. GENERATED FROM PYTHON SOURCE LINES 91-105
 
 We can see that the distribution of the fully-observed data is the same
 than that of the original data
 
-Building a predictive model: imputation and simple model
---------------------------------------------------------
+Predictive modeling: imputation and linear model
+-------------------------------------------------
 
 Given that the relationship between the fully-observed X and y is a
 linear relationship, it seems natural to use a linear model for
 prediction, which must be adapted to missing values using imputation.
 
-.. GENERATED FROM PYTHON SOURCE LINES 91-95
+Rich imputation IterativeImputer
+.................................
+
+We'll use the IterativeImputer, a good imputer, but it needs to be enabled
+
+.. GENERATED FROM PYTHON SOURCE LINES 105-109
 
 .. code-block:: default
 
+    from sklearn.experimental import enable_iterative_imputer
+    from sklearn import impute
+    iterative_imputer = impute.IterativeImputer()
 
-    from sklearn.linear_model import RidgeCV # Good default linear model
-    from sklearn.impute import IterativeImputive # Good imputer
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 110-114
+
+Let us try the imputer on the small data used to visualize
+
+**The imputation is learned by fitting the imputer on the data with
+missing values**
+
+.. GENERATED FROM PYTHON SOURCE LINES 114-116
+
+.. code-block:: default
+
+    iterative_imputer.fit(X)
+
+
 
 
 
 .. rst-class:: sphx-glr-script-out
 
-.. code-block:: pytb
+ Out:
 
-    Traceback (most recent call last):
-      File "/home/varoquau/dev/dirty_data_tutorial/notes/missing_values.py", line 93, in <module>
-        from sklearn.impute import IterativeImputive # Good imputer
-    ImportError: cannot import name 'IterativeImputive' from 'sklearn.impute' (/home/varoquau/dev/scikit-learn/sklearn/impute/__init__.py)
+ .. code-block:: none
 
 
+    IterativeImputer()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-105
+
+.. GENERATED FROM PYTHON SOURCE LINES 117-118
+
+**The data are imputed with the transform method**
+
+.. GENERATED FROM PYTHON SOURCE LINES 118-120
+
+.. code-block:: default
+
+    X_imputed = iterative_imputer.transform(X)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 121-122
+
+We can display the imputed data as our previous visualization
+
+.. GENERATED FROM PYTHON SOURCE LINES 122-130
+
+.. code-block:: default
+
+    plt.figure()
+    plt.scatter(X_full[:, 0], X_full[:, 1], color='.8', ec='.5',
+                label='All data', alpha=.5)
+    plt.scatter(X_imputed[:, 0], X_imputed[:, 1], c=y, marker='X',
+                label='Imputed')
+    plt.colorbar(label='y')
+    plt.legend()
+
+
+
+
+.. image:: /gen_notes/images/sphx_glr_missing_values_003.png
+    :alt: missing values
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    <matplotlib.legend.Legend object at 0x7fa459de0400>
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 131-136
+
+We can see that the imputer did a fairly good job of recovering the
+data distribution
+
+To use it in supervised setting, we will pipeline it with a linear
+model, using a ridge, which is a good default linear model
+
+.. GENERATED FROM PYTHON SOURCE LINES 136-141
+
+.. code-block:: default
+
+    from sklearn.pipeline import make_pipeline
+    from sklearn.linear_model import RidgeCV
+
+    iterative_and_ridge = make_pipeline(impute.IterativeImputer(), RidgeCV())
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 142-145
+
+We can evaluate the model performance in a cross-validation loop
+(for better evaluation accuracy, we increase slightly the number of
+folds to 7)
+
+.. GENERATED FROM PYTHON SOURCE LINES 145-151
+
+.. code-block:: default
+
+    from sklearn import model_selection
+    scores_iterative_and_ridge = model_selection.cross_val_score(
+        iterative_and_ridge, X, y, cv=8)
+
+    scores_iterative_and_ridge
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    array([0.47517732, 0.54350564, 0.59814448, 0.53083948, 0.39253505,
+           0.58998889, 0.52351262, 0.62932822])
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 152-155
+
+**Computational cost** One drawback of the IterativeImputer to keep in
+mind is that its computational cost can become prohibitive of large
+datasets (it has a bad computation scalability).
+
+.. GENERATED FROM PYTHON SOURCE LINES 157-161
+
+Mean imputation: SimpleImputer
+...............................
+
+We can try a simple imputer: imputation by the mean
+
+.. GENERATED FROM PYTHON SOURCE LINES 161-163
+
+.. code-block:: default
+
+    mean_imputer = impute.SimpleImputer()
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 164-165
+
+A quick visualization reveals a larger disortion of the distribution
+
+.. GENERATED FROM PYTHON SOURCE LINES 165-173
+
+.. code-block:: default
+
+    X_imputed = mean_imputer.fit_transform(X)
+    plt.figure()
+    plt.scatter(X_full[:, 0], X_full[:, 1], color='.8', ec='.5',
+                label='All data', alpha=.5)
+    plt.scatter(X_imputed[:, 0], X_imputed[:, 1], c=y, marker='X',
+                label='Imputed')
+    plt.colorbar(label='y')
+
+
+
+
+.. image:: /gen_notes/images/sphx_glr_missing_values_004.png
+    :alt: missing values
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    <matplotlib.colorbar.Colorbar object at 0x7fa459d71310>
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 174-175
+
+Evaluating in prediction pipeline
+
+.. GENERATED FROM PYTHON SOURCE LINES 175-181
+
+.. code-block:: default
+
+    mean_and_ridge = make_pipeline(impute.SimpleImputer(), RidgeCV())
+    scores_mean_and_ridge = model_selection.cross_val_score(
+        mean_and_ridge, X, y, cv=8)
+
+    scores_mean_and_ridge
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    array([0.51891859, 0.52407599, 0.58132305, 0.54413239, 0.44286911,
+           0.56337226, 0.50719829, 0.58385359])
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 182-187
+
+A model without imputation
+...........................
+
+The HistGradientBoosting models are based on trees, which can be
+adapted to model directly missing values
+
+.. GENERATED FROM PYTHON SOURCE LINES 187-194
+
+.. code-block:: default
+
+    from sklearn.experimental import enable_hist_gradient_boosting
+    from sklearn.ensemble import HistGradientBoostingRegressor
+    score_hist_gradient_boosting = model_selection.cross_val_score(
+        HistGradientBoostingRegressor(), X, y, cv=8)
+
+    score_hist_gradient_boosting
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    /home/varoquau/dev/scikit-learn/sklearn/experimental/enable_hist_gradient_boosting.py:16: UserWarning: Since version 1.0, it is not needed to import enable_hist_gradient_boosting anymore. HistGradientBoostingClassifier and HistGradientBoostingRegressor are now stable and can be normally imported from sklearn.ensemble.
+      warnings.warn(
+
+    array([0.42146113, 0.53116648, 0.57722118, 0.53856405, 0.43267917,
+           0.58560551, 0.47514251, 0.59526762])
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 195-199
+
+Recap: which pipeline predicts well on our small data?
+.......................................................
+
+Let's plot the scores to see things better
+
+.. GENERATED FROM PYTHON SOURCE LINES 199-213
+
+.. code-block:: default
+
+    import pandas as pd
+    import seaborn as sns
+
+    scores = pd.DataFrame({'Mean imputation + Ridge': scores_mean_and_ridge,
+                 'IterativeImputer + Ridge': scores_iterative_and_ridge,
+                 'HistGradientBoostingRegressor': score_hist_gradient_boosting,
+        })
+
+    sns.boxplot(data=scores, orient='h')
+    plt.title('Prediction accuracy\n linear and small data\n'
+              'Missing Completely at Random')
+    plt.tight_layout()
+
+
+
+
+
+.. image:: /gen_notes/images/sphx_glr_missing_values_005.png
+    :alt: Prediction accuracy  linear and small data Missing Completely at Random
+    :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 214-221
+
+Not much difference with the more sophisticated imputer. A more thorough
+analysis would be necessary, with more cross-validation runs.
+
+Prediction performance with large datasets
+-------------------------------------------
+
+Let us consider large datasets, to compare models in such regimes
+
+.. GENERATED FROM PYTHON SOURCE LINES 221-228
+
+.. code-block:: default
+
+
+    X, y = generate_mcar(n_samples=20000)
+
+    scores_mean_and_ridge = model_selection.cross_val_score(
+        mean_and_ridge, X, y, cv=8)
+    scores_mean_and_ridge
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    array([0.54063996, 0.54322845, 0.50881331, 0.51294466, 0.51704218,
+           0.57207233, 0.52928182, 0.55564578])
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 229-233
+
+.. code-block:: default
+
+    scores_iterative_and_ridge= model_selection.cross_val_score(
+        iterative_and_ridge, X, y, cv=8)
+    scores_iterative_and_ridge
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    array([0.56209218, 0.57559607, 0.52566364, 0.52163367, 0.54051034,
+           0.57700454, 0.53517521, 0.57484487])
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 234-241
+
+.. code-block:: default
+
+    from sklearn.experimental import enable_hist_gradient_boosting
+    from sklearn.ensemble import HistGradientBoostingRegressor
+
+    score_hist_gradient_boosting = model_selection.cross_val_score(
+        HistGradientBoostingRegressor(), X, y, cv=8)
+    score_hist_gradient_boosting
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    array([0.56868735, 0.58025469, 0.53195298, 0.53393026, 0.54472193,
+           0.59211468, 0.54999947, 0.58399399])
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 242-254
+
+.. code-block:: default
+
+    import seaborn as sns
+    import pandas as pd
+
+    scores = pd.DataFrame({'Mean imputation + Ridge': scores_mean_and_ridge,
+                 'IterativeImputer + Ridge': scores_iterative_and_ridge,
+                 'HistGradientBoostingRegressor': score_hist_gradient_boosting,
+        })
+
+    sns.boxplot(data=scores, orient='h')
+    plt.tight_layout()
+
+
+
+
+
+.. image:: /gen_notes/images/sphx_glr_missing_values_006.png
+    :alt: missing values
+    :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 255-264
 
 Missing not at random: censoring
 ======================================
@@ -230,7 +639,7 @@ missing.
 The missing-values mechanism
 -----------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 105-118
+.. GENERATED FROM PYTHON SOURCE LINES 264-277
 
 .. code-block:: default
 
@@ -248,11 +657,17 @@ The missing-values mechanism
         return X, y
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-120
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 278-279
 
 A quick plot to look at the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 120-129
+.. GENERATED FROM PYTHON SOURCE LINES 279-288
 
 .. code-block:: default
 
@@ -266,12 +681,30 @@ A quick plot to look at the data
     plt.legend()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 130-132
+
+
+.. image:: /gen_notes/images/sphx_glr_missing_values_007.png
+    :alt: missing values
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    <matplotlib.legend.Legend object at 0x7fa455276df0>
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 289-291
 
 Here the full-observed data does not reflect well at all the
 distribution of all the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 134-139
+.. GENERATED FROM PYTHON SOURCE LINES 293-298
 
 Using a predictor for the fully-observed case
 ==============================================
@@ -279,7 +712,7 @@ Using a predictor for the fully-observed case
 Let us go back to the "easy" case of the missing completely at random
 settings with plenty of data
 
-.. GENERATED FROM PYTHON SOURCE LINES 139-143
+.. GENERATED FROM PYTHON SOURCE LINES 298-302
 
 .. code-block:: default
 
@@ -288,12 +721,18 @@ settings with plenty of data
     X, y = generate_mcar(n_samples, missing_rate=.5)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 144-146
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 303-305
 
 Suppose we have been able to train a predictive model that works on
 fully-observed data:
 
-.. GENERATED FROM PYTHON SOURCE LINES 146-150
+.. GENERATED FROM PYTHON SOURCE LINES 305-309
 
 .. code-block:: default
 
@@ -303,9 +742,15 @@ fully-observed data:
 
 
 
+
+
+
+
+
+
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.574 seconds)
+   **Total running time of the script:** ( 0 minutes  5.073 seconds)
 
 
 .. _sphx_glr_download_gen_notes_missing_values.py:

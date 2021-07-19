@@ -10,7 +10,11 @@ div.body h1 {
 /* Secondary sections title */
 div.body h2 {
     color: #055100;
-    margin-top: 2em;
+    margin-top: 2.5em;
+}
+
+div.body h3 {
+    margin-top: 1.5em;
 }
 
 /* More horizontal space in pre (to fit 80char lines) */
@@ -86,6 +90,10 @@ div.sphx-glr-script-out, p.sphx-glr-script-out {
 /* Undo for children */
 div.sphinxsidebarwrapper li li a {
     display: inline;
+}
+
+div.sphinxsidebarwrapper li li {
+    margin: 1ex 0ex;
 }
 
 /* Online one level of titles */
