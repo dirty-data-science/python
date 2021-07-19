@@ -1,0 +1,11 @@
+numpy
+scipy
+pytest
+pytest-cov
+coverage
+matplotlib
+seaborn
+joblib
+pandas
+scikit-learn
+dirty-cat
