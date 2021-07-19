@@ -43,7 +43,7 @@ div.sphx-glr-footer-example {
 }
 
 /* Large screens */
-@media only screen and (min-width: 1500px) {
+@media only screen and (min-width: 1550px) {
     /* The download note on top of the examples */
     div.sphx-glr-download-link-note {
 	display: none;
@@ -78,14 +78,20 @@ div.sphx-glr-script-out, p.sphx-glr-script-out {
 /** Sidebar **************************************************************/
 
 /* Hide the title in the navigation bar in the index page */
-div.sphinxsidebarwrapper li a {
+/*div.sphinxsidebarwrapper li a {
     display: none;
-}
+}*/
 
 /* Undo for children */
 div.sphinxsidebarwrapper li li a {
     display: inline;
 }
+
+/* Online one level of titles */
+div.sphinxsidebarwrapper li li a {
+    display: inline;
+}
+
 
 /* Undo for other pages */
 div.sphinxsidebarwrapper li.toctree-l1 a {

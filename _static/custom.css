@@ -78,14 +78,20 @@ div.sphx-glr-script-out, p.sphx-glr-script-out {
 /** Sidebar **************************************************************/
 
 /* Hide the title in the navigation bar in the index page */
-div.sphinxsidebarwrapper li a {
+/*div.sphinxsidebarwrapper li a {
     display: none;
-}
+}*/
 
 /* Undo for children */
 div.sphinxsidebarwrapper li li a {
     display: inline;
 }
+
+/* Online one level of titles */
+div.sphinxsidebarwrapper li li li {
+    display: none;
+}
+
 
 /* Undo for other pages */
 div.sphinxsidebarwrapper li.toctree-l1 a {
