@@ -10,7 +10,15 @@ div.body h1 {
 /* Secondary sections title */
 div.body h2 {
     color: #055100;
+    margin-top: 2.5em;
+}
+
+div.body h3 {
     margin-top: 2em;
+}
+
+div.body h4 {
+    margin-top: 1.5em;
 }
 
 /* More horizontal space in pre (to fit 80char lines) */

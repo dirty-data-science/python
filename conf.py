@@ -54,8 +54,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Dirty data science'
-copyright = u'2021, Dirty Data Science contributors'
-author = u'Dirty Data Science contributors'
+author = u'Gaël Varoquaux'
+copyright = u'2021, ' + author
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
