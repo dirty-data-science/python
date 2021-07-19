@@ -142,7 +142,7 @@ coordinate, with noise.</p>
 </div>
 <img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f010b9ff400&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7fa47d221550&gt;
 </pre></div>
 </div>
 </div>
@@ -177,7 +177,7 @@ of missing at random).</p>
 </div>
 <img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_002.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f010b857af0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fa47d07cc40&gt;
 </pre></div>
 </div>
 <p>We can see that the distribution of the fully-observed data is the same
@@ -185,17 +185,17 @@ than that of the original data</p>
 </div>
 <div class="section" id="building-a-predictive-model-imputation-and-simple-model">
 <h3>Building a predictive model: imputation and simple model<a class="headerlink" href="#building-a-predictive-model-imputation-and-simple-model" title="Permalink to this headline">¶</a></h3>
-<p>Here, the relationship between the fully-observed X and y is a linear
-relationship. We can adapt a linear model to missing values using
-imputation.</p>
+<p>Given that the relationship between the fully-observed X and y is a
+linear relationship, it seems natural to use a linear model for
+prediction, which must be adapted to missing values using imputation.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">RidgeCV</span> <span class="c1"># Good default linear model</span>
 <span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">IterativeImputive</span> <span class="c1"># Good imputer</span>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/home/varoquau/dev/dirty_data_tutorial/notes/missing_values.py&quot;</span>, line <span class="m">92</span>, in <span class="n">&lt;module&gt;</span>
+  File <span class="nb">&quot;/home/varoquau/dev/dirty_data_tutorial/notes/missing_values.py&quot;</span>, line <span class="m">93</span>, in <span class="n">&lt;module&gt;</span>
     <span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">IterativeImputive</span> <span class="c1"># Good imputer</span>
-<span class="gr">ImportError</span>: <span class="n">cannot import name &#39;IterativeImputive&#39; from &#39;sklearn.impute&#39; (/usr/lib/python3/dist-packages/sklearn/impute/__init__.py)</span>
+<span class="gr">ImportError</span>: <span class="n">cannot import name &#39;IterativeImputive&#39; from &#39;sklearn.impute&#39; (/home/varoquau/dev/scikit-learn/sklearn/impute/__init__.py)</span>
 </pre></div>
 </div>
 </div>
@@ -249,7 +249,7 @@ fully-observed data:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X_full</span><span class="p">,</span> <span class="n">y_full</span> <span class="o">=</span> <span class="n">generate_without_missing_values</span><span class="p">(</span><span class="n">n_samples</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.444 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.574 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gen-notes-missing-values-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/missing_values.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>

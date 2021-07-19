@@ -111,7 +111,7 @@ A quick plot reveals what the data looks like
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f010b9ff400>
+    <matplotlib.colorbar.Colorbar object at 0x7fa47d221550>
 
 
 
@@ -180,7 +180,7 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f010b857af0>
+    <matplotlib.legend.Legend object at 0x7fa47d07cc40>
 
 
 
@@ -192,13 +192,14 @@ than that of the original data
 Building a predictive model: imputation and simple model
 --------------------------------------------------------
 
-Here, the relationship between the fully-observed X and y is a linear
-relationship. We can adapt a linear model to missing values using
-imputation.
+Given that the relationship between the fully-observed X and y is a
+linear relationship, it seems natural to use a linear model for
+prediction, which must be adapted to missing values using imputation.
 
-.. GENERATED FROM PYTHON SOURCE LINES 91-94
+.. GENERATED FROM PYTHON SOURCE LINES 91-95
 
 .. code-block:: default
+
 
     from sklearn.linear_model import RidgeCV # Good default linear model
     from sklearn.impute import IterativeImputive # Good imputer
@@ -210,14 +211,14 @@ imputation.
 .. code-block:: pytb
 
     Traceback (most recent call last):
-      File "/home/varoquau/dev/dirty_data_tutorial/notes/missing_values.py", line 92, in <module>
+      File "/home/varoquau/dev/dirty_data_tutorial/notes/missing_values.py", line 93, in <module>
         from sklearn.impute import IterativeImputive # Good imputer
-    ImportError: cannot import name 'IterativeImputive' from 'sklearn.impute' (/usr/lib/python3/dist-packages/sklearn/impute/__init__.py)
+    ImportError: cannot import name 'IterativeImputive' from 'sklearn.impute' (/home/varoquau/dev/scikit-learn/sklearn/impute/__init__.py)
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-104
+.. GENERATED FROM PYTHON SOURCE LINES 96-105
 
 Missing not at random: censoring
 ======================================
@@ -229,7 +230,7 @@ missing.
 The missing-values mechanism
 -----------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-117
+.. GENERATED FROM PYTHON SOURCE LINES 105-118
 
 .. code-block:: default
 
@@ -247,11 +248,11 @@ The missing-values mechanism
         return X, y
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 118-119
+.. GENERATED FROM PYTHON SOURCE LINES 119-120
 
 A quick plot to look at the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-128
+.. GENERATED FROM PYTHON SOURCE LINES 120-129
 
 .. code-block:: default
 
@@ -265,12 +266,12 @@ A quick plot to look at the data
     plt.legend()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 129-131
+.. GENERATED FROM PYTHON SOURCE LINES 130-132
 
 Here the full-observed data does not reflect well at all the
 distribution of all the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 133-138
+.. GENERATED FROM PYTHON SOURCE LINES 134-139
 
 Using a predictor for the fully-observed case
 ==============================================
@@ -278,7 +279,7 @@ Using a predictor for the fully-observed case
 Let us go back to the "easy" case of the missing completely at random
 settings with plenty of data
 
-.. GENERATED FROM PYTHON SOURCE LINES 138-142
+.. GENERATED FROM PYTHON SOURCE LINES 139-143
 
 .. code-block:: default
 
@@ -287,12 +288,12 @@ settings with plenty of data
     X, y = generate_mcar(n_samples, missing_rate=.5)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 143-145
+.. GENERATED FROM PYTHON SOURCE LINES 144-146
 
 Suppose we have been able to train a predictive model that works on
 fully-observed data:
 
-.. GENERATED FROM PYTHON SOURCE LINES 145-149
+.. GENERATED FROM PYTHON SOURCE LINES 146-150
 
 .. code-block:: default
 
@@ -304,7 +305,7 @@ fully-observed data:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.444 seconds)
+   **Total running time of the script:** ( 0 minutes  0.574 seconds)
 
 
 .. _sphx_glr_download_gen_notes_missing_values.py:

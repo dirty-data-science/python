@@ -85,9 +85,10 @@ plt.legend()
 # Building a predictive model: imputation and simple model
 # --------------------------------------------------------
 #
-# Here, the relationship between the fully-observed X and y is a linear
-# relationship. We can adapt a linear model to missing values using
-# imputation.
+# Given that the relationship between the fully-observed X and y is a
+# linear relationship, it seems natural to use a linear model for
+# prediction, which must be adapted to missing values using imputation.
+
 from sklearn.linear_model import RidgeCV # Good default linear model
 from sklearn.impute import IterativeImputive # Good imputer
 
