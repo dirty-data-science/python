@@ -20,7 +20,7 @@ plt.rcParams['figure.figsize'] = (5, 4) # Smaller default figure size
 # gaussian, and y (the prediction target)  is a linear function of the first
 # coordinate, with noise.
 #
-# The missing-values mechanism
+# The data-generating mechanism
 # ------------------------------
 
 def generate_without_missing_values(n_samples, rng=42):
@@ -49,6 +49,9 @@ plt.colorbar(label='y')
 #
 # We now consider missing completely at random settings (a special case
 # of missing at random).
+#
+# The missing-values mechanism
+# -----------------------------
 
 def generate_mcar(n_samples, missing_rate=0.2, rng=42):
     X, y = generate_without_missing_values(n_samples, rng=rng)
