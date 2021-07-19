@@ -114,7 +114,7 @@ html_sidebars = {
 #
 html_theme_options = {
     'logo': 'piggy.svg',
-    'github_user': ' dirty-data-science',
+    'github_user': 'dirty-data-science',
     'github_repo': 'python',
     'github_button': 'true',
     'github_type': 'star',
