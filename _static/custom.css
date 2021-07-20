@@ -159,6 +159,11 @@ div.sphinxsidebarwrapper div h3:first-of-type {
     display: block;
 }
 
+/* Flush the sidebar more to the left */
+@media (min-width: 1500px) {
+    left: 10%;
+}
+
 /*************************************************************************/
 
 /* My custom classes */
