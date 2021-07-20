@@ -69,8 +69,11 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#assembling-a-machine-learning-pipeline-that-encodes-the-data">Assembling a machine-learning pipeline that encodes the data</a><ul>
-<li><a class="reference internal" href="#choosing-columns">Choosing columns</a></li>
-<li><a class="reference internal" href="#the-learning-pipeline">The learning pipeline</a></li>
+<li><a class="reference internal" href="#the-learning-pipeline">The learning pipeline</a><ul>
+<li><a class="reference internal" href="#the-categorical-encoders">The categorical encoders</a></li>
+<li><a class="reference internal" href="#the-prediction-pipeline">The prediction pipeline</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#comparing-different-encoding-for-supervised-learning">Comparing different encoding for supervised learning</a></li>
 <li><a class="reference internal" href="#plotting-the-results">Plotting the results</a></li>
 </ul>
@@ -380,68 +383,64 @@ Downloaded from openml.org.
 </div>
 <div class="section" id="assembling-a-machine-learning-pipeline-that-encodes-the-data">
 <h2>Assembling a machine-learning pipeline that encodes the data<a class="headerlink" href="#assembling-a-machine-learning-pipeline-that-encodes-the-data" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="choosing-columns">
-<h3>Choosing columns<a class="headerlink" href="#choosing-columns" title="Permalink to this headline">¶</a></h3>
-<p>For clean categorical columns, we will use one hot encoding to
-transform them:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">clean_columns</span></a> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;gender&#39;</span><span class="p">:</span> <span class="s1">&#39;one-hot&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;department_name&#39;</span><span class="p">:</span> <span class="s1">&#39;one-hot&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;assignment_category&#39;</span><span class="p">:</span> <span class="s1">&#39;one-hot&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Year First Hired&#39;</span><span class="p">:</span> <span class="s1">&#39;numerical&#39;</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>We then choose the categorical encoding methods we want to benchmark
-and the dirty categorical variable:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoding_methods</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;one-hot&#39;</span><span class="p">,</span> <span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="s1">&#39;similarity&#39;</span><span class="p">,</span> <span class="s1">&#39;minhash&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;gap&#39;</span><span class="p">]</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dirty_column</span></a> <span class="o">=</span> <span class="s1">&#39;employee_position_title&#39;</span>
-</pre></div>
-</div>
-</div>
 <div class="section" id="the-learning-pipeline">
 <h3>The learning pipeline<a class="headerlink" href="#the-learning-pipeline" title="Permalink to this headline">¶</a></h3>
-<p>The encoders for both clean and dirty data are first imported:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.FunctionTransformer.html#sklearn.preprocessing.FunctionTransformer" title="sklearn.preprocessing.FunctionTransformer" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class"><span class="n">FunctionTransformer</span></a>
-<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class"><span class="n">OneHotEncoder</span></a>
+<p>To build a learning pipeline, we need to assemble encoders for each
+column, and apply a supvervised learning model on top.</p>
+<div class="section" id="the-categorical-encoders">
+<h4>The categorical encoders<a class="headerlink" href="#the-categorical-encoders" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><p>For the encoders for both clean and dirty data:</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class"><span class="n">OneHotEncoder</span></a>
 <span class="kn">from</span> <span class="nn">dirty_cat</span> <span class="kn">import</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.SimilarityEncoder.html#dirty_cat.SimilarityEncoder" title="dirty_cat.SimilarityEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">SimilarityEncoder</span></a><span class="p">,</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.TargetEncoder.html#dirty_cat.TargetEncoder" title="dirty_cat.TargetEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">TargetEncoder</span></a><span class="p">,</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.MinHashEncoder.html#dirty_cat.MinHashEncoder" title="dirty_cat.MinHashEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">MinHashEncoder</span></a><span class="p">,</span>\
     <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.GapEncoder.html#dirty_cat.GapEncoder" title="dirty_cat.GapEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">GapEncoder</span></a>
 
-<span class="c1"># for scikit-learn 0.24 we need to require the experimental feature</span>
-<span class="kn">from</span> <span class="nn">sklearn.experimental</span> <span class="kn">import</span> <span class="n">enable_hist_gradient_boosting</span>  <span class="c1"># noqa</span>
+<a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">one_hot</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class"><span class="n">OneHotEncoder</span></a><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a href="https://dirty-cat.github.io/stable/generated/dirty_cat.SimilarityEncoder.html#dirty_cat.SimilarityEncoder" title="dirty_cat.SimilarityEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">similarity</span></a> <span class="o">=</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.SimilarityEncoder.html#dirty_cat.SimilarityEncoder" title="dirty_cat.SimilarityEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">SimilarityEncoder</span></a><span class="p">(</span><a href="https://dirty-cat.github.io/stable/generated/dirty_cat.SimilarityEncoder.html#dirty_cat.SimilarityEncoder" title="dirty_cat.SimilarityEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">similarity</span></a><span class="o">=</span><span class="s1">&#39;ngram&#39;</span><span class="p">)</span>
+<a href="https://dirty-cat.github.io/stable/generated/dirty_cat.TargetEncoder.html#dirty_cat.TargetEncoder" title="dirty_cat.TargetEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target</span></a> <span class="o">=</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.TargetEncoder.html#dirty_cat.TargetEncoder" title="dirty_cat.TargetEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">TargetEncoder</span></a><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+<a href="https://dirty-cat.github.io/stable/generated/dirty_cat.MinHashEncoder.html#dirty_cat.MinHashEncoder" title="dirty_cat.MinHashEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">minhash</span></a> <span class="o">=</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.MinHashEncoder.html#dirty_cat.MinHashEncoder" title="dirty_cat.MinHashEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">MinHashEncoder</span></a><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<a href="https://dirty-cat.github.io/stable/generated/dirty_cat.GapEncoder.html#dirty_cat.GapEncoder" title="dirty_cat.GapEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gap</span></a> <span class="o">=</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.GapEncoder.html#dirty_cat.GapEncoder" title="dirty_cat.GapEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">GapEncoder</span></a><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoder_names</span></a> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;one-hot&#39;</span><span class="p">:</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">one_hot</span></a><span class="p">,</span>
+    <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.SimilarityEncoder.html#dirty_cat.SimilarityEncoder" title="dirty_cat.SimilarityEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">SimilarityEncoder</span></a><span class="p">(</span><a href="https://dirty-cat.github.io/stable/generated/dirty_cat.SimilarityEncoder.html#dirty_cat.SimilarityEncoder" title="dirty_cat.SimilarityEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">similarity</span></a><span class="o">=</span><span class="s1">&#39;ngram&#39;</span><span class="p">),</span>
+    <span class="s1">&#39;target&#39;</span><span class="p">:</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.TargetEncoder.html#dirty_cat.TargetEncoder" title="dirty_cat.TargetEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target</span></a><span class="p">,</span>
+    <span class="s1">&#39;minhash&#39;</span><span class="p">:</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.MinHashEncoder.html#dirty_cat.MinHashEncoder" title="dirty_cat.MinHashEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">minhash</span></a><span class="p">,</span>
+    <span class="s1">&#39;gap&#39;</span><span class="p">:</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.GapEncoder.html#dirty_cat.GapEncoder" title="dirty_cat.GapEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gap</span></a><span class="p">}</span>
+</pre></div>
+</div>
+<p>We assemble these to be applied on the relevant columns</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.make_column_transformer.html#sklearn.compose.make_column_transformer" title="sklearn.compose.make_column_transformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-function"><span class="n">make_column_transformer</span></a>
+<a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer" title="sklearn.compose.ColumnTransformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoder</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.make_column_transformer.html#sklearn.compose.make_column_transformer" title="sklearn.compose.make_column_transformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-function"><span class="n">make_column_transformer</span></a><span class="p">(</span>
+    <span class="p">(</span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">one_hot</span></a><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">,</span> <span class="s1">&#39;department_name&#39;</span><span class="p">,</span> <span class="s1">&#39;assignment_category&#39;</span><span class="p">]),</span>
+    <span class="p">(</span><span class="s1">&#39;passthrough&#39;</span><span class="p">,</span> <span class="s1">&#39;Year First Hired&#39;</span><span class="p">),</span>
+    <span class="c1"># Last but not least, our dirty column</span>
+    <span class="p">(</span><span class="s1">&#39;employee_position_title&#39;</span><span class="p">,</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">one_hot</span></a><span class="p">),</span>
+    <span class="n">remainder</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">,</span>
+   <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-prediction-pipeline">
+<h4>The prediction pipeline<a class="headerlink" href="#the-prediction-pipeline" title="Permalink to this headline">¶</a></h4>
+<p>We will use a HistGradientBoostingRegressor, which is a good predictor
+for data with heterogeneous columns
+(for scikit-learn 0.24 we need to require the experimental feature)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.experimental</span> <span class="kn">import</span> <span class="n">enable_hist_gradient_boosting</span>  <span class="c1"># noqa</span>
 <span class="c1"># now you can import normally from ensemble</span>
 <span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.base.RegressorMixin.html#sklearn.base.RegressorMixin" title="sklearn.base.RegressorMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">HistGradientBoostingRegressor</span></a>
 
-<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoders_dict</span></a> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;one-hot&#39;</span><span class="p">:</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class"><span class="n">OneHotEncoder</span></a><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-    <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.SimilarityEncoder.html#dirty_cat.SimilarityEncoder" title="dirty_cat.SimilarityEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">SimilarityEncoder</span></a><span class="p">(</span><span class="n">similarity</span><span class="o">=</span><span class="s1">&#39;ngram&#39;</span><span class="p">),</span>
-    <span class="s1">&#39;target&#39;</span><span class="p">:</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.TargetEncoder.html#dirty_cat.TargetEncoder" title="dirty_cat.TargetEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">TargetEncoder</span></a><span class="p">(</span><span class="n">handle_unknown</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">),</span>
-    <span class="s1">&#39;minhash&#39;</span><span class="p">:</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.MinHashEncoder.html#dirty_cat.MinHashEncoder" title="dirty_cat.MinHashEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">MinHashEncoder</span></a><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
-    <span class="s1">&#39;gap&#39;</span><span class="p">:</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.GapEncoder.html#dirty_cat.GapEncoder" title="dirty_cat.GapEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class"><span class="n">GapEncoder</span></a><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
-    <span class="s1">&#39;numerical&#39;</span><span class="p">:</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.FunctionTransformer.html#sklearn.preprocessing.FunctionTransformer" title="sklearn.preprocessing.FunctionTransformer" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class"><span class="n">FunctionTransformer</span></a><span class="p">(</span><span class="kc">None</span><span class="p">)}</span>
-
-<span class="c1"># We then create a function that takes one key of our ``encoders_dict``,</span>
-<span class="c1"># returns a pipeline object with the associated encoder,</span>
-<span class="c1"># as well as a gradient-boosting regressor</span>
-
-<span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer" title="sklearn.compose.ColumnTransformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-class"><span class="n">ColumnTransformer</span></a>
+<span class="c1"># We then create a pipeline chaining our encoders to a learner</span>
 <span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline" title="sklearn.pipeline.make_pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-function"><span class="n">make_pipeline</span></a>
-
-
-<span class="k">def</span> <span class="nf">assemble_pipeline</span><span class="p">(</span><span class="n">encoding_method</span><span class="p">):</span>
-    <span class="c1"># static transformers from the other columns</span>
-    <span class="n">transformers</span> <span class="o">=</span> <span class="p">[(</span><span class="n">enc</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">col</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoders_dict</span></a><span class="p">[</span><span class="n">enc</span><span class="p">],</span> <span class="p">[</span><span class="n">col</span><span class="p">])</span>
-                    <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">enc</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">clean_columns</span></a><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
-    <span class="c1"># adding the encoded column</span>
-    <span class="n">transformers</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">encoding_method</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoders_dict</span></a><span class="p">[</span><span class="n">encoding_method</span><span class="p">],</span>
-                      <span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dirty_column</span></a><span class="p">])]</span>
-    <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pipeline</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline" title="sklearn.pipeline.make_pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-function"><span class="n">make_pipeline</span></a><span class="p">(</span>
-        <span class="c1"># Use ColumnTransformer to combine the features</span>
-        <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer" title="sklearn.compose.ColumnTransformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-class"><span class="n">ColumnTransformer</span></a><span class="p">(</span><span class="n">transformers</span><span class="o">=</span><span class="n">transformers</span><span class="p">,</span> <span class="n">remainder</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">),</span>
-        <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.base.RegressorMixin.html#sklearn.base.RegressorMixin" title="sklearn.base.RegressorMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">HistGradientBoostingRegressor</span></a><span class="p">()</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pipeline</span></a>
+<a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pipeline</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline" title="sklearn.pipeline.make_pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-function"><span class="n">make_pipeline</span></a><span class="p">(</span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer" title="sklearn.compose.ColumnTransformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoder</span></a><span class="p">,</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.base.RegressorMixin.html#sklearn.base.RegressorMixin" title="sklearn.base.RegressorMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">HistGradientBoostingRegressor</span></a><span class="p">())</span>
 </pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/varoquau/dev/scikit-learn/sklearn/experimental/enable_hist_gradient_boosting.py:16: UserWarning: Since version 1.0, it is not needed to import enable_hist_gradient_boosting anymore. HistGradientBoostingClassifier and HistGradientBoostingRegressor are now stable and can be normally imported from sklearn.ensemble.
+  warnings.warn(
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="comparing-different-encoding-for-supervised-learning">
@@ -454,30 +453,38 @@ and store the returned cross-validation score:</p>
 
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">all_scores</span></a> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
-<span class="k">for</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">method</span></a> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoding_methods</span></a><span class="p">:</span>
-    <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pipeline</span></a> <span class="o">=</span> <span class="n">assemble_pipeline</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">method</span></a><span class="p">)</span>
+<span class="k">for</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">name</span></a><span class="p">,</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.GapEncoder.html#dirty_cat.GapEncoder" title="dirty_cat.GapEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">method</span></a> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoder_names</span></a><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer" title="sklearn.compose.ColumnTransformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoder</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.make_column_transformer.html#sklearn.compose.make_column_transformer" title="sklearn.compose.make_column_transformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-function"><span class="n">make_column_transformer</span></a><span class="p">(</span>
+        <span class="p">(</span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">one_hot</span></a><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">,</span> <span class="s1">&#39;department_name&#39;</span><span class="p">,</span> <span class="s1">&#39;assignment_category&#39;</span><span class="p">]),</span>
+        <span class="p">(</span><span class="s1">&#39;passthrough&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Year First Hired&#39;</span><span class="p">]),</span>
+        <span class="c1"># Last but not least, our dirty column</span>
+        <span class="p">(</span><a href="https://dirty-cat.github.io/stable/generated/dirty_cat.GapEncoder.html#dirty_cat.GapEncoder" title="dirty_cat.GapEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">method</span></a><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;employee_position_title&#39;</span><span class="p">]),</span>
+        <span class="n">remainder</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pipeline</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline" title="sklearn.pipeline.make_pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-function"><span class="n">make_pipeline</span></a><span class="p">(</span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer" title="sklearn.compose.ColumnTransformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoder</span></a><span class="p">,</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.base.RegressorMixin.html#sklearn.base.RegressorMixin" title="sklearn.base.RegressorMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">HistGradientBoostingRegressor</span></a><span class="p">())</span>
     <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="sklearn.model_selection.cross_val_score" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">cross_val_score</span></a><span class="p">(</span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pipeline</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="pandas.Series" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> encoding&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">method</span></a><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> encoding&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">name</span></a><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;r2 score:  mean: </span><span class="si">{:.3f}</span><span class="s1">; std: </span><span class="si">{:.3f}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <a href="https://numpy.org/doc/stable/reference/generated/numpy.mean.html#numpy.mean" title="numpy.mean" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">mean</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">),</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.std.html#numpy.std" title="numpy.std" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">std</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">)))</span>
-    <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">all_scores</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">method</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a>
+    <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">all_scores</span></a><span class="p">[</span><a href="https://dirty-cat.github.io/stable/generated/dirty_cat.GapEncoder.html#dirty_cat.GapEncoder" title="dirty_cat.GapEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">method</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>one-hot encoding
 r2 score:  mean: 0.776; std: 0.028
 
-target encoding
-r2 score:  mean: 0.842; std: 0.030
-
 similarity encoding
 r2 score:  mean: 0.923; std: 0.014
+
+target encoding
+r2 score:  mean: 0.842; std: 0.030
 
 minhash encoding
 r2 score:  mean: 0.919; std: 0.012
 
 gap encoding
-r2 score:  mean: 0.908; std: 0.011
+r2 score:  mean: 0.903; std: 0.017
 </pre></div>
 </div>
 </div>
@@ -495,6 +502,11 @@ r2 score:  mean: 0.908; std: 0.011
 </pre></div>
 </div>
 <img alt="02 dirty categories" class="sphx-glr-single-img" src="../_images/sphx_glr_02_dirty_categories_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/varoquau/dev/dirty_data_tutorial/notes/02_dirty_categories.py:160: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all axes decorations.
+  plt.tight_layout()
+</pre></div>
+</div>
 <p>The clear trend is that encoders that use the string form
 of the category (similarity, minhash, and gap) perform better than
 those that discard it.</p>
@@ -722,9 +734,9 @@ can be readily applied to the dataframe</strong>.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>scores=array([0.90664182, 0.88617175, 0.90759486, 0.90401124, 0.90497323])
-mean=0.9018785810113942
-std=0.007952280159383717
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>scores=array([0.86807381, 0.85438695, 0.90916532, 0.90702853, 0.92304461])
+mean=0.8923398418322229
+std=0.026347291899617892
 </pre></div>
 </div>
 <p>The prediction perform here is pretty much as good as above
@@ -782,7 +794,7 @@ A <a class="reference external" href="https://scikit-learn.org/0.20/modules/gene
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;division: operations, station, liquor&#39;, &#39;division: district, patrol, squad&#39;, &#39;division: compliance, twinbrook, downtown&#39;, &#39;division: investigative, administrative, communication&#39;, &#39;division: management, maintenance, development&#39;, &#39;division: director, safety, traffic&#39;, &#39;division: engineering, planning, programs&#39;, &#39;division: welfare, health, sexual&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;division: district, patrol, squad&#39;, &#39;division: administration, battalion, station&#39;, &#39;division: services, service, health&#39;, &#39;division: security, custody, director&#39;, &#39;division: communications, communication, division&#39;, &#39;division: eligibility, facilities, maintenance&#39;, &#39;division: management, enforcement, germantown&#39;, &#39;division: gaithersburg, transit, training&#39;]
 </pre></div>
 </div>
 <p>As we can see, it created a new column for each unique value.
@@ -853,7 +865,7 @@ having a permanent, full-time job :).</p>
 automated by the <a class="reference external" href="https://dirty-cat.github.io/stable/generated/dirty_cat.SuperVectorizer.html#dirty_cat.SuperVectorizer" title="(in dirty_cat v0.2.0a1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SuperVectorizer</span></code></a>, and the resulting pipeline can still be
 inspected, even with non-normalized entries.</p>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 3 minutes  17.254 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  50.264 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gen-notes-02-dirty-categories-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/02_dirty_categories.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>
