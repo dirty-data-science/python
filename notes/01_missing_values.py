@@ -15,7 +15,7 @@ it's impact on predictive models. In particular, standard imputation
 procedures can reconstruct missing values without distortion only if the
 data is *missing at random*.
 
-The mathematical details behind this notebook can be found in
+A good introduction to the mathematics behind this notebook can be found in
 https://arxiv.org/abs/1902.06931
 """
 
