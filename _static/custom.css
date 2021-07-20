@@ -5,6 +5,7 @@ div.body h1 {
     text-align: center;
     font-size: 270%;
     color: #055100;
+    margin-bottom: 1em;
 }
 
 /* Secondary sections title */
@@ -74,6 +75,7 @@ div.sphx-glr-download-link-note {
     float: right;
     padding: 0px 1px 10px 10px;
     background-color: #F6F6F6;
+    font-size: small;
 }
 
 /* The download block at the bottom */
@@ -142,7 +144,7 @@ div.sphinxsidebarwrapper ul:first-of-type {
 
 /* Undo for children */
 div.sphinxsidebarwrapper li li a {
-    display: inline;
+    display: block;
 }
 
 div.sphinxsidebarwrapper li li {
@@ -156,7 +158,7 @@ div.sphinxsidebarwrapper li li ul {
 
 /* Undo for other pages */
 div.sphinxsidebarwrapper li.toctree-l1 a {
-    display: inline;
+    display: block;
 }
 
 /* Less info in the navigation sidebar */
@@ -169,15 +171,33 @@ div.sphinxsidebarwrapper div h3:first-of-type {
     display: block;
 }
 
-/* The "active" sections */
-div.sphinxsidebarwrapper li a.active {
-    font-weight: bold;
-}
-
-div.sphinxsidebarwrapper li a.active + ul {
+/* The section links */
+div.sphinxsidebarwrapper li a {
     display: block;
+    margin-left: -2.5ex;
+    padding-left: 2.5ex;
 }
 
+div.sphinxsidebarwrapper ul ul {
+    list-style: circle;
+}
+
+div.sphinxsidebarwrapper li li a:hover {
+    border-right: #076B00 solid 5px;
+    background-color: #F6F6F6;
+}
+
+/* The "active" sections */
+div.sphinxsidebarwrapper li li a.active {
+    border-right: #055100 solid 5px;
+    background-color: #F3F3F3;
+    text-decoration: none;
+}
+
+div.sphinxsidebarwrapper li li a.active + ul {
+    display: block;
+    font-size: smaller;
+}
 
 /* Flush the sidebar more to the left */
 @media (min-width: 1500px) {

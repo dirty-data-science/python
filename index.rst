@@ -2,7 +2,7 @@
 Machine-learning on dirty-data in Python: a tutorial
 =====================================================
 
-In data science, applications of machine learning spend a significant
+Often in data science, machine-learning applications spend a significant
 energy preparing, tidying, and cleaning the data before the machine
 learning.
 
