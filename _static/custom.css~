@@ -95,9 +95,15 @@ div.sphx-glr-footer-example {
 	position: absolute;
 	right: 10px;
 	width: 300px;
-	top: 300px;
+	top: 100px;
     }
 
+}
+
+@media only screen and (min-width: 1750px) {
+    div.sphx-glr-footer-example {
+	width: 400px;
+    }
 }
 
 div.sphx-glr-download-link-note p.admonition-title {
