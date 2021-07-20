@@ -467,7 +467,7 @@ and store the returned cross-validation score:</p>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> encoding&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">name</span></a><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;r2 score:  mean: </span><span class="si">{:.3f}</span><span class="s1">; std: </span><span class="si">{:.3f}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
         <a href="https://numpy.org/doc/stable/reference/generated/numpy.mean.html#numpy.mean" title="numpy.mean" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">mean</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">),</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.std.html#numpy.std" title="numpy.std" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">std</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">)))</span>
-    <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">all_scores</span></a><span class="p">[</span><a href="https://dirty-cat.github.io/stable/generated/dirty_cat.GapEncoder.html#dirty_cat.GapEncoder" title="dirty_cat.GapEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">method</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a>
+    <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">all_scores</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">name</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
@@ -484,7 +484,7 @@ minhash encoding
 r2 score:  mean: 0.919; std: 0.012
 
 gap encoding
-r2 score:  mean: 0.903; std: 0.017
+r2 score:  mean: 0.916; std: 0.014
 </pre></div>
 </div>
 </div>
@@ -502,11 +502,6 @@ r2 score:  mean: 0.903; std: 0.017
 </pre></div>
 </div>
 <img alt="02 dirty categories" class="sphx-glr-single-img" src="../_images/sphx_glr_02_dirty_categories_001.png" />
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/varoquau/dev/dirty_data_tutorial/notes/02_dirty_categories.py:160: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all axes decorations.
-  plt.tight_layout()
-</pre></div>
-</div>
 <p>The clear trend is that encoders that use the string form
 of the category (similarity, minhash, and gap) perform better than
 those that discard it.</p>
@@ -734,9 +729,9 @@ can be readily applied to the dataframe</strong>.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>scores=array([0.86807381, 0.85438695, 0.90916532, 0.90702853, 0.92304461])
-mean=0.8923398418322229
-std=0.026347291899617892
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>scores=array([0.90180643, 0.85666805, 0.90379381, 0.84444664, 0.92812669])
+mean=0.8869683220153757
+std=0.03137985908960377
 </pre></div>
 </div>
 <p>The prediction perform here is pretty much as good as above
@@ -794,7 +789,7 @@ A <a class="reference external" href="https://scikit-learn.org/0.20/modules/gene
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;division: district, patrol, squad&#39;, &#39;division: administration, battalion, station&#39;, &#39;division: services, service, health&#39;, &#39;division: security, custody, director&#39;, &#39;division: communications, communication, division&#39;, &#39;division: eligibility, facilities, maintenance&#39;, &#39;division: management, enforcement, germantown&#39;, &#39;division: gaithersburg, transit, training&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;division: development, technology, equipment&#39;, &#39;division: childhood, services, highway&#39;, &#39;division: station, staff, council&#39;, &#39;division: district, patrol, squad&#39;, &#39;division: gaithersburg, nicholson, officer&#39;, &#39;division: administrative, administration, warehouse&#39;, &#39;division: division, director, safety&#39;, &#39;division: training, kensington, spring&#39;]
 </pre></div>
 </div>
 <p>As we can see, it created a new column for each unique value.
@@ -865,7 +860,7 @@ having a permanent, full-time job :).</p>
 automated by the <a class="reference external" href="https://dirty-cat.github.io/stable/generated/dirty_cat.SuperVectorizer.html#dirty_cat.SuperVectorizer" title="(in dirty_cat v0.2.0a1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SuperVectorizer</span></code></a>, and the resulting pipeline can still be
 inspected, even with non-normalized entries.</p>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  50.264 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  52.576 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gen-notes-02-dirty-categories-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/02_dirty_categories.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>

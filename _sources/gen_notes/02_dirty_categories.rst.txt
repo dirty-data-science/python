@@ -494,7 +494,7 @@ and store the returned cross-validation score:
         print('{} encoding'.format(name))
         print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
             np.mean(scores), np.std(scores)))
-        all_scores[method] = scores
+        all_scores[name] = scores
 
 
 
@@ -519,7 +519,7 @@ and store the returned cross-validation score:
     r2 score:  mean: 0.919; std: 0.012
 
     gap encoding
-    r2 score:  mean: 0.903; std: 0.017
+    r2 score:  mean: 0.916; std: 0.014
 
 
 
@@ -552,15 +552,6 @@ Finally, we plot the scores on a boxplot:
     :alt: 02 dirty categories
     :class: sphx-glr-single-img
 
-
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/varoquau/dev/dirty_data_tutorial/notes/02_dirty_categories.py:160: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all axes decorations. 
-      plt.tight_layout()
 
 
 
@@ -887,9 +878,9 @@ Let's perform a cross-validation to see how well this model predicts
 
  .. code-block:: none
 
-    scores=array([0.86807381, 0.85438695, 0.90916532, 0.90702853, 0.92304461])
-    mean=0.8923398418322229
-    std=0.026347291899617892
+    scores=array([0.90180643, 0.85666805, 0.90379381, 0.84444664, 0.92812669])
+    mean=0.8869683220153757
+    std=0.03137985908960377
 
 
 
@@ -1032,7 +1023,7 @@ After encoding (we only plot the first 8 feature names):
  .. code-block:: none
 
 
-    ['division: district, patrol, squad', 'division: administration, battalion, station', 'division: services, service, health', 'division: security, custody, director', 'division: communications, communication, division', 'division: eligibility, facilities, maintenance', 'division: management, enforcement, germantown', 'division: gaithersburg, transit, training']
+    ['division: development, technology, equipment', 'division: childhood, services, highway', 'division: station, staff, council', 'division: district, patrol, squad', 'division: gaithersburg, nicholson, officer', 'division: administrative, administration, warehouse', 'division: division, director, safety', 'division: training, kensington, spring']
 
 
 
@@ -1180,7 +1171,7 @@ having a permanent, full-time job :).
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  50.264 seconds)
+   **Total running time of the script:** ( 2 minutes  52.576 seconds)
 
 
 .. _sphx_glr_download_gen_notes_02_dirty_categories.py:

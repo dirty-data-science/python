@@ -143,7 +143,7 @@ for name, method in encoder_names.items():
     print('{} encoding'.format(name))
     print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
         np.mean(scores), np.std(scores)))
-    all_scores[method] = scores
+    all_scores[name] = scores
 
 # %%
 # Plotting the results
