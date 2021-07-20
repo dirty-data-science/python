@@ -1,5 +1,5 @@
 =====================================================
-Machine-learning on dirty-data in Python: a tutorial
+Machine-learning on dirty data in Python: a tutorial
 =====================================================
 
 Often in data science, machine-learning applications spend a significant
