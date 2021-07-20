@@ -36,10 +36,10 @@ Notebooks:
 
 .. only:: html
 
- .. figure:: /gen_notes/images/thumb/sphx_glr_02_dirty_categrories_thumb.png
+ .. figure:: /gen_notes/images/thumb/sphx_glr_02_dirty_categories_thumb.png
      :alt: Dirty categories: learning with non normalized entries
 
-     :ref:`sphx_glr_gen_notes_02_dirty_categrories.py`
+     :ref:`sphx_glr_gen_notes_02_dirty_categories.py`
 
 .. raw:: html
 
@@ -49,7 +49,7 @@ Notebooks:
 .. toctree::
    :hidden:
 
-   /gen_notes/02_dirty_categrories
+   /gen_notes/02_dirty_categories
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>
