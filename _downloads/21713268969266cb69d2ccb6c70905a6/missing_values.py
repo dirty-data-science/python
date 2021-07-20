@@ -128,12 +128,12 @@ plt.legend()
 # We can see that the imputer did a fairly good job of recovering the
 # data distribution
 #
-# Supervised learning with a linear model
-# ----------------------------------------
+# Supervised learning: imputation and a linear model
+# -----------------------------------------------------------
 #
 # Given that the relationship between the fully-observed X and y is a
 # linear relationship, it seems natural to use a linear model for
-# prediction, which must be adapted to missing values using imputation.
+# prediction. It must be adapted to missing values using imputation.
 #
 # To use it in supervised setting, we will pipeline it with a linear
 # model, using a ridge, which is a good default linear model
@@ -153,7 +153,7 @@ scores_iterative_and_ridge = model_selection.cross_val_score(
 scores_iterative_and_ridge
 
 # %%
-# **Computational cost** One drawback of the IterativeImputer to keep in
+# **Computational cost**: One drawback of the IterativeImputer to keep in
 # mind is that its computational cost can become prohibitive of large
 # datasets (it has a bad computation scalability).
 
@@ -258,6 +258,15 @@ plt.tight_layout()
 
 
 # %%
+#
+# **When there is a reasonnable amout of data, the
+# HistGradientBoostingRegressor is the best strategy** even for a linear
+# data-generating mechanism, in MAR settings, which are settings
+# favorable to imputation + linear model.
+#
+# |
+
+# %%
 # Missing not at random: censoring
 # ======================================
 #
@@ -296,11 +305,13 @@ plt.legend()
 # distribution of all the data
 
 # %%
-# Standard imputation fails to recover the distribution
+# Imputation fails to recover the distribution
 # --------------------------------------------------------
+#
+# With MNAR data, off-the-shelf imputation methods do not recover the
+# initial distribution:
 
 iterative_imputer = impute.IterativeImputer()
-
 X_imputed = iterative_imputer.fit_transform(X)
 
 plt.figure()
@@ -310,6 +321,65 @@ plt.scatter(X_imputed[:, 0], X_imputed[:, 1], c=y, marker='X',
             label='Imputed')
 plt.colorbar(label='y')
 plt.legend()
+
+# %%
+# Recovering the initial data distribution would need much more mass on
+# the right and the top of the figure. The imputed data is shifted to
+# lower values than the original data.
+#
+# Note also that as imputed values typically have lower X values than
+# their full-observed counterparts, the association between X and y is
+# also distorted. This is visible as the imputed values appear as lighter
+# diagonal lines.
+#
+# An important consequence is that **the link between imputed X and y is no
+# longer linear**, although the original data-generating mechanism is
+# linear. For this reason, it is often a good idea to use non-linear
+# learners in the presence of missing values.
+
+# %%
+# Predictive pipelines
+# -----------------------------
+#
+# Let us now evaluate predictive pipelines
+scores = dict()
+
+# %%
+# Iterative imputation and linear model
+scores['IterativeImputer + Ridge'] = model_selection.cross_val_score(
+    iterative_and_ridge, X, y, cv=10)
+
+# %%
+# Mean imputation and linear model
+scores['Mean imputation + Ridge'] = model_selection.cross_val_score(
+    mean_and_ridge, X, y, cv=10)
+
+# %%
+# IterativeImputer and non-linear model
+iterative_and_gb = make_pipeline(impute.SimpleImputer(),
+                            HistGradientBoostingRegressor())
+scores['Mean imputation\n+ HistGradientBoostingRegressor'] = model_selection.cross_val_score(
+    iterative_and_gb, X, y, cv=10)
+
+# %%
+# Mean imputation and non-linear model
+mean_and_gb = make_pipeline(impute.SimpleImputer(),
+                            HistGradientBoostingRegressor())
+scores['IterativeImputer\n+ HistGradientBoostingRegressor'] = model_selection.cross_val_score(
+    mean_and_gb, X, y, cv=10)
+
+# %%
+# And now the HistGradientBoostingRegressor, whithout imputation
+scores['HistGradientBoostingRegressor'] = model_selection.cross_val_score(
+    HistGradientBoostingRegressor(), X, y, cv=10)
+
+# %%
+# We plot the results
+sns.boxplot(data=pd.DataFrame(scores), orient='h')
+plt.title('Prediction accuracy\n linear and small data\n'
+          'Missing not at Random')
+plt.tight_layout()
+
 
 # %%
 # Using a predictor for the fully-observed case

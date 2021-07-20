@@ -107,7 +107,7 @@ A quick plot reveals what the data looks like
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f6fa8576580>
+    <matplotlib.colorbar.Colorbar object at 0x7f25dd901a00>
 
 
 
@@ -176,7 +176,7 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f6fa844e9a0>
+    <matplotlib.legend.Legend object at 0x7f25dd765df0>
 
 
 
@@ -285,7 +285,7 @@ We can display the imputed data as our previous visualization
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f6f79d5d250>
+    <matplotlib.legend.Legend object at 0x7f25d2b546d0>
 
 
 
@@ -294,12 +294,12 @@ We can display the imputed data as our previous visualization
 We can see that the imputer did a fairly good job of recovering the
 data distribution
 
-Supervised learning with a linear model
-----------------------------------------
+Supervised learning: imputation and a linear model
+-----------------------------------------------------------
 
 Given that the relationship between the fully-observed X and y is a
 linear relationship, it seems natural to use a linear model for
-prediction, which must be adapted to missing values using imputation.
+prediction. It must be adapted to missing values using imputation.
 
 To use it in supervised setting, we will pipeline it with a linear
 model, using a ridge, which is a good default linear model
@@ -354,7 +354,7 @@ folds to 10)
 
 .. GENERATED FROM PYTHON SOURCE LINES 156-159
 
-**Computational cost** One drawback of the IterativeImputer to keep in
+**Computational cost**: One drawback of the IterativeImputer to keep in
 mind is that its computational cost can become prohibitive of large
 datasets (it has a bad computation scalability).
 
@@ -409,7 +409,7 @@ A quick visualization reveals a larger disortion of the distribution
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f6f79c6c160>
+    <matplotlib.colorbar.Colorbar object at 0x7f25d2ae2250>
 
 
 
@@ -620,8 +620,8 @@ imputation
  .. code-block:: none
 
 
-    array([0.56976283, 0.5708208 , 0.55195623, 0.55170622, 0.52400319,
-           0.54014591, 0.55622059, 0.59915038, 0.54118073, 0.60385627])
+    array([0.57113473, 0.5711859 , 0.54966187, 0.55123937, 0.52478314,
+           0.54274794, 0.55441546, 0.59902986, 0.54229768, 0.60273433])
 
 
 
@@ -655,7 +655,16 @@ We plot the results
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 261-270
+.. GENERATED FROM PYTHON SOURCE LINES 261-267
+
+**When there is a reasonnable amout of data, the
+HistGradientBoostingRegressor is the best strategy** even for a linear
+data-generating mechanism, in MAR settings, which are settings
+favorable to imputation + linear model.
+
+|
+
+.. GENERATED FROM PYTHON SOURCE LINES 270-279
 
 Missing not at random: censoring
 ======================================
@@ -667,7 +676,7 @@ missing.
 The missing-values mechanism
 -----------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 270-283
+.. GENERATED FROM PYTHON SOURCE LINES 279-292
 
 .. code-block:: default
 
@@ -691,11 +700,11 @@ The missing-values mechanism
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 284-285
+.. GENERATED FROM PYTHON SOURCE LINES 293-294
 
 A quick plot to look at the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 285-294
+.. GENERATED FROM PYTHON SOURCE LINES 294-303
 
 .. code-block:: default
 
@@ -723,27 +732,29 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f6f71191820>
+    <matplotlib.legend.Legend object at 0x7f25c9ffdca0>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 295-297
+.. GENERATED FROM PYTHON SOURCE LINES 304-306
 
 Here the full-observed data does not reflect well at all the
 distribution of all the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 299-301
+.. GENERATED FROM PYTHON SOURCE LINES 308-313
 
-Standard imputation fails to recover the distribution
+Imputation fails to recover the distribution
 --------------------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 301-314
+With MNAR data, off-the-shelf imputation methods do not recover the
+initial distribution:
+
+.. GENERATED FROM PYTHON SOURCE LINES 313-325
 
 .. code-block:: default
 
 
     iterative_imputer = impute.IterativeImputer()
-
     X_imputed = iterative_imputer.fit_transform(X)
 
     plt.figure()
@@ -769,11 +780,166 @@ Standard imputation fails to recover the distribution
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f6f7113a2e0>
+    <matplotlib.legend.Legend object at 0x7f25c9f1e760>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 315-320
+.. GENERATED FROM PYTHON SOURCE LINES 326-339
+
+Recovering the initial data distribution would need much more mass on
+the right and the top of the figure. The imputed data is shifted to
+lower values than the original data.
+
+Note also that as imputed values typically have lower X values than
+their full-observed counterparts, the association between X and y is
+also distorted. This is visible as the imputed values appear as lighter
+diagonal lines.
+
+An important consequence is that **the link between imputed X and y is no
+longer linear**, although the original data-generating mechanism is
+linear. For this reason, it is often a good idea to use non-linear
+learners in the presence of missing values.
+
+.. GENERATED FROM PYTHON SOURCE LINES 341-345
+
+Predictive pipelines
+-----------------------------
+
+Let us now evaluate predictive pipelines
+
+.. GENERATED FROM PYTHON SOURCE LINES 345-347
+
+.. code-block:: default
+
+    scores = dict()
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 348-349
+
+Iterative imputation and linear model
+
+.. GENERATED FROM PYTHON SOURCE LINES 349-352
+
+.. code-block:: default
+
+    scores['IterativeImputer + Ridge'] = model_selection.cross_val_score(
+        iterative_and_ridge, X, y, cv=10)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 353-354
+
+Mean imputation and linear model
+
+.. GENERATED FROM PYTHON SOURCE LINES 354-357
+
+.. code-block:: default
+
+    scores['Mean imputation + Ridge'] = model_selection.cross_val_score(
+        mean_and_ridge, X, y, cv=10)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 358-359
+
+IterativeImputer and non-linear model
+
+.. GENERATED FROM PYTHON SOURCE LINES 359-364
+
+.. code-block:: default
+
+    iterative_and_gb = make_pipeline(impute.SimpleImputer(),
+                                HistGradientBoostingRegressor())
+    scores['Mean imputation\n+ HistGradientBoostingRegressor'] = model_selection.cross_val_score(
+        iterative_and_gb, X, y, cv=10)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 365-366
+
+Mean imputation and non-linear model
+
+.. GENERATED FROM PYTHON SOURCE LINES 366-371
+
+.. code-block:: default
+
+    mean_and_gb = make_pipeline(impute.SimpleImputer(),
+                                HistGradientBoostingRegressor())
+    scores['IterativeImputer\n+ HistGradientBoostingRegressor'] = model_selection.cross_val_score(
+        mean_and_gb, X, y, cv=10)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 372-373
+
+And now the HistGradientBoostingRegressor, whithout imputation
+
+.. GENERATED FROM PYTHON SOURCE LINES 373-376
+
+.. code-block:: default
+
+    scores['HistGradientBoostingRegressor'] = model_selection.cross_val_score(
+        HistGradientBoostingRegressor(), X, y, cv=10)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 377-378
+
+We plot the results
+
+.. GENERATED FROM PYTHON SOURCE LINES 378-384
+
+.. code-block:: default
+
+    sns.boxplot(data=pd.DataFrame(scores), orient='h')
+    plt.title('Prediction accuracy\n linear and small data\n'
+              'Missing not at Random')
+    plt.tight_layout()
+
+
+
+
+
+.. image:: /gen_notes/images/sphx_glr_missing_values_009.png
+    :alt: Prediction accuracy  linear and small data Missing not at Random
+    :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 385-390
 
 Using a predictor for the fully-observed case
 ==============================================
@@ -781,7 +947,7 @@ Using a predictor for the fully-observed case
 Let us go back to the "easy" case of the missing completely at random
 settings with plenty of data
 
-.. GENERATED FROM PYTHON SOURCE LINES 320-324
+.. GENERATED FROM PYTHON SOURCE LINES 390-394
 
 .. code-block:: default
 
@@ -796,12 +962,12 @@ settings with plenty of data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 325-327
+.. GENERATED FROM PYTHON SOURCE LINES 395-397
 
 Suppose we have been able to train a predictive model that works on
 fully-observed data:
 
-.. GENERATED FROM PYTHON SOURCE LINES 327-331
+.. GENERATED FROM PYTHON SOURCE LINES 397-401
 
 .. code-block:: default
 
@@ -819,7 +985,7 @@ fully-observed data:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.827 seconds)
+   **Total running time of the script:** ( 0 minutes  10.252 seconds)
 
 
 .. _sphx_glr_download_gen_notes_missing_values.py:
