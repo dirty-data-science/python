@@ -95,7 +95,7 @@ div.sphx-glr-footer-example {
 	position: absolute;
 	right: 10px;
 	width: 300px;
-	top: 100px;
+	top: 50px;
     }
 
 }
@@ -157,6 +157,11 @@ div.sphinxsidebarwrapper h3:first-of-type {
 /* Undo for childs of enclosing divs */
 div.sphinxsidebarwrapper div h3:first-of-type {
     display: block;
+}
+
+/* Flush the sidebar more to the left */
+@media (min-width: 1500px) {
+
 }
 
 /*************************************************************************/
