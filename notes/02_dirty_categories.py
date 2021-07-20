@@ -61,30 +61,11 @@ y = df[target_column].values.ravel()
 # Assembling a machine-learning pipeline that encodes the data
 # =============================================================
 #
-# Choosing columns
-# -----------------
-#
-# For clean categorical columns, we will use one hot encoding to
-# transform them:
-
-clean_columns = {
-    'gender': 'one-hot',
-    'department_name': 'one-hot',
-    'assignment_category': 'one-hot',
-    'Year First Hired': 'numerical'}
-
-# %%
-# We then choose the categorical encoding methods we want to benchmark
-# and the dirty categorical variable:
-
-encoding_methods = ['one-hot', 'target', 'similarity', 'minhash',
-                    'gap']
-dirty_column = 'employee_position_title'
-
-
-# %%
 # The learning pipeline
 # ----------------------------
+#
+# To build a learning pipeline, we need to assemble encoders for each
+# column, and apply a supvervised learning model on top.
 
 # %%
 # The categorical encoders
@@ -146,18 +127,18 @@ import numpy as np
 
 all_scores = dict()
 
-for method in encoding_methods:
+for name, method in encoder_names.items():
     encoder = make_column_transformer(
         (one_hot, ['gender', 'department_name', 'assignment_category']),
         ('passthrough', ['Year First Hired']),
         # Last but not least, our dirty column
-        (encoder_names[method], ['employee_position_title']),
+        (method, ['employee_position_title']),
         remainder='drop',
     )
 
     pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
     scores = cross_val_score(pipeline, df, y)
-    print('{} encoding'.format(method))
+    print('{} encoding'.format(name))
     print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
         np.mean(scores), np.std(scores)))
     all_scores[method] = scores
