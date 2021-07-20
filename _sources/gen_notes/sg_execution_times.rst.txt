@@ -5,8 +5,8 @@
 
 Computation times
 =================
-**00:10.252** total execution time for **gen_notes** files:
+**00:16.057** total execution time for **gen_notes** files:
 
 +---------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gen_notes_missing_values.py` (``missing_values.py``) | 00:10.252 | 0.0 MB |
+| :ref:`sphx_glr_gen_notes_missing_values.py` (``missing_values.py``) | 00:16.057 | 0.0 MB |
 +---------------------------------------------------------------------+-----------+--------+

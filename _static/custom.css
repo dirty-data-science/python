@@ -36,6 +36,34 @@ div.body pre {
     }
 }
 
+div.body dl.footnote {
+    font-size: smaller;
+}
+
+/* Side hanging footnotes */
+@media (min-width: 1500px) {
+    div.body dl.footnote {
+	position: absolute;
+	right: 1ex;
+	margin-top: -10ex;
+	width: 17em;
+    }
+}
+
+@media (min-width: 1650px) {
+    div.body dl.footnote {
+	width: 20em;
+    }
+
+}
+
+@media (min-width: 1750px) {
+    div.body dl.footnote {
+	width: 25em;
+    }
+
+}
+
 /** Sphinx gallery *******************************************************/
 
 /* The download note on top of the examples */
@@ -67,7 +95,7 @@ div.sphx-glr-footer-example {
 	position: absolute;
 	right: 10px;
 	width: 300px;
-	top: 300px;
+	top: 100px;
     }
 
 }

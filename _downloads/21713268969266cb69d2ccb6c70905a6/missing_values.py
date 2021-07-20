@@ -10,10 +10,10 @@ This notebook reveals why a HistGradientBoostingRegressor (
 :class:`sklearn.ensemble.HistGradientBoostingRegressor` ) is a choice to
 predict with missing values.
 
-Simulations are very useful to control the missing-value mechanism, and
-inspect it's impact on predictive models. In particular, standard
-imputation procedures can reconstruct missing values with distortion only
-if the data is *missing at random*.
+We use simulations to control the missing-value mechanism, and inspect
+it's impact on predictive models. In particular, standard imputation
+procedures can reconstruct missing values without distortion only if the
+data is *missing at random*.
 
 The mathematical details behind this notebook can be found in
 https://arxiv.org/abs/1902.06931
@@ -229,20 +229,17 @@ X, y = generate_mcar(n_samples=20000)
 # Iterative imputation and linear model
 scores_iterative_and_ridge= model_selection.cross_val_score(
     iterative_and_ridge, X, y, cv=10)
-scores_iterative_and_ridge
 
 # %%
 # Mean imputation and linear model
 scores_mean_and_ridge = model_selection.cross_val_score(
     mean_and_ridge, X, y, cv=10)
-scores_mean_and_ridge
 
 # %%
 # And now the HistGradientBoostingRegressor, which does not need
 # imputation
 score_hist_gradient_boosting = model_selection.cross_val_score(
     HistGradientBoostingRegressor(), X, y, cv=10)
-score_hist_gradient_boosting
 
 # %%
 # We plot the results
@@ -262,7 +259,14 @@ plt.tight_layout()
 # **When there is a reasonnable amout of data, the
 # HistGradientBoostingRegressor is the best strategy** even for a linear
 # data-generating mechanism, in MAR settings, which are settings
-# favorable to imputation + linear model.
+# favorable to imputation + linear model [#]_.
+#
+# .. [#] Even in the case of a linear data-generating mechanism, the
+#        optimal prediction one data imputed by a constant
+#        is a piecewise affine function with 2^d regions (
+#        http://proceedings.mlr.press/v108/morvan20a.html ). The
+#        larger the dimensionality (number of features), the more a
+#        imperfect imputation is hard to approximate with a simple model.
 #
 # |
 
@@ -277,12 +281,12 @@ plt.tight_layout()
 # The missing-values mechanism
 # -----------------------------
 
-def generate_censored(n_samples, missing_rate=0.2, rng=42):
+def generate_censored(n_samples, missing_rate=.4, rng=42):
     X, y = generate_without_missing_values(n_samples, rng=rng)
     if not isinstance(rng, np.random.RandomState):
         rng = np.random.RandomState(rng)
 
-    B = np.random.binomial(1, 2 * missing_rate, (n_samples, 2))
+    B = rng.binomial(1, 2 * missing_rate, (n_samples, 2))
     M = (X > 0.5) * B
 
     np.putmask(X, M, np.nan)
@@ -334,8 +338,13 @@ plt.legend()
 #
 # An important consequence is that **the link between imputed X and y is no
 # longer linear**, although the original data-generating mechanism is
-# linear. For this reason, it is often a good idea to use non-linear
-# learners in the presence of missing values.
+# linear [#]_. For this reason, **it is often a good idea to use non-linear
+# learners in the presence of missing values**.
+#
+# .. [#] As mentionned above, even in the case of a linear
+#    data-generating mechanism, imperfect imputation leads to complex
+#    functions to link to y (
+#    http://proceedings.mlr.press/v108/morvan20a.html )
 
 # %%
 # Predictive pipelines
@@ -344,36 +353,30 @@ plt.legend()
 # Let us now evaluate predictive pipelines
 scores = dict()
 
-# %%
 # Iterative imputation and linear model
 scores['IterativeImputer + Ridge'] = model_selection.cross_val_score(
     iterative_and_ridge, X, y, cv=10)
 
-# %%
 # Mean imputation and linear model
 scores['Mean imputation + Ridge'] = model_selection.cross_val_score(
     mean_and_ridge, X, y, cv=10)
 
-# %%
 # IterativeImputer and non-linear model
 iterative_and_gb = make_pipeline(impute.SimpleImputer(),
                             HistGradientBoostingRegressor())
 scores['Mean imputation\n+ HistGradientBoostingRegressor'] = model_selection.cross_val_score(
     iterative_and_gb, X, y, cv=10)
 
-# %%
 # Mean imputation and non-linear model
 mean_and_gb = make_pipeline(impute.SimpleImputer(),
                             HistGradientBoostingRegressor())
 scores['IterativeImputer\n+ HistGradientBoostingRegressor'] = model_selection.cross_val_score(
     mean_and_gb, X, y, cv=10)
 
-# %%
 # And now the HistGradientBoostingRegressor, whithout imputation
 scores['HistGradientBoostingRegressor'] = model_selection.cross_val_score(
     HistGradientBoostingRegressor(), X, y, cv=10)
 
-# %%
 # We plot the results
 sns.boxplot(data=pd.DataFrame(scores), orient='h')
 plt.title('Prediction accuracy\n linear and small data\n'
@@ -382,12 +385,29 @@ plt.tight_layout()
 
 
 # %%
+# We can see that the imputation is not the most important step of the
+# pipeline [#]_, rather **what is important is to use a powerful model**.
+#
+# .. [#] Note that there are less missing values in the example here
+#    compared to the section above on MCAR, hence the absolute prediction
+#    accuracies are not comparable.
+
+# %%
+# .. topic:: Prediction with missing values
+#
+#   The data above are very simple: linear data-generating mechanism,
+#   Gaussian, and low dimensional. Yet, they show the importance of using
+#   non-linear models, in particular the HistGradientBoostingRegressor
+#   which natively deals with missing values.
+
+
+# %%
 # Using a predictor for the fully-observed case
 # ==============================================
 #
 # Let us go back to the "easy" case of the missing completely at random
 # settings with plenty of data
-n_samples = 10000
+n_samples = 20000
 
 X, y = generate_mcar(n_samples, missing_rate=.5)
 
@@ -396,5 +416,99 @@ X, y = generate_mcar(n_samples, missing_rate=.5)
 # fully-observed data:
 
 X_full, y_full = generate_without_missing_values(n_samples)
+full_data_predictor = HistGradientBoostingRegressor()
+full_data_predictor.fit(X_full, y_full)
 
+model_selection.cross_val_score(full_data_predictor, X_full, y_full)
+
+# %%
+# The cross validation reveals that the predictor achieves an excellent
+# explained variance; it is a near-perfect predictor on fully observed
+# data
+
+# %%
+# Now we turn to data with missing values. Given that our data is MAR
+# (missing at random), we will use imputation to build a completed data
+# that looks like the full-observed data
+
+iterative_imputer = impute.IterativeImputer()
+X_imputed = iterative_imputer.fit_transform(X)
+
+# %%
+# The full data predictor can be used on the imputed data
+from sklearn import metrics
+metrics.r2_score(y, full_data_predictor.predict(X_imputed))
+
+# %%
+# This prediction is less good than on the full data, but this is
+# expected, as missing values lead to a loss of information. We can
+# compare it to a model trained to predict on data with missing values
+
+X_train, y_train = generate_mcar(n_samples, missing_rate=.5)
+na_predictor = HistGradientBoostingRegressor()
+na_predictor.fit(X_train, y_train)
+
+metrics.r2_score(y, na_predictor.predict(X))
+
+# %%
+# Applying a model valid on the full data to imputed data work almost
+# as well as a model trained for missing values. The small loss in
+# performance is because the imputation is imperfect.
+
+# %%
+# When the data-generation is non linear
+# ---------------------------------------
+#
+# We now modify a bit the example above to consider the situation where y
+# is a non-linear function of X
+
+X, y = generate_mcar(n_samples, missing_rate=.5)
+y = y ** 2
+
+# Train a predictive model that works on fully-observed data:
+X_full, y_full = generate_without_missing_values(n_samples)
+y_full = y_full ** 2
+full_data_predictor = HistGradientBoostingRegressor()
+full_data_predictor.fit(X_full, y_full)
+
+model_selection.cross_val_score(full_data_predictor, X_full, y_full)
+
+# %%
+# Once again, we have a near-perfect predictor on fully-observed data
+#
+# On data with missing values:
+
+iterative_imputer = impute.IterativeImputer()
+X_imputed = iterative_imputer.fit_transform(X)
+
+from sklearn import metrics
+metrics.r2_score(y, full_data_predictor.predict(X_imputed))
+
+# %%
+# The full-data predictor works much less well
+#
+# Now we use a model trained to predict on data with missing values
+
+X_train, y_train = generate_mcar(n_samples, missing_rate=.5)
+y_train = y_train ** 2
+na_predictor = HistGradientBoostingRegressor()
+na_predictor.fit(X_train, y_train)
+
+metrics.r2_score(y, na_predictor.predict(X))
+
+# %%
+# The model trained on data with missing values works significantly
+# better than that that was optimal for the fully-observed data.
+#
+# **Only for linear mechanism is the model on full data also optimal for
+# prefectly imputed data**. When the function linking X to y has
+# curvature, this curvature turns uncertainty resulting from missingness
+# into bias [#]_.
+#
+# .. [#] The detailed mathematical analysis of prediction after
+#    imputation can be found here: https://arxiv.org/abs/2106.00311
+#
+# |
+#
+# ________
 
