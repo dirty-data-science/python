@@ -129,6 +129,17 @@ div.sphx-glr-script-out, p.sphx-glr-script-out {
     display: none;
 }*/
 
+div.sphinxsidebarwrapper h3.toc-title {
+    font-size: unset;
+    font-style: italic;
+    text-decoration: underline;
+    margin-bottom: 0px;
+}
+
+div.sphinxsidebarwrapper ul:first-of-type {
+    margin-top: 0px;
+}
+
 /* Undo for children */
 div.sphinxsidebarwrapper li li a {
     display: inline;
@@ -139,10 +150,9 @@ div.sphinxsidebarwrapper li li {
 }
 
 /* Online one level of titles */
-div.sphinxsidebarwrapper li li li {
+div.sphinxsidebarwrapper li li ul {
     display: none;
 }
-
 
 /* Undo for other pages */
 div.sphinxsidebarwrapper li.toctree-l1 a {
@@ -150,18 +160,35 @@ div.sphinxsidebarwrapper li.toctree-l1 a {
 }
 
 /* Less info in the navigation sidebar */
-div.sphinxsidebarwrapper h3:first-of-type {
+/*div.sphinxsidebarwrapper h3:first-of-type {
     display: none;
-}
+}*/
 
 /* Undo for childs of enclosing divs */
 div.sphinxsidebarwrapper div h3:first-of-type {
     display: block;
 }
 
+/* The "active" sections */
+div.sphinxsidebarwrapper li a.active {
+    font-weight: bold;
+}
+
+div.sphinxsidebarwrapper li a.active {
+    font-weight: bold;
+}
+
+
 /* Flush the sidebar more to the left */
 @media (min-width: 1500px) {
-    left: 10%;
+    div.sphinxsidebar {
+	left: 10%;
+	width: 300px;
+    }
+
+    div.sphinxsidebar p.logo {
+	width: 220px;
+    }
 }
 
 /*************************************************************************/
