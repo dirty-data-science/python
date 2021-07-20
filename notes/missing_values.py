@@ -10,10 +10,10 @@ This notebook reveals why a HistGradientBoostingRegressor (
 :class:`sklearn.ensemble.HistGradientBoostingRegressor` ) is a choice to
 predict with missing values.
 
-Simulations are very useful to control the missing-value mechanism, and
-inspect it's impact on predictive models. In particular, standard
-imputation procedures can reconstruct missing values with distortion only
-if the data is *missing at random*.
+We use simulations to control the missing-value mechanism, and inspect
+it's impact on predictive models. In particular, standard imputation
+procedures can reconstruct missing values without distortion only if the
+data is *missing at random*.
 
 The mathematical details behind this notebook can be found in
 https://arxiv.org/abs/1902.06931
