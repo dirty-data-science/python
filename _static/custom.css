@@ -161,7 +161,9 @@ div.sphinxsidebarwrapper div h3:first-of-type {
 
 /* Flush the sidebar more to the left */
 @media (min-width: 1500px) {
-    left: 10%;
+    div.sphinxsidebar {
+	left: 10%;
+    }
 }
 
 /*************************************************************************/
