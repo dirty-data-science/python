@@ -127,7 +127,7 @@ html_theme_options = {
 #    'gray_3': "#090",
     'fixed_sidebar': 'true',
     'note_bg': "rgb(246, 248, 250);",
-    'topic_bg': "rgb(246, 248, 250);",
+    #'topic_bg': "rgb(246, 248, 250);",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -193,3 +193,6 @@ ogp_image = "https://dirtydata.science/python/_static/piggy.svg"
 ogp_use_first_image = True
 ogp_site_name = "Dirty Data Science"
 
+
+# -- The javascript to highlight the toc as we scroll ----------------------
+html_js_files = ['scrolltoc.js']
