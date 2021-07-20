@@ -61,90 +61,116 @@ y = df[target_column].values.ravel()
 # Assembling a machine-learning pipeline that encodes the data
 # =============================================================
 #
-# The learning pipeline
-# ----------------------------
+# Choosing columns
+# -----------------
 #
-# To build a learning pipeline, we need to assemble encoders for each
-# column, and apply a supvervised learning model on top.
+# For clean categorical columns, we will use one hot encoding to
+# transform them:
+
+clean_columns = {
+    'gender': 'one-hot',
+    'department_name': 'one-hot',
+    'assignment_category': 'one-hot',
+    'Year First Hired': 'numerical'}
 
 # %%
-# The categorical encoders
-# ........................
-#
-#  For the encoders for both clean and dirty data:
+# We then choose the categorical encoding methods we want to benchmark
+# and the dirty categorical variable:
+
+encoding_methods = ['one-hot', 'target', 'similarity', 'minhash',
+                    'gap']
+dirty_column = 'employee_position_title'
+
+
+# %%
+# The learning pipeline
+# ----------------------------
+# The encoders for both clean and dirty data are first imported:
+
+from sklearn.preprocessing import FunctionTransformer
 from sklearn.preprocessing import OneHotEncoder
 from dirty_cat import SimilarityEncoder, TargetEncoder, MinHashEncoder,\
     GapEncoder
 
-one_hot = OneHotEncoder(handle_unknown='ignore', sparse=False)
-similarity = SimilarityEncoder(similarity='ngram')
-target = TargetEncoder(handle_unknown='ignore')
-minhash = MinHashEncoder(n_components=100)
-gap = GapEncoder(n_components=100)
-
-encoder_names = {
-    'one-hot': one_hot,
-    'similarity': SimilarityEncoder(similarity='ngram'),
-    'target': target,
-    'minhash': minhash,
-    'gap': gap}
-
-# %%
-# We assemble these to be applied on the relevant columns
-
-from sklearn.compose import make_column_transformer
-encoder = make_column_transformer(
-    (one_hot, ['gender', 'department_name', 'assignment_category']),
-    ('passthrough', ['Year First Hired']),
-    # Last but not least, our dirty column
-    (one_hot, ['employee_position_title']),
-    remainder='drop',
-   )
-
-# %%
-# The prediction pipeline
-# .......................
-#
-# We will use a HistGradientBoostingRegressor, which is a good predictor
-# for data with heterogeneous columns
-# (for scikit-learn 0.24 we need to require the experimental feature)
+# for scikit-learn 0.24 we need to require the experimental feature
 from sklearn.experimental import enable_hist_gradient_boosting  # noqa
 # now you can import normally from ensemble
 from sklearn.ensemble import HistGradientBoostingRegressor
 
-# We then create a pipeline chaining our encoders to a learner
+encoders_dict = {
+    'one-hot': OneHotEncoder(handle_unknown='ignore', sparse=False),
+    'similarity': SimilarityEncoder(similarity='ngram'),
+    'target': TargetEncoder(handle_unknown='ignore'),
+    'minhash': MinHashEncoder(n_components=100),
+    'gap': GapEncoder(n_components=100),
+    'numerical': FunctionTransformer(None)}
+
+# We then create a function that takes one key of our ``encoders_dict``,
+# returns a pipeline object with the associated encoder,
+# as well as a gradient-boosting regressor
+
+from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import make_pipeline
-pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
+
+
+def assemble_pipeline(encoding_method):
+    # static transformers from the other columns
+    transformers = [(enc + '_' + col, encoders_dict[enc], [col])
+                    for col, enc in clean_columns.items()]
+    # adding the encoded column
+    transformers += [(encoding_method, encoders_dict[encoding_method],
+                      [dirty_column])]
+    pipeline = make_pipeline(
+        # Use ColumnTransformer to combine the features
+        ColumnTransformer(transformers=transformers, remainder='drop'),
+        HistGradientBoostingRegressor()
+    )
+    return pipeline
 
 
 # %%
-# Prediction performance for supervised learning
+# Comparing different encoding for supervised learning
 # -----------------------------------------------------
 # Eventually, we loop over the different encoding methods,
 # instantiate each time a new pipeline, fit it
 # and store the returned cross-validation score:
 
-import numpy as np
 from sklearn.model_selection import cross_val_score
-scores = cross_val_score(pipeline, df, y)
-print('one-ot encoding')
-print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
-    np.mean(scores), np.std(scores)))
+import numpy as np
+
+all_scores = dict()
+
+for method in encoding_methods:
+    pipeline = assemble_pipeline(method)
+    scores = cross_val_score(pipeline, df, y)
+    print('{} encoding'.format(method))
+    print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
+        np.mean(scores), np.std(scores)))
+    all_scores[method] = scores
 
 # %%
-# **Exercise**: now try out the different categorical encoders for our 
-# dirty categorical column. Make sure to store the scores (for instance
-# in a dictionary) for plotting later
-
-# %%
-# Plot the results
+# Plotting the results
 # --------------------
-#
-# Plot the prediction scores using seaborn
+# Finally, we plot the scores on a boxplot:
+
+import seaborn
+import matplotlib.pyplot as plt
+plt.figure(figsize=(4, 3))
+ax = seaborn.boxplot(data=pd.DataFrame(all_scores), orient='h')
+plt.ylabel('Encoding', size=20)
+plt.xlabel('Prediction accuracy     ', size=20)
+plt.yticks(size=20)
+plt.tight_layout()
 
 # %%
-# What's the dominant trend? What characterizes the strategies that work
-# best?
+# The clear trend is that encoders that use the string form
+# of the category (similarity, minhash, and gap) perform better than
+# those that discard it.
+# 
+# SimilarityEncoder is the best performer, but it is less scalable on big
+# data than MinHashEncoder and GapEncoder. The most scalable encoder is
+# the MinHashEncoder. GapEncoder, on the other hand, has the benefit that
+# it provides interpretable features (see :ref:`sphx_glr_auto_examples_04_feature_interpretation_gap_encoder.py`)
 #
 # |
 #

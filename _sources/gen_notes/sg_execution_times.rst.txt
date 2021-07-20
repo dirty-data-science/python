@@ -5,10 +5,10 @@
 
 Computation times
 =================
-**01:29.114** total execution time for **gen_notes** files:
+**14:40.535** total execution time for **gen_notes** files:
 
 +-------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gen_notes_02_dirty_categories.py` (``02_dirty_categories.py``) | 01:29.114 | 0.0 MB |
+| :ref:`sphx_glr_gen_notes_02_dirty_categories.py` (``02_dirty_categories.py``) | 13:00.426 | 0.0 MB |
 +-------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_gen_notes_01_missing_values.py` (``01_missing_values.py``)     | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_gen_notes_01_missing_values.py` (``01_missing_values.py``)     | 01:40.110 | 0.0 MB |
 +-------------------------------------------------------------------------------+-----------+--------+
