@@ -105,7 +105,9 @@ encoder = make_column_transformer(
 # The prediction pipeline
 # .......................
 #
-# for scikit-learn 0.24 we need to require the experimental feature
+# We will use a HistGradientBoostingRegressor, which is a good predictor
+# for data with heterogeneous columns
+# (for scikit-learn 0.24 we need to require the experimental feature)
 from sklearn.experimental import enable_hist_gradient_boosting  # noqa
 # now you can import normally from ensemble
 from sklearn.ensemble import HistGradientBoostingRegressor
