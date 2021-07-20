@@ -176,7 +176,7 @@ sphinx_gallery_conf = {
     'examples_dirs':'notes',
     'gallery_dirs':'gen_notes',
     'within_subsection_order': FileNameSortKey,
-    'download_all_examples': True,
+    'download_all_examples': False,
     'binder': {
         'org': 'dirty-data-science',
         'repo': 'python',

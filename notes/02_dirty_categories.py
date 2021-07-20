@@ -231,7 +231,12 @@ X
 # such as gradient boosted trees, gives **a machine-learning method that
 # can be readily applied to the dataframe**.
 
-# The supervectorizer requires dirty_cat 0.2.0a1
+# The supervectorizer requires dirty_cat 0.2.0a1. If you have an older
+# version, you can install the alpha release with
+#
+#   pip install -pre dirty_cat==0.2.0a1
+#
+
 from dirty_cat import SuperVectorizer
 
 pipeline = make_pipeline(
