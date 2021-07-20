@@ -85,47 +85,53 @@ dirty_column = 'employee_position_title'
 # %%
 # The learning pipeline
 # ----------------------------
-# The encoders for both clean and dirty data are first imported:
 
-from sklearn.preprocessing import FunctionTransformer
+# %%
+# The categorical encoders
+# ........................
+#
+#  For the encoders for both clean and dirty data:
 from sklearn.preprocessing import OneHotEncoder
 from dirty_cat import SimilarityEncoder, TargetEncoder, MinHashEncoder,\
     GapEncoder
 
+one_hot = OneHotEncoder(handle_unknown='ignore', sparse=False)
+similarity = SimilarityEncoder(similarity='ngram')
+target = TargetEncoder(handle_unknown='ignore')
+minhash = MinHashEncoder(n_components=100)
+gap = GapEncoder(n_components=100)
+
+encoder_names = {
+    'one-hot': one_hot,
+    'similarity': SimilarityEncoder(similarity='ngram'),
+    'target': target,
+    'minhash': minhash,
+    'gap': gap}
+
+# %%
+# We assemble these to be applied on the relevant columns
+
+from sklearn.compose import make_column_transformer
+encoder = make_column_transformer(
+    (one_hot, ['gender', 'department_name', 'assignment_category']),
+    ('passthrough', 'Year First Hired'),
+    # Last but not least, our dirty column
+    ('employee_position_title', one_hot),
+    remainder='drop',
+   )
+
+# %%
+# The prediction pipeline
+# .......................
+#
 # for scikit-learn 0.24 we need to require the experimental feature
 from sklearn.experimental import enable_hist_gradient_boosting  # noqa
 # now you can import normally from ensemble
 from sklearn.ensemble import HistGradientBoostingRegressor
 
-encoders_dict = {
-    'one-hot': OneHotEncoder(handle_unknown='ignore', sparse=False),
-    'similarity': SimilarityEncoder(similarity='ngram'),
-    'target': TargetEncoder(handle_unknown='ignore'),
-    'minhash': MinHashEncoder(n_components=100),
-    'gap': GapEncoder(n_components=100),
-    'numerical': FunctionTransformer(None)}
-
-# We then create a function that takes one key of our ``encoders_dict``,
-# returns a pipeline object with the associated encoder,
-# as well as a gradient-boosting regressor
-
-from sklearn.compose import ColumnTransformer
+# We then create a pipeline chaining our encoders to a learner
 from sklearn.pipeline import make_pipeline
-
-
-def assemble_pipeline(encoding_method):
-    # static transformers from the other columns
-    transformers = [(enc + '_' + col, encoders_dict[enc], [col])
-                    for col, enc in clean_columns.items()]
-    # adding the encoded column
-    transformers += [(encoding_method, encoders_dict[encoding_method],
-                      [dirty_column])]
-    pipeline = make_pipeline(
-        # Use ColumnTransformer to combine the features
-        ColumnTransformer(transformers=transformers, remainder='drop'),
-        HistGradientBoostingRegressor()
-    )
-    return pipeline
+pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
 
 
 # %%
@@ -141,7 +147,15 @@ import numpy as np
 all_scores = dict()
 
 for method in encoding_methods:
-    pipeline = assemble_pipeline(method)
+    encoder = make_column_transformer(
+        (one_hot, ['gender', 'department_name', 'assignment_category']),
+        ('passthrough', ['Year First Hired']),
+        # Last but not least, our dirty column
+        (encoder_names[method], ['employee_position_title']),
+        remainder='drop',
+    )
+
+    pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
     scores = cross_val_score(pipeline, df, y)
     print('{} encoding'.format(method))
     print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
