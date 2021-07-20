@@ -95,9 +95,9 @@ encoder_names = {
 from sklearn.compose import make_column_transformer
 encoder = make_column_transformer(
     (one_hot, ['gender', 'department_name', 'assignment_category']),
-    ('passthrough', 'Year First Hired'),
+    ('passthrough', ['Year First Hired']),
     # Last but not least, our dirty column
-    ('employee_position_title', one_hot),
+    (one_hot, ['employee_position_title']),
     remainder='drop',
    )
 

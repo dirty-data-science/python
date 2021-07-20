@@ -414,9 +414,9 @@ column, and apply a supvervised learning model on top.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.make_column_transformer.html#sklearn.compose.make_column_transformer" title="sklearn.compose.make_column_transformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-function"><span class="n">make_column_transformer</span></a>
 <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer" title="sklearn.compose.ColumnTransformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoder</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.make_column_transformer.html#sklearn.compose.make_column_transformer" title="sklearn.compose.make_column_transformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-function"><span class="n">make_column_transformer</span></a><span class="p">(</span>
     <span class="p">(</span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">one_hot</span></a><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">,</span> <span class="s1">&#39;department_name&#39;</span><span class="p">,</span> <span class="s1">&#39;assignment_category&#39;</span><span class="p">]),</span>
-    <span class="p">(</span><span class="s1">&#39;passthrough&#39;</span><span class="p">,</span> <span class="s1">&#39;Year First Hired&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;passthrough&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Year First Hired&#39;</span><span class="p">]),</span>
     <span class="c1"># Last but not least, our dirty column</span>
-    <span class="p">(</span><span class="s1">&#39;employee_position_title&#39;</span><span class="p">,</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">one_hot</span></a><span class="p">),</span>
+    <span class="p">(</span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">one_hot</span></a><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;employee_position_title&#39;</span><span class="p">]),</span>
     <span class="n">remainder</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">,</span>
    <span class="p">)</span>
 </pre></div>
@@ -457,103 +457,8 @@ and store the returned cross-validation score:</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details:
-Traceback (most recent call last):
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py&quot;, line 652, in _fit_and_score
-    estimator.fit(X_train, y_train, **fit_params)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 357, in fit
-    Xt = self._fit(X, y, **fit_params_steps)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 315, in _fit
-    X, fitted_transformer = fit_transform_one_cached(
-  File &quot;/usr/lib/python3/dist-packages/joblib/memory.py&quot;, line 352, in __call__
-    return self.func(*args, **kwargs)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 767, in _fit_transform_one
-    res = transformer.fit_transform(X, y, **fit_params)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 557, in fit_transform
-    self._validate_transformers()
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 318, in _validate_transformers
-    raise TypeError(
-TypeError: All estimators should implement fit and transform, or can be &#39;drop&#39; or &#39;passthrough&#39; specifiers. &#39;employee_position_title&#39; (type &lt;class &#39;str&#39;&gt;) doesn&#39;t.
-
-  warnings.warn(
-/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details:
-Traceback (most recent call last):
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py&quot;, line 652, in _fit_and_score
-    estimator.fit(X_train, y_train, **fit_params)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 357, in fit
-    Xt = self._fit(X, y, **fit_params_steps)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 315, in _fit
-    X, fitted_transformer = fit_transform_one_cached(
-  File &quot;/usr/lib/python3/dist-packages/joblib/memory.py&quot;, line 352, in __call__
-    return self.func(*args, **kwargs)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 767, in _fit_transform_one
-    res = transformer.fit_transform(X, y, **fit_params)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 557, in fit_transform
-    self._validate_transformers()
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 318, in _validate_transformers
-    raise TypeError(
-TypeError: All estimators should implement fit and transform, or can be &#39;drop&#39; or &#39;passthrough&#39; specifiers. &#39;employee_position_title&#39; (type &lt;class &#39;str&#39;&gt;) doesn&#39;t.
-
-  warnings.warn(
-/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details:
-Traceback (most recent call last):
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py&quot;, line 652, in _fit_and_score
-    estimator.fit(X_train, y_train, **fit_params)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 357, in fit
-    Xt = self._fit(X, y, **fit_params_steps)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 315, in _fit
-    X, fitted_transformer = fit_transform_one_cached(
-  File &quot;/usr/lib/python3/dist-packages/joblib/memory.py&quot;, line 352, in __call__
-    return self.func(*args, **kwargs)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 767, in _fit_transform_one
-    res = transformer.fit_transform(X, y, **fit_params)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 557, in fit_transform
-    self._validate_transformers()
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 318, in _validate_transformers
-    raise TypeError(
-TypeError: All estimators should implement fit and transform, or can be &#39;drop&#39; or &#39;passthrough&#39; specifiers. &#39;employee_position_title&#39; (type &lt;class &#39;str&#39;&gt;) doesn&#39;t.
-
-  warnings.warn(
-/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details:
-Traceback (most recent call last):
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py&quot;, line 652, in _fit_and_score
-    estimator.fit(X_train, y_train, **fit_params)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 357, in fit
-    Xt = self._fit(X, y, **fit_params_steps)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 315, in _fit
-    X, fitted_transformer = fit_transform_one_cached(
-  File &quot;/usr/lib/python3/dist-packages/joblib/memory.py&quot;, line 352, in __call__
-    return self.func(*args, **kwargs)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 767, in _fit_transform_one
-    res = transformer.fit_transform(X, y, **fit_params)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 557, in fit_transform
-    self._validate_transformers()
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 318, in _validate_transformers
-    raise TypeError(
-TypeError: All estimators should implement fit and transform, or can be &#39;drop&#39; or &#39;passthrough&#39; specifiers. &#39;employee_position_title&#39; (type &lt;class &#39;str&#39;&gt;) doesn&#39;t.
-
-  warnings.warn(
-/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details:
-Traceback (most recent call last):
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py&quot;, line 652, in _fit_and_score
-    estimator.fit(X_train, y_train, **fit_params)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 357, in fit
-    Xt = self._fit(X, y, **fit_params_steps)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 315, in _fit
-    X, fitted_transformer = fit_transform_one_cached(
-  File &quot;/usr/lib/python3/dist-packages/joblib/memory.py&quot;, line 352, in __call__
-    return self.func(*args, **kwargs)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 767, in _fit_transform_one
-    res = transformer.fit_transform(X, y, **fit_params)
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 557, in fit_transform
-    self._validate_transformers()
-  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 318, in _validate_transformers
-    raise TypeError(
-TypeError: All estimators should implement fit and transform, or can be &#39;drop&#39; or &#39;passthrough&#39; specifiers. &#39;employee_position_title&#39; (type &lt;class &#39;str&#39;&gt;) doesn&#39;t.
-
-  warnings.warn(
-one-ot encoding
-r2 score:  mean: nan; std: nan
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>one-ot encoding
+r2 score:  mean: 0.776; std: 0.028
 </pre></div>
 </div>
 <p><strong>Exercise</strong>: now try out the different categorical encoders for our
@@ -785,9 +690,9 @@ can be readily applied to the dataframe</strong>.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>scores=array([0.88561269, 0.83760419, 0.89255637, 0.91054519, 0.92222249])
-mean=0.8897081885442703
-std=0.029089765011896567
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>scores=array([0.90806297, 0.8801256 , 0.89193395, 0.90330693, 0.92179303])
+mean=0.9010444967306344
+std=0.014180844502099112
 </pre></div>
 </div>
 <p>The prediction perform here is pretty much as good as above
@@ -845,7 +750,7 @@ A <a class="reference external" href="https://scikit-learn.org/0.20/modules/gene
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;division: management, highway, welfare&#39;, &#39;division: administration, operations, battalion&#39;, &#39;division: technology, division, safety&#39;, &#39;division: planning, security, recruit&#39;, &#39;division: district, patrol, squad&#39;, &#39;division: maintenance, facilities, downtown&#39;, &#39;division: supports, support, supportive&#39;, &#39;division: gaithersburg, transit, silver&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;division: accounting, accounts, programs&#39;, &#39;division: gaithersburg, transit, silver&#39;, &#39;division: services, highway, welfare&#39;, &#39;division: division, safety, criminal&#39;, &#39;division: management, development, enforcement&#39;, &#39;division: health, school, heavy&#39;, &#39;division: planning, training, administration&#39;, &#39;division: operations, station, liquor&#39;]
 </pre></div>
 </div>
 <p>As we can see, it created a new column for each unique value.
@@ -916,7 +821,7 @@ having a permanent, full-time job :).</p>
 automated by the <a class="reference external" href="https://dirty-cat.github.io/stable/generated/dirty_cat.SuperVectorizer.html#dirty_cat.SuperVectorizer" title="(in dirty_cat v0.2.0a1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SuperVectorizer</span></code></a>, and the resulting pipeline can still be
 inspected, even with non-normalized entries.</p>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  21.869 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  29.114 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gen-notes-02-dirty-categories-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/02_dirty_categories.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>

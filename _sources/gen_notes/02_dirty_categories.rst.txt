@@ -411,9 +411,9 @@ We assemble these to be applied on the relevant columns
     from sklearn.compose import make_column_transformer
     encoder = make_column_transformer(
         (one_hot, ['gender', 'department_name', 'assignment_category']),
-        ('passthrough', 'Year First Hired'),
+        ('passthrough', ['Year First Hired']),
         # Last but not least, our dirty column
-        ('employee_position_title', one_hot),
+        (one_hot, ['employee_position_title']),
         remainder='drop',
        )
 
@@ -492,103 +492,8 @@ and store the returned cross-validation score:
 
  .. code-block:: none
 
-    /home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details: 
-    Traceback (most recent call last):
-      File "/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py", line 652, in _fit_and_score
-        estimator.fit(X_train, y_train, **fit_params)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 357, in fit
-        Xt = self._fit(X, y, **fit_params_steps)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 315, in _fit
-        X, fitted_transformer = fit_transform_one_cached(
-      File "/usr/lib/python3/dist-packages/joblib/memory.py", line 352, in __call__
-        return self.func(*args, **kwargs)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 767, in _fit_transform_one
-        res = transformer.fit_transform(X, y, **fit_params)
-      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 557, in fit_transform
-        self._validate_transformers()
-      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 318, in _validate_transformers
-        raise TypeError(
-    TypeError: All estimators should implement fit and transform, or can be 'drop' or 'passthrough' specifiers. 'employee_position_title' (type <class 'str'>) doesn't.
-
-      warnings.warn(
-    /home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details: 
-    Traceback (most recent call last):
-      File "/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py", line 652, in _fit_and_score
-        estimator.fit(X_train, y_train, **fit_params)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 357, in fit
-        Xt = self._fit(X, y, **fit_params_steps)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 315, in _fit
-        X, fitted_transformer = fit_transform_one_cached(
-      File "/usr/lib/python3/dist-packages/joblib/memory.py", line 352, in __call__
-        return self.func(*args, **kwargs)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 767, in _fit_transform_one
-        res = transformer.fit_transform(X, y, **fit_params)
-      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 557, in fit_transform
-        self._validate_transformers()
-      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 318, in _validate_transformers
-        raise TypeError(
-    TypeError: All estimators should implement fit and transform, or can be 'drop' or 'passthrough' specifiers. 'employee_position_title' (type <class 'str'>) doesn't.
-
-      warnings.warn(
-    /home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details: 
-    Traceback (most recent call last):
-      File "/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py", line 652, in _fit_and_score
-        estimator.fit(X_train, y_train, **fit_params)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 357, in fit
-        Xt = self._fit(X, y, **fit_params_steps)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 315, in _fit
-        X, fitted_transformer = fit_transform_one_cached(
-      File "/usr/lib/python3/dist-packages/joblib/memory.py", line 352, in __call__
-        return self.func(*args, **kwargs)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 767, in _fit_transform_one
-        res = transformer.fit_transform(X, y, **fit_params)
-      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 557, in fit_transform
-        self._validate_transformers()
-      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 318, in _validate_transformers
-        raise TypeError(
-    TypeError: All estimators should implement fit and transform, or can be 'drop' or 'passthrough' specifiers. 'employee_position_title' (type <class 'str'>) doesn't.
-
-      warnings.warn(
-    /home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details: 
-    Traceback (most recent call last):
-      File "/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py", line 652, in _fit_and_score
-        estimator.fit(X_train, y_train, **fit_params)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 357, in fit
-        Xt = self._fit(X, y, **fit_params_steps)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 315, in _fit
-        X, fitted_transformer = fit_transform_one_cached(
-      File "/usr/lib/python3/dist-packages/joblib/memory.py", line 352, in __call__
-        return self.func(*args, **kwargs)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 767, in _fit_transform_one
-        res = transformer.fit_transform(X, y, **fit_params)
-      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 557, in fit_transform
-        self._validate_transformers()
-      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 318, in _validate_transformers
-        raise TypeError(
-    TypeError: All estimators should implement fit and transform, or can be 'drop' or 'passthrough' specifiers. 'employee_position_title' (type <class 'str'>) doesn't.
-
-      warnings.warn(
-    /home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details: 
-    Traceback (most recent call last):
-      File "/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py", line 652, in _fit_and_score
-        estimator.fit(X_train, y_train, **fit_params)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 357, in fit
-        Xt = self._fit(X, y, **fit_params_steps)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 315, in _fit
-        X, fitted_transformer = fit_transform_one_cached(
-      File "/usr/lib/python3/dist-packages/joblib/memory.py", line 352, in __call__
-        return self.func(*args, **kwargs)
-      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 767, in _fit_transform_one
-        res = transformer.fit_transform(X, y, **fit_params)
-      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 557, in fit_transform
-        self._validate_transformers()
-      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 318, in _validate_transformers
-        raise TypeError(
-    TypeError: All estimators should implement fit and transform, or can be 'drop' or 'passthrough' specifiers. 'employee_position_title' (type <class 'str'>) doesn't.
-
-      warnings.warn(
     one-ot encoding
-    r2 score:  mean: nan; std: nan
+    r2 score:  mean: 0.776; std: 0.028
 
 
 
@@ -923,9 +828,9 @@ Let's perform a cross-validation to see how well this model predicts
 
  .. code-block:: none
 
-    scores=array([0.88561269, 0.83760419, 0.89255637, 0.91054519, 0.92222249])
-    mean=0.8897081885442703
-    std=0.029089765011896567
+    scores=array([0.90806297, 0.8801256 , 0.89193395, 0.90330693, 0.92179303])
+    mean=0.9010444967306344
+    std=0.014180844502099112
 
 
 
@@ -1068,7 +973,7 @@ After encoding (we only plot the first 8 feature names):
  .. code-block:: none
 
 
-    ['division: management, highway, welfare', 'division: administration, operations, battalion', 'division: technology, division, safety', 'division: planning, security, recruit', 'division: district, patrol, squad', 'division: maintenance, facilities, downtown', 'division: supports, support, supportive', 'division: gaithersburg, transit, silver']
+    ['division: accounting, accounts, programs', 'division: gaithersburg, transit, silver', 'division: services, highway, welfare', 'division: division, safety, criminal', 'division: management, development, enforcement', 'division: health, school, heavy', 'division: planning, training, administration', 'division: operations, station, liquor']
 
 
 
@@ -1216,7 +1121,7 @@ having a permanent, full-time job :).
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  21.869 seconds)
+   **Total running time of the script:** ( 1 minutes  29.114 seconds)
 
 
 .. _sphx_glr_download_gen_notes_02_dirty_categories.py:
