@@ -4,7 +4,6 @@
 
 .. _sphx_glr_gen_notes:
 
-Notebooks:
 
 
 
