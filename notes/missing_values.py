@@ -262,7 +262,14 @@ plt.tight_layout()
 # **When there is a reasonnable amout of data, the
 # HistGradientBoostingRegressor is the best strategy** even for a linear
 # data-generating mechanism, in MAR settings, which are settings
-# favorable to imputation + linear model.
+# favorable to imputation + linear model [#]_.
+#
+# .. [#] Even in the case of a linear data-generating mechanism, the
+#        optimal prediction one data imputed by a constant
+#        is a piecewise affine function with 2^d regions (
+#        http://proceedings.mlr.press/v108/morvan20a.html ). The
+#        larger the dimensionality (number of features), the more a
+#        imperfect imputation is hard to approximate with a simple model.
 #
 # |
 
@@ -277,12 +284,12 @@ plt.tight_layout()
 # The missing-values mechanism
 # -----------------------------
 
-def generate_censored(n_samples, missing_rate=0.2, rng=42):
+def generate_censored(n_samples, missing_rate=.4, rng=42):
     X, y = generate_without_missing_values(n_samples, rng=rng)
     if not isinstance(rng, np.random.RandomState):
         rng = np.random.RandomState(rng)
 
-    B = np.random.binomial(1, 2 * missing_rate, (n_samples, 2))
+    B = rng.binomial(1, 2 * missing_rate, (n_samples, 2))
     M = (X > 0.5) * B
 
     np.putmask(X, M, np.nan)
@@ -334,8 +341,13 @@ plt.legend()
 #
 # An important consequence is that **the link between imputed X and y is no
 # longer linear**, although the original data-generating mechanism is
-# linear. For this reason, it is often a good idea to use non-linear
-# learners in the presence of missing values.
+# linear [#]_. For this reason, **it is often a good idea to use non-linear
+# learners in the presence of missing values**.
+#
+# .. [#] As mentionned above, even in the case of a linear
+#    data-generating mechanism, imperfect imputation leads to complex
+#    functions to link to y (
+#    http://proceedings.mlr.press/v108/morvan20a.html )
 
 # %%
 # Predictive pipelines
@@ -344,41 +356,52 @@ plt.legend()
 # Let us now evaluate predictive pipelines
 scores = dict()
 
-# %%
 # Iterative imputation and linear model
 scores['IterativeImputer + Ridge'] = model_selection.cross_val_score(
     iterative_and_ridge, X, y, cv=10)
 
-# %%
 # Mean imputation and linear model
 scores['Mean imputation + Ridge'] = model_selection.cross_val_score(
     mean_and_ridge, X, y, cv=10)
 
-# %%
 # IterativeImputer and non-linear model
 iterative_and_gb = make_pipeline(impute.SimpleImputer(),
                             HistGradientBoostingRegressor())
 scores['Mean imputation\n+ HistGradientBoostingRegressor'] = model_selection.cross_val_score(
     iterative_and_gb, X, y, cv=10)
 
-# %%
 # Mean imputation and non-linear model
 mean_and_gb = make_pipeline(impute.SimpleImputer(),
                             HistGradientBoostingRegressor())
 scores['IterativeImputer\n+ HistGradientBoostingRegressor'] = model_selection.cross_val_score(
     mean_and_gb, X, y, cv=10)
 
-# %%
 # And now the HistGradientBoostingRegressor, whithout imputation
 scores['HistGradientBoostingRegressor'] = model_selection.cross_val_score(
     HistGradientBoostingRegressor(), X, y, cv=10)
 
-# %%
 # We plot the results
 sns.boxplot(data=pd.DataFrame(scores), orient='h')
 plt.title('Prediction accuracy\n linear and small data\n'
           'Missing not at Random')
 plt.tight_layout()
+
+
+# %%
+# We can see that the imputation is not the most important step of the
+# pipeline [#]_, rather **what is important is to use a powerful model**.
+#
+# .. [#] Note that there are less missing values in the example here
+#    compared to the section above on MCAR, hence the absolute prediction
+#    accuracies are not comparable.
+
+# %%
+# .. topic:: Prediction with missing values
+#
+#   The data above are very simple: linear data-generating mechanism,
+#   Gaussian, and low dimensional. Yet, they show the importance of using
+#   non-linear models, in particular the HistGradientBoostingRegressor
+#   which natively deals with missing values.
 
 
 # %%
