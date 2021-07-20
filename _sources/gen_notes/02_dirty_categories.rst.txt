@@ -464,37 +464,23 @@ for data with heterogeneous columns
 
 .. GENERATED FROM PYTHON SOURCE LINES 121-126
 
-Comparing different encoding for supervised learning
+Prediction performance for supervised learning
 -----------------------------------------------------
 Eventually, we loop over the different encoding methods,
 instantiate each time a new pipeline, fit it
 and store the returned cross-validation score:
 
-.. GENERATED FROM PYTHON SOURCE LINES 126-148
+.. GENERATED FROM PYTHON SOURCE LINES 126-134
 
 .. code-block:: default
 
 
-    from sklearn.model_selection import cross_val_score
     import numpy as np
-
-    all_scores = dict()
-
-    for name, method in encoder_names.items():
-        encoder = make_column_transformer(
-            (one_hot, ['gender', 'department_name', 'assignment_category']),
-            ('passthrough', ['Year First Hired']),
-            # Last but not least, our dirty column
-            (method, ['employee_position_title']),
-            remainder='drop',
-        )
-
-        pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
-        scores = cross_val_score(pipeline, df, y)
-        print('{} encoding'.format(name))
-        print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
-            np.mean(scores), np.std(scores)))
-        all_scores[name] = scores
+    from sklearn.model_selection import cross_val_score
+    scores = cross_val_score(pipeline, df, y)
+    print('one-ot encoding')
+    print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
+        np.mean(scores), np.std(scores)))
 
 
 
@@ -506,71 +492,130 @@ and store the returned cross-validation score:
 
  .. code-block:: none
 
-    one-hot encoding
-    r2 score:  mean: 0.776; std: 0.028
+    /home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details: 
+    Traceback (most recent call last):
+      File "/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py", line 652, in _fit_and_score
+        estimator.fit(X_train, y_train, **fit_params)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 357, in fit
+        Xt = self._fit(X, y, **fit_params_steps)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 315, in _fit
+        X, fitted_transformer = fit_transform_one_cached(
+      File "/usr/lib/python3/dist-packages/joblib/memory.py", line 352, in __call__
+        return self.func(*args, **kwargs)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 767, in _fit_transform_one
+        res = transformer.fit_transform(X, y, **fit_params)
+      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 557, in fit_transform
+        self._validate_transformers()
+      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 318, in _validate_transformers
+        raise TypeError(
+    TypeError: All estimators should implement fit and transform, or can be 'drop' or 'passthrough' specifiers. 'employee_position_title' (type <class 'str'>) doesn't.
 
-    similarity encoding
-    r2 score:  mean: 0.923; std: 0.014
+      warnings.warn(
+    /home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details: 
+    Traceback (most recent call last):
+      File "/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py", line 652, in _fit_and_score
+        estimator.fit(X_train, y_train, **fit_params)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 357, in fit
+        Xt = self._fit(X, y, **fit_params_steps)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 315, in _fit
+        X, fitted_transformer = fit_transform_one_cached(
+      File "/usr/lib/python3/dist-packages/joblib/memory.py", line 352, in __call__
+        return self.func(*args, **kwargs)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 767, in _fit_transform_one
+        res = transformer.fit_transform(X, y, **fit_params)
+      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 557, in fit_transform
+        self._validate_transformers()
+      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 318, in _validate_transformers
+        raise TypeError(
+    TypeError: All estimators should implement fit and transform, or can be 'drop' or 'passthrough' specifiers. 'employee_position_title' (type <class 'str'>) doesn't.
 
-    target encoding
-    r2 score:  mean: 0.842; std: 0.030
+      warnings.warn(
+    /home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details: 
+    Traceback (most recent call last):
+      File "/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py", line 652, in _fit_and_score
+        estimator.fit(X_train, y_train, **fit_params)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 357, in fit
+        Xt = self._fit(X, y, **fit_params_steps)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 315, in _fit
+        X, fitted_transformer = fit_transform_one_cached(
+      File "/usr/lib/python3/dist-packages/joblib/memory.py", line 352, in __call__
+        return self.func(*args, **kwargs)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 767, in _fit_transform_one
+        res = transformer.fit_transform(X, y, **fit_params)
+      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 557, in fit_transform
+        self._validate_transformers()
+      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 318, in _validate_transformers
+        raise TypeError(
+    TypeError: All estimators should implement fit and transform, or can be 'drop' or 'passthrough' specifiers. 'employee_position_title' (type <class 'str'>) doesn't.
 
-    minhash encoding
-    r2 score:  mean: 0.919; std: 0.012
+      warnings.warn(
+    /home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details: 
+    Traceback (most recent call last):
+      File "/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py", line 652, in _fit_and_score
+        estimator.fit(X_train, y_train, **fit_params)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 357, in fit
+        Xt = self._fit(X, y, **fit_params_steps)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 315, in _fit
+        X, fitted_transformer = fit_transform_one_cached(
+      File "/usr/lib/python3/dist-packages/joblib/memory.py", line 352, in __call__
+        return self.func(*args, **kwargs)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 767, in _fit_transform_one
+        res = transformer.fit_transform(X, y, **fit_params)
+      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 557, in fit_transform
+        self._validate_transformers()
+      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 318, in _validate_transformers
+        raise TypeError(
+    TypeError: All estimators should implement fit and transform, or can be 'drop' or 'passthrough' specifiers. 'employee_position_title' (type <class 'str'>) doesn't.
 
-    gap encoding
-    r2 score:  mean: 0.916; std: 0.014
+      warnings.warn(
+    /home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details: 
+    Traceback (most recent call last):
+      File "/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py", line 652, in _fit_and_score
+        estimator.fit(X_train, y_train, **fit_params)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 357, in fit
+        Xt = self._fit(X, y, **fit_params_steps)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 315, in _fit
+        X, fitted_transformer = fit_transform_one_cached(
+      File "/usr/lib/python3/dist-packages/joblib/memory.py", line 352, in __call__
+        return self.func(*args, **kwargs)
+      File "/home/varoquau/dev/scikit-learn/sklearn/pipeline.py", line 767, in _fit_transform_one
+        res = transformer.fit_transform(X, y, **fit_params)
+      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 557, in fit_transform
+        self._validate_transformers()
+      File "/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py", line 318, in _validate_transformers
+        raise TypeError(
+    TypeError: All estimators should implement fit and transform, or can be 'drop' or 'passthrough' specifiers. 'employee_position_title' (type <class 'str'>) doesn't.
+
+      warnings.warn(
+    one-ot encoding
+    r2 score:  mean: nan; std: nan
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 149-152
+.. GENERATED FROM PYTHON SOURCE LINES 135-138
 
-Plotting the results
+**Exercise**: now try out the different categorical encoders for our 
+dirty categorical column. Make sure to store the scores (for instance
+in a dictionary) for plotting later
+
+.. GENERATED FROM PYTHON SOURCE LINES 140-144
+
+Plot the results
 --------------------
-Finally, we plot the scores on a boxplot:
 
-.. GENERATED FROM PYTHON SOURCE LINES 152-162
+Plot the prediction scores using seaborn
 
-.. code-block:: default
+.. GENERATED FROM PYTHON SOURCE LINES 146-151
 
-
-    import seaborn
-    import matplotlib.pyplot as plt
-    plt.figure(figsize=(4, 3))
-    ax = seaborn.boxplot(data=pd.DataFrame(all_scores), orient='h')
-    plt.ylabel('Encoding', size=20)
-    plt.xlabel('Prediction accuracy     ', size=20)
-    plt.yticks(size=20)
-    plt.tight_layout()
-
-
-
-
-.. image:: /gen_notes/images/sphx_glr_02_dirty_categories_001.png
-    :alt: 02 dirty categories
-    :class: sphx-glr-single-img
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 163-174
-
-The clear trend is that encoders that use the string form
-of the category (similarity, minhash, and gap) perform better than
-those that discard it.
-
-SimilarityEncoder is the best performer, but it is less scalable on big
-data than MinHashEncoder and GapEncoder. The most scalable encoder is
-the MinHashEncoder. GapEncoder, on the other hand, has the benefit that
-it provides interpretable features (see :ref:`sphx_glr_auto_examples_04_feature_interpretation_gap_encoder.py`)
+What's the dominant trend? What characterizes the strategies that work
+best?
 
 |
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 176-198
+.. GENERATED FROM PYTHON SOURCE LINES 153-175
 
 Automatic vectorization
 ========================
@@ -595,7 +640,7 @@ Automatic vectorization
 Let's start again from the raw data, but this time well use an
 automated way of encoding the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 198-201
+.. GENERATED FROM PYTHON SOURCE LINES 175-178
 
 .. code-block:: default
 
@@ -609,11 +654,11 @@ automated way of encoding the data
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 202-203
+.. GENERATED FROM PYTHON SOURCE LINES 179-180
 
 We'll drop a few columns we don't want
 
-.. GENERATED FROM PYTHON SOURCE LINES 203-215
+.. GENERATED FROM PYTHON SOURCE LINES 180-192
 
 .. code-block:: default
 
@@ -636,11 +681,11 @@ We'll drop a few columns we don't want
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 216-217
+.. GENERATED FROM PYTHON SOURCE LINES 193-194
 
 We have a fairly complex and heterogeneous dataframe:
 
-.. GENERATED FROM PYTHON SOURCE LINES 217-219
+.. GENERATED FROM PYTHON SOURCE LINES 194-196
 
 .. code-block:: default
 
@@ -812,12 +857,12 @@ We have a fairly complex and heterogeneous dataframe:
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 220-222
+.. GENERATED FROM PYTHON SOURCE LINES 197-199
 
 The challenge is to turn this dataframe into a form suited for
 machine learning.
 
-.. GENERATED FROM PYTHON SOURCE LINES 224-230
+.. GENERATED FROM PYTHON SOURCE LINES 201-207
 
 Using the SuperVectorizer in a supervised-learning pipeline
 ------------------------------------------------------------
@@ -826,7 +871,7 @@ Assembling the |SV| in a pipeline with a powerful learner,
 such as gradient boosted trees, gives **a machine-learning method that
 can be readily applied to the dataframe**.
 
-.. GENERATED FROM PYTHON SOURCE LINES 230-244
+.. GENERATED FROM PYTHON SOURCE LINES 207-221
 
 .. code-block:: default
 
@@ -851,11 +896,11 @@ can be readily applied to the dataframe**.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 245-246
+.. GENERATED FROM PYTHON SOURCE LINES 222-223
 
 Let's perform a cross-validation to see how well this model predicts
 
-.. GENERATED FROM PYTHON SOURCE LINES 246-255
+.. GENERATED FROM PYTHON SOURCE LINES 223-232
 
 .. code-block:: default
 
@@ -878,20 +923,20 @@ Let's perform a cross-validation to see how well this model predicts
 
  .. code-block:: none
 
-    scores=array([0.90180643, 0.85666805, 0.90379381, 0.84444664, 0.92812669])
-    mean=0.8869683220153757
-    std=0.03137985908960377
+    scores=array([0.88561269, 0.83760419, 0.89255637, 0.91054519, 0.92222249])
+    mean=0.8897081885442703
+    std=0.029089765011896567
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 256-259
+.. GENERATED FROM PYTHON SOURCE LINES 233-236
 
 The prediction perform here is pretty much as good as above
 but the code here is much simpler as it does not involve specifying
 columns manually.
 
-.. GENERATED FROM PYTHON SOURCE LINES 261-266
+.. GENERATED FROM PYTHON SOURCE LINES 238-243
 
 Analyzing the features created
 -------------------------------
@@ -899,7 +944,7 @@ Analyzing the features created
 Let us perform the same workflow, but without the `Pipeline`, so we can
 analyze its mechanisms along the way.
 
-.. GENERATED FROM PYTHON SOURCE LINES 266-268
+.. GENERATED FROM PYTHON SOURCE LINES 243-245
 
 .. code-block:: default
 
@@ -912,11 +957,11 @@ analyze its mechanisms along the way.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 269-270
+.. GENERATED FROM PYTHON SOURCE LINES 246-247
 
 We split the data between train and test, and transform them:
 
-.. GENERATED FROM PYTHON SOURCE LINES 270-278
+.. GENERATED FROM PYTHON SOURCE LINES 247-255
 
 .. code-block:: default
 
@@ -935,14 +980,14 @@ We split the data between train and test, and transform them:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 279-283
+.. GENERATED FROM PYTHON SOURCE LINES 256-260
 
 Inspecting the features created
 .................................
 Once it has been trained on data,
 we can print the transformers and the columns assignment it creates:
 
-.. GENERATED FROM PYTHON SOURCE LINES 283-286
+.. GENERATED FROM PYTHON SOURCE LINES 260-263
 
 .. code-block:: default
 
@@ -964,7 +1009,7 @@ we can print the transformers and the columns assignment it creates:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 287-300
+.. GENERATED FROM PYTHON SOURCE LINES 264-277
 
 This is what is being passed to the |ColumnTransformer| under the hood.
 If you're familiar with how the later works, it should be very intuitive.
@@ -980,7 +1025,7 @@ Next, we can have a look at the encoded feature names.
 
 Before encoding:
 
-.. GENERATED FROM PYTHON SOURCE LINES 300-302
+.. GENERATED FROM PYTHON SOURCE LINES 277-279
 
 .. code-block:: default
 
@@ -1001,11 +1046,11 @@ Before encoding:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 303-304
+.. GENERATED FROM PYTHON SOURCE LINES 280-281
 
 After encoding (we only plot the first 8 feature names):
 
-.. GENERATED FROM PYTHON SOURCE LINES 304-307
+.. GENERATED FROM PYTHON SOURCE LINES 281-284
 
 .. code-block:: default
 
@@ -1023,11 +1068,11 @@ After encoding (we only plot the first 8 feature names):
  .. code-block:: none
 
 
-    ['division: development, technology, equipment', 'division: childhood, services, highway', 'division: station, staff, council', 'division: district, patrol, squad', 'division: gaithersburg, nicholson, officer', 'division: administrative, administration, warehouse', 'division: division, director, safety', 'division: training, kensington, spring']
+    ['division: management, highway, welfare', 'division: administration, operations, battalion', 'division: technology, division, safety', 'division: planning, security, recruit', 'division: district, patrol, squad', 'division: maintenance, facilities, downtown', 'division: supports, support, supportive', 'division: gaithersburg, transit, silver']
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 308-314
+.. GENERATED FROM PYTHON SOURCE LINES 285-291
 
 As we can see, it created a new column for each unique value.
 This is because we used |SE| on the column "division",
@@ -1036,7 +1081,7 @@ which was classified as a high cardinality string variable.
 
 In total, we have reasonnable number of encoded columns.
 
-.. GENERATED FROM PYTHON SOURCE LINES 314-317
+.. GENERATED FROM PYTHON SOURCE LINES 291-294
 
 .. code-block:: default
 
@@ -1058,7 +1103,7 @@ In total, we have reasonnable number of encoded columns.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 318-330
+.. GENERATED FROM PYTHON SOURCE LINES 295-307
 
 Feature importance in the statistical model
 ---------------------------------------------
@@ -1073,7 +1118,7 @@ In this section, we will train a regressor, and plot the feature importances
 
 First, let's train the |RandomForestRegressor|,
 
-.. GENERATED FROM PYTHON SOURCE LINES 330-336
+.. GENERATED FROM PYTHON SOURCE LINES 307-313
 
 .. code-block:: default
 
@@ -1098,11 +1143,11 @@ First, let's train the |RandomForestRegressor|,
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 337-338
+.. GENERATED FROM PYTHON SOURCE LINES 314-315
 
 Retreiving the feature importances
 
-.. GENERATED FROM PYTHON SOURCE LINES 338-348
+.. GENERATED FROM PYTHON SOURCE LINES 315-325
 
 .. code-block:: default
 
@@ -1123,11 +1168,11 @@ Retreiving the feature importances
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 349-350
+.. GENERATED FROM PYTHON SOURCE LINES 326-327
 
 Plotting the results:
 
-.. GENERATED FROM PYTHON SOURCE LINES 350-362
+.. GENERATED FROM PYTHON SOURCE LINES 327-339
 
 .. code-block:: default
 
@@ -1146,7 +1191,7 @@ Plotting the results:
 
 
 
-.. image:: /gen_notes/images/sphx_glr_02_dirty_categories_002.png
+.. image:: /gen_notes/images/sphx_glr_02_dirty_categories_001.png
     :alt: Feature importances
     :class: sphx-glr-single-img
 
@@ -1154,7 +1199,7 @@ Plotting the results:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 363-374
+.. GENERATED FROM PYTHON SOURCE LINES 340-351
 
 We can deduce from this data that the three factors that define the
 most the salary are: being hired for a long time, being a manager, and
@@ -1171,7 +1216,7 @@ having a permanent, full-time job :).
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  52.576 seconds)
+   **Total running time of the script:** ( 1 minutes  21.869 seconds)
 
 
 .. _sphx_glr_download_gen_notes_02_dirty_categories.py:

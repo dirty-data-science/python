@@ -11,7 +11,7 @@
   <meta property="og:site_name" content="Dirty Data Science" />
   <meta property="og:description" content="Including strings that represent categories often calls for much data preparation. In particular categories may appear with many morphological variants, when they have been manually input, or assem..." />
   <meta property="og:image" content="../_images/sphx_glr_02_dirty_categories_001.png" />
-  <meta property="og:image:alt" content="02 dirty categories" />
+  <meta property="og:image:alt" content="Feature importances" />
   
     <title>Dirty categories: learning with non normalized entries &#8212; &amp;mdash; Dirty data science</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -74,8 +74,8 @@
 <li><a class="reference internal" href="#the-prediction-pipeline">The prediction pipeline</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#comparing-different-encoding-for-supervised-learning">Comparing different encoding for supervised learning</a></li>
-<li><a class="reference internal" href="#plotting-the-results">Plotting the results</a></li>
+<li><a class="reference internal" href="#prediction-performance-for-supervised-learning">Prediction performance for supervised learning</a></li>
+<li><a class="reference internal" href="#plot-the-results">Plot the results</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#automatic-vectorization">Automatic vectorization</a><ul>
@@ -443,72 +443,128 @@ for data with heterogeneous columns
 </div>
 </div>
 </div>
-<div class="section" id="comparing-different-encoding-for-supervised-learning">
-<h3>Comparing different encoding for supervised learning<a class="headerlink" href="#comparing-different-encoding-for-supervised-learning" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="prediction-performance-for-supervised-learning">
+<h3>Prediction performance for supervised learning<a class="headerlink" href="#prediction-performance-for-supervised-learning" title="Permalink to this headline">¶</a></h3>
 <p>Eventually, we loop over the different encoding methods,
 instantiate each time a new pipeline, fit it
 and store the returned cross-validation score:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="sklearn.model_selection.cross_val_score" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">cross_val_score</span></a>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">all_scores</span></a> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-
-<span class="k">for</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">name</span></a><span class="p">,</span> <a href="https://dirty-cat.github.io/stable/generated/dirty_cat.GapEncoder.html#dirty_cat.GapEncoder" title="dirty_cat.GapEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">method</span></a> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoder_names</span></a><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer" title="sklearn.compose.ColumnTransformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoder</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.make_column_transformer.html#sklearn.compose.make_column_transformer" title="sklearn.compose.make_column_transformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-function"><span class="n">make_column_transformer</span></a><span class="p">(</span>
-        <span class="p">(</span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="sklearn.preprocessing.OneHotEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">one_hot</span></a><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;gender&#39;</span><span class="p">,</span> <span class="s1">&#39;department_name&#39;</span><span class="p">,</span> <span class="s1">&#39;assignment_category&#39;</span><span class="p">]),</span>
-        <span class="p">(</span><span class="s1">&#39;passthrough&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Year First Hired&#39;</span><span class="p">]),</span>
-        <span class="c1"># Last but not least, our dirty column</span>
-        <span class="p">(</span><a href="https://dirty-cat.github.io/stable/generated/dirty_cat.GapEncoder.html#dirty_cat.GapEncoder" title="dirty_cat.GapEncoder" class="sphx-glr-backref-module-dirty_cat sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">method</span></a><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;employee_position_title&#39;</span><span class="p">]),</span>
-        <span class="n">remainder</span><span class="o">=</span><span class="s1">&#39;drop&#39;</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pipeline</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline" title="sklearn.pipeline.make_pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-function"><span class="n">make_pipeline</span></a><span class="p">(</span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.compose.ColumnTransformer.html#sklearn.compose.ColumnTransformer" title="sklearn.compose.ColumnTransformer" class="sphx-glr-backref-module-sklearn-compose sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">encoder</span></a><span class="p">,</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.base.RegressorMixin.html#sklearn.base.RegressorMixin" title="sklearn.base.RegressorMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">HistGradientBoostingRegressor</span></a><span class="p">())</span>
-    <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="sklearn.model_selection.cross_val_score" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">cross_val_score</span></a><span class="p">(</span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pipeline</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="pandas.Series" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> encoding&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">name</span></a><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;r2 score:  mean: </span><span class="si">{:.3f}</span><span class="s1">; std: </span><span class="si">{:.3f}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <a href="https://numpy.org/doc/stable/reference/generated/numpy.mean.html#numpy.mean" title="numpy.mean" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">mean</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">),</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.std.html#numpy.std" title="numpy.std" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">std</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">)))</span>
-    <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">all_scores</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">name</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="sklearn.model_selection.cross_val_score" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">cross_val_score</span></a>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a> <span class="o">=</span> <a href="http://scikit-learn.org/0.20/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="sklearn.model_selection.cross_val_score" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">cross_val_score</span></a><span class="p">(</span><a href="http://scikit-learn.org/0.20/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">pipeline</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="pandas.Series" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;one-ot encoding&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;r2 score:  mean: </span><span class="si">{:.3f}</span><span class="s1">; std: </span><span class="si">{:.3f}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <a href="https://numpy.org/doc/stable/reference/generated/numpy.mean.html#numpy.mean" title="numpy.mean" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">mean</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">),</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.std.html#numpy.std" title="numpy.std" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">std</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">)))</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>one-hot encoding
-r2 score:  mean: 0.776; std: 0.028
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py&quot;, line 652, in _fit_and_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 357, in fit
+    Xt = self._fit(X, y, **fit_params_steps)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 315, in _fit
+    X, fitted_transformer = fit_transform_one_cached(
+  File &quot;/usr/lib/python3/dist-packages/joblib/memory.py&quot;, line 352, in __call__
+    return self.func(*args, **kwargs)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 767, in _fit_transform_one
+    res = transformer.fit_transform(X, y, **fit_params)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 557, in fit_transform
+    self._validate_transformers()
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 318, in _validate_transformers
+    raise TypeError(
+TypeError: All estimators should implement fit and transform, or can be &#39;drop&#39; or &#39;passthrough&#39; specifiers. &#39;employee_position_title&#39; (type &lt;class &#39;str&#39;&gt;) doesn&#39;t.
 
-similarity encoding
-r2 score:  mean: 0.923; std: 0.014
+  warnings.warn(
+/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py&quot;, line 652, in _fit_and_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 357, in fit
+    Xt = self._fit(X, y, **fit_params_steps)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 315, in _fit
+    X, fitted_transformer = fit_transform_one_cached(
+  File &quot;/usr/lib/python3/dist-packages/joblib/memory.py&quot;, line 352, in __call__
+    return self.func(*args, **kwargs)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 767, in _fit_transform_one
+    res = transformer.fit_transform(X, y, **fit_params)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 557, in fit_transform
+    self._validate_transformers()
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 318, in _validate_transformers
+    raise TypeError(
+TypeError: All estimators should implement fit and transform, or can be &#39;drop&#39; or &#39;passthrough&#39; specifiers. &#39;employee_position_title&#39; (type &lt;class &#39;str&#39;&gt;) doesn&#39;t.
 
-target encoding
-r2 score:  mean: 0.842; std: 0.030
+  warnings.warn(
+/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py&quot;, line 652, in _fit_and_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 357, in fit
+    Xt = self._fit(X, y, **fit_params_steps)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 315, in _fit
+    X, fitted_transformer = fit_transform_one_cached(
+  File &quot;/usr/lib/python3/dist-packages/joblib/memory.py&quot;, line 352, in __call__
+    return self.func(*args, **kwargs)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 767, in _fit_transform_one
+    res = transformer.fit_transform(X, y, **fit_params)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 557, in fit_transform
+    self._validate_transformers()
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 318, in _validate_transformers
+    raise TypeError(
+TypeError: All estimators should implement fit and transform, or can be &#39;drop&#39; or &#39;passthrough&#39; specifiers. &#39;employee_position_title&#39; (type &lt;class &#39;str&#39;&gt;) doesn&#39;t.
 
-minhash encoding
-r2 score:  mean: 0.919; std: 0.012
+  warnings.warn(
+/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py&quot;, line 652, in _fit_and_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 357, in fit
+    Xt = self._fit(X, y, **fit_params_steps)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 315, in _fit
+    X, fitted_transformer = fit_transform_one_cached(
+  File &quot;/usr/lib/python3/dist-packages/joblib/memory.py&quot;, line 352, in __call__
+    return self.func(*args, **kwargs)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 767, in _fit_transform_one
+    res = transformer.fit_transform(X, y, **fit_params)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 557, in fit_transform
+    self._validate_transformers()
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 318, in _validate_transformers
+    raise TypeError(
+TypeError: All estimators should implement fit and transform, or can be &#39;drop&#39; or &#39;passthrough&#39; specifiers. &#39;employee_position_title&#39; (type &lt;class &#39;str&#39;&gt;) doesn&#39;t.
 
-gap encoding
-r2 score:  mean: 0.916; std: 0.014
+  warnings.warn(
+/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py:669: FitFailedWarning: Estimator fit failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/model_selection/_validation.py&quot;, line 652, in _fit_and_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 357, in fit
+    Xt = self._fit(X, y, **fit_params_steps)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 315, in _fit
+    X, fitted_transformer = fit_transform_one_cached(
+  File &quot;/usr/lib/python3/dist-packages/joblib/memory.py&quot;, line 352, in __call__
+    return self.func(*args, **kwargs)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/pipeline.py&quot;, line 767, in _fit_transform_one
+    res = transformer.fit_transform(X, y, **fit_params)
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 557, in fit_transform
+    self._validate_transformers()
+  File &quot;/home/varoquau/dev/scikit-learn/sklearn/compose/_column_transformer.py&quot;, line 318, in _validate_transformers
+    raise TypeError(
+TypeError: All estimators should implement fit and transform, or can be &#39;drop&#39; or &#39;passthrough&#39; specifiers. &#39;employee_position_title&#39; (type &lt;class &#39;str&#39;&gt;) doesn&#39;t.
+
+  warnings.warn(
+one-ot encoding
+r2 score:  mean: nan; std: nan
 </pre></div>
 </div>
+<p><strong>Exercise</strong>: now try out the different categorical encoders for our
+dirty categorical column. Make sure to store the scores (for instance
+in a dictionary) for plotting later</p>
 </div>
-<div class="section" id="plotting-the-results">
-<h3>Plotting the results<a class="headerlink" href="#plotting-the-results" title="Permalink to this headline">¶</a></h3>
-<p>Finally, we plot the scores on a boxplot:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="n">ax</span> <span class="o">=</span> <a href="http://seaborn.pydata.org/generated/seaborn.boxplot.html#seaborn.boxplot" title="seaborn.boxplot" class="sphx-glr-backref-module-seaborn sphx-glr-backref-type-py-function"><span class="n">seaborn</span><span class="o">.</span><span class="n">boxplot</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class"><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">all_scores</span></a><span class="p">),</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>
-<a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.ylabel.html#matplotlib.pyplot.ylabel" title="matplotlib.pyplot.ylabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span></a><span class="p">(</span><span class="s1">&#39;Encoding&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.xlabel.html#matplotlib.pyplot.xlabel" title="matplotlib.pyplot.xlabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span></a><span class="p">(</span><span class="s1">&#39;Prediction accuracy     &#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.yticks.html#matplotlib.pyplot.yticks" title="matplotlib.pyplot.yticks" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span></a><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
-<a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="matplotlib.pyplot.tight_layout" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
-</pre></div>
-</div>
-<img alt="02 dirty categories" class="sphx-glr-single-img" src="../_images/sphx_glr_02_dirty_categories_001.png" />
-<p>The clear trend is that encoders that use the string form
-of the category (similarity, minhash, and gap) perform better than
-those that discard it.</p>
-<p>SimilarityEncoder is the best performer, but it is less scalable on big
-data than MinHashEncoder and GapEncoder. The most scalable encoder is
-the MinHashEncoder. GapEncoder, on the other hand, has the benefit that
-it provides interpretable features (see <a class="reference external" href="https://dirty-cat.github.io/stable/auto_examples/04_feature_interpretation_gap_encoder.html#sphx-glr-auto-examples-04-feature-interpretation-gap-encoder-py" title="(in dirty_cat v0.2.0a1)"><span>Feature interpretation with the GapEncoder</span></a>)</p>
+<div class="section" id="plot-the-results">
+<h3>Plot the results<a class="headerlink" href="#plot-the-results" title="Permalink to this headline">¶</a></h3>
+<p>Plot the prediction scores using seaborn</p>
+<p>What’s the dominant trend? What characterizes the strategies that work
+best?</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -729,9 +785,9 @@ can be readily applied to the dataframe</strong>.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>scores=array([0.90180643, 0.85666805, 0.90379381, 0.84444664, 0.92812669])
-mean=0.8869683220153757
-std=0.03137985908960377
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>scores=array([0.88561269, 0.83760419, 0.89255637, 0.91054519, 0.92222249])
+mean=0.8897081885442703
+std=0.029089765011896567
 </pre></div>
 </div>
 <p>The prediction perform here is pretty much as good as above
@@ -789,7 +845,7 @@ A <a class="reference external" href="https://scikit-learn.org/0.20/modules/gene
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;division: development, technology, equipment&#39;, &#39;division: childhood, services, highway&#39;, &#39;division: station, staff, council&#39;, &#39;division: district, patrol, squad&#39;, &#39;division: gaithersburg, nicholson, officer&#39;, &#39;division: administrative, administration, warehouse&#39;, &#39;division: division, director, safety&#39;, &#39;division: training, kensington, spring&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;division: management, highway, welfare&#39;, &#39;division: administration, operations, battalion&#39;, &#39;division: technology, division, safety&#39;, &#39;division: planning, security, recruit&#39;, &#39;division: district, patrol, squad&#39;, &#39;division: maintenance, facilities, downtown&#39;, &#39;division: supports, support, supportive&#39;, &#39;division: gaithersburg, transit, silver&#39;]
 </pre></div>
 </div>
 <p>As we can see, it created a new column for each unique value.
@@ -850,7 +906,7 @@ instead (which are less subject to biases)</p>
 <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="Feature importances" class="sphx-glr-single-img" src="../_images/sphx_glr_02_dirty_categories_002.png" />
+<img alt="Feature importances" class="sphx-glr-single-img" src="../_images/sphx_glr_02_dirty_categories_001.png" />
 <p>We can deduce from this data that the three factors that define the
 most the salary are: being hired for a long time, being a manager, and
 having a permanent, full-time job :).</p>
@@ -860,7 +916,7 @@ having a permanent, full-time job :).</p>
 automated by the <a class="reference external" href="https://dirty-cat.github.io/stable/generated/dirty_cat.SuperVectorizer.html#dirty_cat.SuperVectorizer" title="(in dirty_cat v0.2.0a1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SuperVectorizer</span></code></a>, and the resulting pipeline can still be
 inspected, even with non-normalized entries.</p>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  52.576 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  21.869 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gen-notes-02-dirty-categories-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/02_dirty_categories.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>
