@@ -118,56 +118,33 @@ pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
 
 
 # %%
-# Comparing different encoding for supervised learning
+# Prediction performance for supervised learning
 # -----------------------------------------------------
 # Eventually, we loop over the different encoding methods,
 # instantiate each time a new pipeline, fit it
 # and store the returned cross-validation score:
 
-from sklearn.model_selection import cross_val_score
 import numpy as np
-
-all_scores = dict()
-
-for name, method in encoder_names.items():
-    encoder = make_column_transformer(
-        (one_hot, ['gender', 'department_name', 'assignment_category']),
-        ('passthrough', ['Year First Hired']),
-        # Last but not least, our dirty column
-        (method, ['employee_position_title']),
-        remainder='drop',
-    )
-
-    pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
-    scores = cross_val_score(pipeline, df, y)
-    print('{} encoding'.format(name))
-    print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
-        np.mean(scores), np.std(scores)))
-    all_scores[name] = scores
+from sklearn.model_selection import cross_val_score
+scores = cross_val_score(pipeline, df, y)
+print('one-ot encoding')
+print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
+    np.mean(scores), np.std(scores)))
 
 # %%
-# Plotting the results
+# **Exercise**: now try out the different categorical encoders for our 
+# dirty categorical column. Make sure to store the scores (for instance
+# in a dictionary) for plotting later
+
+# %%
+# Plot the results
 # --------------------
-# Finally, we plot the scores on a boxplot:
-
-import seaborn
-import matplotlib.pyplot as plt
-plt.figure(figsize=(4, 3))
-ax = seaborn.boxplot(data=pd.DataFrame(all_scores), orient='h')
-plt.ylabel('Encoding', size=20)
-plt.xlabel('Prediction accuracy     ', size=20)
-plt.yticks(size=20)
-plt.tight_layout()
+#
+# Plot the prediction scores using seaborn
 
 # %%
-# The clear trend is that encoders that use the string form
-# of the category (similarity, minhash, and gap) perform better than
-# those that discard it.
-# 
-# SimilarityEncoder is the best performer, but it is less scalable on big
-# data than MinHashEncoder and GapEncoder. The most scalable encoder is
-# the MinHashEncoder. GapEncoder, on the other hand, has the benefit that
-# it provides interpretable features (see :ref:`sphx_glr_auto_examples_04_feature_interpretation_gap_encoder.py`)
+# What's the dominant trend? What characterizes the strategies that work
+# best?
 #
 # |
 #
