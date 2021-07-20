@@ -34,7 +34,7 @@ it's impact on predictive models. In particular, standard imputation
 procedures can reconstruct missing values without distortion only if the
 data is *missing at random*.
 
-The mathematical details behind this notebook can be found in
+A good introduction to the mathematics behind this notebook can be found in
 https://arxiv.org/abs/1902.06931
 
 .. GENERATED FROM PYTHON SOURCE LINES 24-33
@@ -107,7 +107,7 @@ A quick plot reveals what the data looks like
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7fda21ebd190>
+    <matplotlib.colorbar.Colorbar object at 0x7f523e1ada30>
 
 
 
@@ -176,7 +176,7 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7fda21d98580>
+    <matplotlib.legend.Legend object at 0x7f523e092e50>
 
 
 
@@ -285,7 +285,7 @@ We can display the imputed data as our previous visualization
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7fda1b187e20>
+    <matplotlib.legend.Legend object at 0x7f5217a90700>
 
 
 
@@ -409,7 +409,7 @@ A quick visualization reveals a larger disortion of the distribution
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7fda1b091a00>
+    <matplotlib.colorbar.Colorbar object at 0x7f5217a1d280>
 
 
 
@@ -709,7 +709,7 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7fda165c6430>
+    <matplotlib.legend.Legend object at 0x7f5212f4fcd0>
 
 
 
@@ -757,7 +757,7 @@ initial distribution:
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7fda16558eb0>
+    <matplotlib.legend.Legend object at 0x7f5212ef3790>
 
 
 
@@ -905,7 +905,7 @@ fully-observed data:
  .. code-block:: none
 
 
-    array([0.98892956, 0.98958153, 0.98949915, 0.98910235, 0.98877953])
+    array([0.98885081, 0.98964008, 0.98954276, 0.98904928, 0.98873297])
 
 
 
@@ -958,7 +958,7 @@ The full data predictor can be used on the imputed data
  .. code-block:: none
 
 
-    0.5426904828626229
+    0.5427288623176603
 
 
 
@@ -990,7 +990,7 @@ compare it to a model trained to predict on data with missing values
  .. code-block:: none
 
 
-    0.5694143257010138
+    0.5688571299441851
 
 
 
@@ -1035,7 +1035,7 @@ is a non-linear function of X
  .. code-block:: none
 
 
-    array([0.96216682, 0.96662789, 0.9668087 , 0.96845013, 0.96311003])
+    array([0.96279567, 0.96704914, 0.96772713, 0.96782557, 0.96420989])
 
 
 
@@ -1067,7 +1067,7 @@ On data with missing values:
  .. code-block:: none
 
 
-    0.33589695977786693
+    0.33588755909768464
 
 
 
@@ -1100,7 +1100,7 @@ Now we use a model trained to predict on data with missing values
  .. code-block:: none
 
 
-    0.5143647119387207
+    0.5142286105425498
 
 
 
@@ -1124,7 +1124,7 @@ ________
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  40.110 seconds)
+   **Total running time of the script:** ( 0 minutes  14.932 seconds)
 
 
 .. _sphx_glr_download_gen_notes_01_missing_values.py:

@@ -37,7 +37,7 @@ Notebooks:
 .. only:: html
 
  .. figure:: /gen_notes/images/thumb/sphx_glr_02_dirty_categories_thumb.png
-     :alt: Dirty categories: learning with non normalized entries
+     :alt: Dirty categories: learning with non normalized strings
 
      :ref:`sphx_glr_gen_notes_02_dirty_categories.py`
 

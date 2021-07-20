@@ -19,7 +19,7 @@
 
 
 ========================================================
-Dirty categories: learning with non normalized entries
+Dirty categories: learning with non normalized strings
 ========================================================
 
 Including strings that represent categories often calls for much data
@@ -440,15 +440,6 @@ for data with heterogeneous columns
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/varoquau/dev/scikit-learn/sklearn/experimental/enable_hist_gradient_boosting.py:16: UserWarning: Since version 1.0, it is not needed to import enable_hist_gradient_boosting anymore. HistGradientBoostingClassifier and HistGradientBoostingRegressor are now stable and can be normally imported from sklearn.ensemble.
-      warnings.warn(
-
 
 
 
@@ -581,7 +572,7 @@ and store the returned cross-validation score:
     r2 score:  mean: 0.919; std: 0.012
 
     gap encoding
-    r2 score:  mean: 0.911; std: 0.019
+    r2 score:  mean: 0.909; std: 0.011
 
 
 
@@ -938,9 +929,9 @@ Let's perform a cross-validation to see how well this model predicts
 
  .. code-block:: none
 
-    scores=array([0.90793956, 0.84991141, 0.91769624, 0.90406107, 0.90471622])
-    mean=0.8968649015546832
-    std=0.023977702100498183
+    scores=array([0.87651907, 0.87186239, 0.90534537, 0.9120328 , 0.92163719])
+    mean=0.897479364762644
+    std=0.0197627927771675
 
 
 
@@ -1016,20 +1007,19 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
  .. code-block:: none
 
 
-    array([[46.146669160567455, 2.3723041056412892, 0.1454854129998407, ...,
-            0.068675594071764, 0.13705376257973623, 2007],
-           [0.05365538951150268, 0.05197551111633178, 0.054512684087124286,
-            ..., 0.056462732181151366, 0.06179109334775452, 2005],
-           [0.18984249436338, 38.725266948569384, 0.06330747663001067, ...,
-            0.05480082116040234, 0.06385017456063524, 2009],
+    array([[1.0449171656292862, 0.7205922491346307, 0.39571982605966466, ...,
+            0.07790133090254987, 0.0866859328077334, 2007],
+           [0.05211638296647561, 29.96795271024839, 0.06107061378494277, ...,
+            0.08273956019725892, 0.0597482324987131, 2005],
+           [0.06000891970972247, 0.057149413239210564, 0.07738515680926894,
+            ..., 0.08811993992371518, 0.05843022597056747, 2009],
            ...,
-           [1.3353050071063834, 44.35863872528189, 0.08711093257776978, ...,
-            0.055952420354087304, 0.061288638285426786, 1990],
-           [49.315544501088795, 0.14122044034756548, 0.07064135013106879,
-            ..., 0.056452468691546784, 0.055342509780022295, 2012],
-           [0.06017128337016342, 0.05539002959849023, 0.05509281633731955,
-            ..., 0.056462732181151366, 0.06179109334775452, 2014]],
-          dtype=object)
+           [0.09535114306092987, 0.06932818336882285, 0.16664185835837403,
+            ..., 0.0827813134238929, 0.06117155771841887, 1990],
+           [0.08348536132941996, 0.06641634058081916, 0.07844733009530419,
+            ..., 0.0836319932541453, 0.056200358797388036, 2012],
+           [0.060952392787100976, 0.07522578586235484, 0.055811123562746645,
+            ..., 0.08273956019725892, 0.0597482324987131, 2014]], dtype=object)
 
 
 
@@ -1146,7 +1136,7 @@ After encoding (we only plot the first 8 feature names):
  .. code-block:: none
 
 
-    ['division: administrative, warehouse, delivery', 'division: development, supplement, management', 'division: accountability, maintenance, facilities', 'division: poolesville, adolescent, rockville', 'division: traffic, training, safety', 'division: services, highway, service', 'division: district, patrol, squad', 'division: technology, communications, technical']
+    ['division: supports, twinbrook, compliance', 'division: health, emergency, school', 'division: technology, traffic, safety', 'division: gaithersburg, transit, silver', 'division: assignment, assessment, programs', 'division: administration, operations, battalion', 'division: accountability, development, planning', 'division: management, facilities, maintenance']
 
 
 
@@ -1294,7 +1284,7 @@ having a permanent, full-time job :).
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 3 minutes  28.003 seconds)
+   **Total running time of the script:** ( 3 minutes  14.261 seconds)
 
 
 .. _sphx_glr_download_gen_notes_02_dirty_categories.py:

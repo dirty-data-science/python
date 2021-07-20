@@ -26,7 +26,7 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Dirty categories: learning with non normalized entries" href="02_dirty_categories.html" />
+    <link rel="next" title="Dirty categories: learning with non normalized strings" href="02_dirty_categories.html" />
     <link rel="prev" title="Machine-learning on dirty-data in Python: a tutorial" href="../index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -97,7 +97,7 @@
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
       <li>Previous: <a href="../index.html" title="previous chapter">Machine-learning on dirty-data in Python: a tutorial</a></li>
-      <li>Next: <a href="02_dirty_categories.html" title="next chapter">Dirty categories: learning with non normalized entries</a></li>
+      <li>Next: <a href="02_dirty_categories.html" title="next chapter">Dirty categories: learning with non normalized strings</a></li>
   </ul></li>
 </ul>
 </div>
@@ -123,7 +123,7 @@ predict with missing values.</p>
 it’s impact on predictive models. In particular, standard imputation
 procedures can reconstruct missing values without distortion only if the
 data is <em>missing at random</em>.</p>
-<p>The mathematical details behind this notebook can be found in
+<p>A good introduction to the mathematics behind this notebook can be found in
 <a class="reference external" href="https://arxiv.org/abs/1902.06931">https://arxiv.org/abs/1902.06931</a></p>
 <div class="section" id="the-fully-observed-data-a-toy-regression-problem">
 <h2>The fully-observed data: a toy regression problem<a class="headerlink" href="#the-fully-observed-data-a-toy-regression-problem" title="Permalink to this headline">¶</a></h2>
@@ -159,7 +159,7 @@ coordinate, with noise.</p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7fda21ebd190&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f523e1ada30&gt;
 </pre></div>
 </div>
 </div>
@@ -194,7 +194,7 @@ the values.</p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_002.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fda21d98580&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f523e092e50&gt;
 </pre></div>
 </div>
 <p>We can see that the distribution of the fully-observed data is the same
@@ -237,7 +237,7 @@ missing values</strong></p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_003.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fda1b187e20&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f5217a90700&gt;
 </pre></div>
 </div>
 <p>We can see that the imputer did a fairly good job of recovering the
@@ -293,7 +293,7 @@ datasets (it has a bad computation scalability).</p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7fda1b091a00&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f5217a1d280&gt;
 </pre></div>
 </div>
 <p>Evaluating in prediction pipeline</p>
@@ -439,7 +439,7 @@ missing.</p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_007.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fda165c6430&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f5212f4fcd0&gt;
 </pre></div>
 </div>
 <p>Here the full-observed data does not reflect well at all the
@@ -463,7 +463,7 @@ initial distribution:</p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_008.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fda16558eb0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f5212ef3790&gt;
 </pre></div>
 </div>
 <p>Recovering the initial data distribution would need much more mass on
@@ -560,7 +560,7 @@ fully-observed data:</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.98892956, 0.98958153, 0.98949915, 0.98910235, 0.98877953])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.98885081, 0.98964008, 0.98954276, 0.98904928, 0.98873297])
 </pre></div>
 </div>
 <p>The cross validation reveals that the predictor achieves an excellent
@@ -579,7 +579,7 @@ that looks like the full-observed data</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5426904828626229
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5427288623176603
 </pre></div>
 </div>
 <p>This prediction is less good than on the full data, but this is
@@ -593,7 +593,7 @@ compare it to a model trained to predict on data with missing values</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5694143257010138
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5688571299441851
 </pre></div>
 </div>
 <p>Applying a model valid on the full data to imputed data work almost
@@ -616,7 +616,7 @@ is a non-linear function of X</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.96216682, 0.96662789, 0.9668087 , 0.96845013, 0.96311003])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.96279567, 0.96704914, 0.96772713, 0.96782557, 0.96420989])
 </pre></div>
 </div>
 <p>Once again, we have a near-perfect predictor on fully-observed data</p>
@@ -629,7 +629,7 @@ is a non-linear function of X</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.33589695977786693
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.33588755909768464
 </pre></div>
 </div>
 <p>The full-data predictor works much less well</p>
@@ -643,7 +643,7 @@ is a non-linear function of X</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5143647119387207
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5142286105425498
 </pre></div>
 </div>
 <p>The model trained on data with missing values works significantly
@@ -662,7 +662,7 @@ imputation can be found here: <a class="reference external" href="https://arxiv.
 <div class="line"><br /></div>
 </div>
 <hr class="docutils" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  40.110 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  14.932 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gen-notes-01-missing-values-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/01_missing_values.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>

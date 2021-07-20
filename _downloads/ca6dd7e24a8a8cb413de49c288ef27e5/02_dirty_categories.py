@@ -1,6 +1,6 @@
 """
 ========================================================
-Dirty categories: learning with non normalized entries
+Dirty categories: learning with non normalized strings
 ========================================================
 
 Including strings that represent categories often calls for much data
