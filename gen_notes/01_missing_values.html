@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta property="og:title" content="Machine learning with missing values" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://dirtydata.science/gen_notes/missing_values.html" />
+  <meta property="og:url" content="https://dirtydata.science/gen_notes/01_missing_values.html" />
   <meta property="og:site_name" content="Dirty Data Science" />
   <meta property="og:description" content="Here we use simulated data to understanding the fundamentals of statistical learning with missing values. This notebook reveals why a HistGradientBoostingRegressor ( sklearn.ensemble.HistGradientBo..." />
-  <meta property="og:image" content="../_images/sphx_glr_missing_values_001.png" />
-  <meta property="og:image:alt" content="missing values" />
+  <meta property="og:image" content="../_images/sphx_glr_01_missing_values_001.png" />
+  <meta property="og:image:alt" content="01 missing values" />
   
     <title>Machine learning with missing values &#8212; &amp;mdash; Dirty data science</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -26,6 +26,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Dirty categories: learning with non normalized entries" href="02_dirty_categrories.html" />
+    <link rel="prev" title="Machine-learning on dirty-data in Python: a tutorial" href="../index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -94,6 +96,8 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">Machine-learning on dirty-data in Python: a tutorial</a></li>
+      <li>Next: <a href="02_dirty_categrories.html" title="next chapter">Dirty categories: learning with non normalized entries</a></li>
   </ul></li>
 </ul>
 </div>
@@ -105,11 +109,11 @@
             
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-gen-notes-missing-values-py"><span class="std std-ref">here</span></a>
+<p>Click <a class="reference internal" href="#sphx-glr-download-gen-notes-01-missing-values-py"><span class="std std-ref">here</span></a>
 to download the full example code or to run this example in your browser via Binder</p>
 </div>
 <div class="sphx-glr-example-title section" id="machine-learning-with-missing-values">
-<span id="sphx-glr-gen-notes-missing-values-py"></span><h1>Machine learning with missing values<a class="headerlink" href="#machine-learning-with-missing-values" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-gen-notes-01-missing-values-py"></span><h1>Machine learning with missing values<a class="headerlink" href="#machine-learning-with-missing-values" title="Permalink to this headline">¶</a></h1>
 <p>Here we use simulated data to understanding the fundamentals of statistical
 learning with missing values.</p>
 <p>This notebook reveals why a HistGradientBoostingRegressor (
@@ -153,9 +157,9 @@ coordinate, with noise.</p>
 <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.colorbar.html#matplotlib.pyplot.colorbar" title="matplotlib.pyplot.colorbar" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_001.png" />
+<img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7feb3450a970&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f3c671ca970&gt;
 </pre></div>
 </div>
 </div>
@@ -188,9 +192,9 @@ the values.</p>
 <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_002.png" />
+<img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_002.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7feb343f1a30&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f3c670abd90&gt;
 </pre></div>
 </div>
 <p>We can see that the distribution of the fully-observed data is the same
@@ -231,9 +235,9 @@ missing values</strong></p>
 <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_003.png" />
+<img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_003.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7feb05cf1f10&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f3c4cebc640&gt;
 </pre></div>
 </div>
 <p>We can see that the imputer did a fairly good job of recovering the
@@ -287,9 +291,9 @@ datasets (it has a bad computation scalability).</p>
 <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.colorbar.html#matplotlib.pyplot.colorbar" title="matplotlib.pyplot.colorbar" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_004.png" />
+<img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7feb05bfe880&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f3c4ce491c0&gt;
 </pre></div>
 </div>
 <p>Evaluating in prediction pipeline</p>
@@ -344,7 +348,7 @@ array([0.48104853, 0.3676542 , 0.54779672, 0.43052366, 0.53230889,
 <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="matplotlib.pyplot.tight_layout" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="Prediction accuracy  linear and small data Missing Completely at Random" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_005.png" />
+<img alt="Prediction accuracy  linear and small data Missing Completely at Random" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_005.png" />
 <p>Not much difference with the more sophisticated imputer. A more thorough
 analysis would be necessary, with more cross-validation runs.</p>
 </div>
@@ -382,7 +386,7 @@ imputation</p>
 <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="matplotlib.pyplot.tight_layout" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="Prediction accuracy  linear and large data Missing Completely at Random" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_006.png" />
+<img alt="Prediction accuracy  linear and large data Missing Completely at Random" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_006.png" />
 <p><strong>When there is a reasonnable amout of data, the
 HistGradientBoostingRegressor is the best strategy</strong> even for a linear
 data-generating mechanism, in MAR settings, which are settings
@@ -433,9 +437,9 @@ missing.</p>
 <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_007.png" />
+<img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_007.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7feafd141310&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f3c44375c10&gt;
 </pre></div>
 </div>
 <p>Here the full-observed data does not reflect well at all the
@@ -457,9 +461,9 @@ initial distribution:</p>
 <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_008.png" />
+<img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_008.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7feafd0d1d90&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f3c443186d0&gt;
 </pre></div>
 </div>
 <p>Recovering the initial data distribution would need much more mass on
@@ -518,7 +522,7 @@ functions to link to y (
 <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="matplotlib.pyplot.tight_layout" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="Prediction accuracy  linear and small data Missing not at Random" class="sphx-glr-single-img" src="../_images/sphx_glr_missing_values_009.png" />
+<img alt="Prediction accuracy  linear and small data Missing not at Random" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_009.png" />
 <p>We can see that the imputation is not the most important step of the
 pipeline <a class="footnote-reference brackets" href="#id7" id="id6">3</a>, rather <strong>what is important is to use a powerful model</strong>.</p>
 <dl class="footnote brackets">
@@ -556,7 +560,7 @@ fully-observed data:</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.98899843, 0.98966673, 0.98957666, 0.98906105, 0.98879757])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.98887533, 0.98963272, 0.98945931, 0.9889413 , 0.98890976])
 </pre></div>
 </div>
 <p>The cross validation reveals that the predictor achieves an excellent
@@ -575,7 +579,7 @@ that looks like the full-observed data</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.542844390398004
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5428835430085962
 </pre></div>
 </div>
 <p>This prediction is less good than on the full data, but this is
@@ -589,7 +593,7 @@ compare it to a model trained to predict on data with missing values</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5689002643778134
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5695367990150736
 </pre></div>
 </div>
 <p>Applying a model valid on the full data to imputed data work almost
@@ -612,7 +616,7 @@ is a non-linear function of X</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.96126008, 0.9668436 , 0.96628597, 0.9692579 , 0.96525838])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.96294251, 0.96673048, 0.96868901, 0.9683646 , 0.96456764])
 </pre></div>
 </div>
 <p>Once again, we have a near-perfect predictor on fully-observed data</p>
@@ -625,7 +629,7 @@ is a non-linear function of X</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.3368895297521687
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.33334292858842474
 </pre></div>
 </div>
 <p>The full-data predictor works much less well</p>
@@ -639,7 +643,7 @@ is a non-linear function of X</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5135658403954364
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5121113269294663
 </pre></div>
 </div>
 <p>The model trained on data with missing values works significantly
@@ -658,16 +662,16 @@ imputation can be found here: <a class="reference external" href="https://arxiv.
 <div class="line"><br /></div>
 </div>
 <hr class="docutils" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  16.057 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gen-notes-missing-values-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  17.318 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gen-notes-01-missing-values-py">
 <div class="binder-badge docutils container">
-<a class="reference external image-reference" href="https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/missing_values.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>
+<a class="reference external image-reference" href="https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/01_missing_values.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>
 </div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/21713268969266cb69d2ccb6c70905a6/missing_values.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">missing_values.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../_downloads/830f10ce16a62e7c5af86505c1fbdebd/01_missing_values.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">01_missing_values.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../_downloads/f2c5e60e923d88b35d47f7f5f97ab3a4/missing_values.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">missing_values.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../_downloads/0d97fc1b1a0b526237202e770844f21d/01_missing_values.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">01_missing_values.ipynb</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -685,7 +689,7 @@ imputation can be found here: <a class="reference external" href="https://arxiv.
       &copy;2021, Gaël Varoquaux.
       
       |
-      <a href="../_sources/gen_notes/missing_values.rst.txt"
+      <a href="../_sources/gen_notes/01_missing_values.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
