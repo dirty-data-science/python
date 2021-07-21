@@ -103,13 +103,13 @@ div.sphx-glr-footer-example {
 
 @media only screen and (min-width: 1550px) {
     div.sphx-glr-footer-example {
-	width: 300px;
+	max-width: 300px;
     }
 }
 
 @media only screen and (min-width: 1750px) {
     div.sphx-glr-footer-example {
-	width: 400px;
+	max-width: 400px;
     }
 }
 
@@ -193,16 +193,36 @@ div.sphinxsidebarwrapper li li a:hover {
 }
 
 /* The "active" sections */
+div.sphinxsidebarwrapper li li.preactive > a:first-child {
+    border-right: #C1CEC1 solid 5px;
+}
+
+div.sphinxsidebarwrapper li ul.active ul {
+    display: block;
+    font-size: smaller;
+}
+
 div.sphinxsidebarwrapper li li a.active {
     border-right: #055100 solid 5px;
     background-color: #F3F3F3;
     text-decoration: none;
 }
 
+div.sphinxsidebarwrapper li li a.active {
+
+}
+
+
 div.sphinxsidebarwrapper li li a.active + ul {
     display: block;
     font-size: smaller;
 }
+
+div.sphinxsidebarwrapper li li ul.active {
+    display: block;
+    font-size: smaller;
+}
+
 
 /* Flush the sidebar more to the left */
 @media (min-width: 1300px) {

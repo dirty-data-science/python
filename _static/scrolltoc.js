@@ -5,16 +5,21 @@ function updateSideBarPosition(sections) {
     i = 0;
     current_section = 0;
     $('a.internal').removeClass('active');
+    $('ul.active').removeClass('active');
+    $('li.preactive').removeClass('preactive');
     for(i in sections) {
         if(sections[i] > pos) {
             break
         }
+	console.log(i); 
+	current_section = i
         if($('a.internal[href$="' + i + '"]').is(':visible')){
             current_section = i
         }
     }
     $('a.internal[href$="' + current_section + '"]').addClass('active');
-    $('a.internal[href$="' + current_section + '"]').parent().addClass('active')
+    $('a.internal[href$="' + current_section + '"]').parent().parent().addClass('active')
+    $('a.internal[href$="' + current_section + '"]').parent().parent().parent().addClass('preactive')
 }
 
 $(function() {
