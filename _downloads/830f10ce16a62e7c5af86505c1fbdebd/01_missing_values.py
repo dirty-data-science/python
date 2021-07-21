@@ -17,6 +17,16 @@ data is *missing at random*.
 
 A good introduction to the mathematics behind this notebook can be found in
 https://arxiv.org/abs/1902.06931
+
+.. topic:: **Missing values in categorical data**
+
+    If a categorical column has missing values, the simplest approach is
+    to create a specific category "missing" and assign missing values to
+    this new category, to represent missingness in the classifier.
+    Indeed, as we will see, imputation is not crucial for prediction.
+    In the following we focus on continuous columns, where the discrete
+    nature of a missing value poses more problems.
+
 """
 
 

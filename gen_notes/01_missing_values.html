@@ -126,6 +126,15 @@ procedures can reconstruct missing values without distortion only if the
 data is <em>missing at random</em>.</p>
 <p>A good introduction to the mathematics behind this notebook can be found in
 <a class="reference external" href="https://arxiv.org/abs/1902.06931">https://arxiv.org/abs/1902.06931</a></p>
+<div class="topic">
+<p class="topic-title"><strong>Missing values in categorical data</strong></p>
+<p>If a categorical column has missing values, the simplest approach is
+to create a specific category “missing” and assign missing values to
+this new category, to represent missingness in the classifier.
+Indeed, as we will see, imputation is not crucial for prediction.
+In the following we focus on continuous columns, where the discrete
+nature of a missing value poses more problems.</p>
+</div>
 <div class="section" id="the-fully-observed-data-a-toy-regression-problem">
 <h2>The fully-observed data: a toy regression problem<a class="headerlink" href="#the-fully-observed-data-a-toy-regression-problem" title="Permalink to this headline">¶</a></h2>
 <p>We consider a simple regression problem where X (the data) is bivariate
@@ -160,7 +169,7 @@ coordinate, with noise.</p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7fad011b3a60&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f859dee24f0&gt;
 </pre></div>
 </div>
 </div>
@@ -195,7 +204,7 @@ the values.</p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_002.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7fad01097e80&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f859ddc1580&gt;
 </pre></div>
 </div>
 <p>We can see that the distribution of the fully-observed data is the same
@@ -238,7 +247,7 @@ missing values</strong></p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_003.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7facd2fa8730&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f85971b2a90&gt;
 </pre></div>
 </div>
 <p>We can see that the imputer did a fairly good job of recovering the
@@ -294,7 +303,7 @@ datasets (it has a bad computation scalability).</p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7facd2f342b0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.colorbar.Colorbar object at 0x7f85970be3a0&gt;
 </pre></div>
 </div>
 <p>Evaluating in prediction pipeline</p>
@@ -440,7 +449,7 @@ missing.</p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_007.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7facce461d00&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f85925e3df0&gt;
 </pre></div>
 </div>
 <p>Here the full-observed data does not reflect well at all the
@@ -464,7 +473,7 @@ initial distribution:</p>
 </div>
 <img alt="01 missing values" class="sphx-glr-single-img" src="../_images/sphx_glr_01_missing_values_008.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7facce4057c0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend object at 0x7f85925878b0&gt;
 </pre></div>
 </div>
 <p>Recovering the initial data distribution would need much more mass on
@@ -561,7 +570,7 @@ fully-observed data:</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.98894349, 0.98964877, 0.98951514, 0.98905205, 0.98889807])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.98888884, 0.98963288, 0.98949116, 0.9891748 , 0.98867209])
 </pre></div>
 </div>
 <p>The cross validation reveals that the predictor achieves an excellent
@@ -580,7 +589,7 @@ that looks like the full-observed data</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5426683935153551
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5429150686482935
 </pre></div>
 </div>
 <p>This prediction is less good than on the full data, but this is
@@ -594,7 +603,7 @@ compare it to a model trained to predict on data with missing values</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5696382485509184
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5690383994592372
 </pre></div>
 </div>
 <p>Applying a model valid on the full data to imputed data work almost
@@ -617,7 +626,7 @@ is a non-linear function of X</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.96259445, 0.96723527, 0.96709732, 0.96822263, 0.96367207])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([0.96089489, 0.96778786, 0.96819083, 0.96760048, 0.96490093])
 </pre></div>
 </div>
 <p>Once again, we have a near-perfect predictor on fully-observed data</p>
@@ -630,7 +639,7 @@ is a non-linear function of X</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.3373983503835205
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.3370580106410458
 </pre></div>
 </div>
 <p>The full-data predictor works much less well</p>
@@ -644,7 +653,7 @@ is a non-linear function of X</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5134671124163934
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5129030422947651
 </pre></div>
 </div>
 <p>The model trained on data with missing values works significantly
@@ -663,7 +672,7 @@ imputation can be found here: <a class="reference external" href="https://arxiv.
 <div class="line"><br /></div>
 </div>
 <hr class="docutils" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  17.047 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  13.565 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-gen-notes-01-missing-values-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/01_missing_values.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>
