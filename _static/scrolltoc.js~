@@ -6,7 +6,7 @@ function updateSideBarPosition(sections) {
     current_section = 0;
     $('a.internal').removeClass('active');
     $('ul.active').removeClass('active');
-    $('li.practive').removeClass('active');
+    $('li.preactive').removeClass('preactive');
     for(i in sections) {
         if(sections[i] > pos) {
             break

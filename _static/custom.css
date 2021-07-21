@@ -193,6 +193,14 @@ div.sphinxsidebarwrapper li li a:hover {
 }
 
 /* The "active" sections */
+div.sphinxsidebarwrapper li li.preactive li ul {
+    display: none;
+}
+
+div.sphinxsidebarwrapper li li.preactive li ul.active {
+    display: block;
+}
+
 div.sphinxsidebarwrapper li li.preactive > a:first-child {
     border-right: #C1CEC1 solid 5px;
 }
@@ -212,6 +220,13 @@ div.sphinxsidebarwrapper > ul > li.preactive li ul {
     display: none;
 }
 
+div.sphinxsidebarwrapper > ul > li.preactive li ul.active {
+    display: block;
+}
+
+div.sphinxsidebarwrapper li li.preactive ul {
+    display: block;
+}
 
 div.sphinxsidebarwrapper li li a.active + ul {
     display: block;
@@ -220,6 +235,9 @@ div.sphinxsidebarwrapper li li a.active + ul {
 
 div.sphinxsidebarwrapper li li ul.active {
     display: block;
+}
+
+div.sphinxsidebarwrapper li li ul {
     font-size: smaller;
 }
 
