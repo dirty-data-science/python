@@ -20,6 +20,7 @@ function updateSideBarPosition(sections) {
     $('a.internal[href$="' + current_section + '"]').addClass('active');
     $('a.internal[href$="' + current_section + '"]').parent().parent().addClass('active')
     $('a.internal[href$="' + current_section + '"]').parent().parent().parent().addClass('preactive')
+    $('a.internal[href$="' + current_section + '"]').parent().parent().parent().parent().parent().addClass('preactive')
 }
 
 $(function() {
