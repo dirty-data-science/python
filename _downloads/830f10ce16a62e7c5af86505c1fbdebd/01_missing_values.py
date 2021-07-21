@@ -7,7 +7,7 @@ Here we use simulated data to understanding the fundamentals of statistical
 learning with missing values.
 
 This notebook reveals why a HistGradientBoostingRegressor (
-:class:`sklearn.ensemble.HistGradientBoostingRegressor` ) is a choice to
+:class:`sklearn.ensemble.HistGradientBoostingRegressor` ) is a good choice to
 predict with missing values.
 
 We use simulations to control the missing-value mechanism, and inspect

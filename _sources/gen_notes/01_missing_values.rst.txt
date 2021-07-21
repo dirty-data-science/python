@@ -26,7 +26,7 @@ Here we use simulated data to understanding the fundamentals of statistical
 learning with missing values.
 
 This notebook reveals why a HistGradientBoostingRegressor (
-:class:`sklearn.ensemble.HistGradientBoostingRegressor` ) is a choice to
+:class:`sklearn.ensemble.HistGradientBoostingRegressor` ) is a good choice to
 predict with missing values.
 
 We use simulations to control the missing-value mechanism, and inspect
@@ -107,7 +107,7 @@ A quick plot reveals what the data looks like
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f523e1ada30>
+    <matplotlib.colorbar.Colorbar object at 0x7fad011b3a60>
 
 
 
@@ -176,7 +176,7 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f523e092e50>
+    <matplotlib.legend.Legend object at 0x7fad01097e80>
 
 
 
@@ -285,7 +285,7 @@ We can display the imputed data as our previous visualization
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f5217a90700>
+    <matplotlib.legend.Legend object at 0x7facd2fa8730>
 
 
 
@@ -409,7 +409,7 @@ A quick visualization reveals a larger disortion of the distribution
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f5217a1d280>
+    <matplotlib.colorbar.Colorbar object at 0x7facd2f342b0>
 
 
 
@@ -709,7 +709,7 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f5212f4fcd0>
+    <matplotlib.legend.Legend object at 0x7facce461d00>
 
 
 
@@ -757,7 +757,7 @@ initial distribution:
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f5212ef3790>
+    <matplotlib.legend.Legend object at 0x7facce4057c0>
 
 
 
@@ -905,7 +905,7 @@ fully-observed data:
  .. code-block:: none
 
 
-    array([0.98885081, 0.98964008, 0.98954276, 0.98904928, 0.98873297])
+    array([0.98894349, 0.98964877, 0.98951514, 0.98905205, 0.98889807])
 
 
 
@@ -958,7 +958,7 @@ The full data predictor can be used on the imputed data
  .. code-block:: none
 
 
-    0.5427288623176603
+    0.5426683935153551
 
 
 
@@ -990,7 +990,7 @@ compare it to a model trained to predict on data with missing values
  .. code-block:: none
 
 
-    0.5688571299441851
+    0.5696382485509184
 
 
 
@@ -1035,7 +1035,7 @@ is a non-linear function of X
  .. code-block:: none
 
 
-    array([0.96279567, 0.96704914, 0.96772713, 0.96782557, 0.96420989])
+    array([0.96259445, 0.96723527, 0.96709732, 0.96822263, 0.96367207])
 
 
 
@@ -1067,7 +1067,7 @@ On data with missing values:
  .. code-block:: none
 
 
-    0.33588755909768464
+    0.3373983503835205
 
 
 
@@ -1100,7 +1100,7 @@ Now we use a model trained to predict on data with missing values
  .. code-block:: none
 
 
-    0.5142286105425498
+    0.5134671124163934
 
 
 
@@ -1124,7 +1124,7 @@ ________
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  14.932 seconds)
+   **Total running time of the script:** ( 0 minutes  17.047 seconds)
 
 
 .. _sphx_glr_download_gen_notes_01_missing_values.py:
