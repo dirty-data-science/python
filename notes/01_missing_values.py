@@ -397,6 +397,8 @@ plt.tight_layout()
 # %%
 # We can see that the imputation is not the most important step of the
 # pipeline [#]_, rather **what is important is to use a powerful model**.
+# Here there is information in missingness (if a value is missing, it is
+# large), information that a model can use to predict better.
 #
 # .. [#] Note that there are less missing values in the example here
 #    compared to the section above on MCAR, hence the absolute prediction
