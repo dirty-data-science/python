@@ -78,6 +78,11 @@ div.sphx-glr-download-link-note {
     font-size: small;
 }
 
+/* Hide the download python button (the notebook is enough) */
+div.sphx-glr-download-python {
+    display: none;
+}
+
 /* The download block at the bottom */
 div.sphx-glr-footer-example {
     background-color: #F6F6F6;
@@ -85,8 +90,14 @@ div.sphx-glr-footer-example {
     padding: 0px 5px;
 }
 
+div.sphx-glr-download code.download {
+    word-break: break-word;
+    font-size: small;
+}
+
+
 /* Large screens */
-@media only screen and (min-width: 1500px) {
+@media only screen and (min-width: 1400px) {
     /* The download note on top of the examples */
     div.sphx-glr-download-link-note {
 	display: none;
@@ -96,7 +107,7 @@ div.sphx-glr-footer-example {
     div.sphx-glr-footer-example {
 	position: absolute;
 	right: 10px;
-	max-width: 250px;
+	max-width: 200px;
 	top: 50px;
     }
 }
