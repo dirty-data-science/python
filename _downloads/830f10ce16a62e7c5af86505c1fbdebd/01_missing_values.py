@@ -510,10 +510,10 @@ metrics.r2_score(y, na_predictor.predict(X))
 
 # %%
 # The model trained on data with missing values works significantly
-# better than that that was optimal for the fully-observed data.
+# better than that was optimal for the fully-observed data.
 #
 # **Only for linear mechanism is the model on full data also optimal for
-# prefectly imputed data**. When the function linking X to y has
+# perfectly imputed data**. When the function linking X to y has
 # curvature, this curvature turns uncertainty resulting from missingness
 # into bias [#]_.
 #

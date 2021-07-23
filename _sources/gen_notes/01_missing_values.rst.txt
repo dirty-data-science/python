@@ -116,7 +116,7 @@ A quick plot reveals what the data looks like
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f88659cfb80>
+    <matplotlib.colorbar.Colorbar object at 0x7f7d239c6bb0>
 
 
 
@@ -185,7 +185,7 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f88658b4fa0>
+    <matplotlib.legend.Legend object at 0x7f7d238aafd0>
 
 
 
@@ -294,7 +294,7 @@ We can display the imputed data as our previous visualization
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f883b799850>
+    <matplotlib.legend.Legend object at 0x7f7d05144880>
 
 
 
@@ -418,7 +418,7 @@ A quick visualization reveals a larger disortion of the distribution
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f883b7223d0>
+    <matplotlib.colorbar.Colorbar object at 0x7f7d050d0400>
 
 
 
@@ -718,7 +718,7 @@ A quick plot to look at the data
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f8832c55e20>
+    <matplotlib.legend.Legend object at 0x7f7d00601df0>
 
 
 
@@ -766,7 +766,7 @@ initial distribution:
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f8832bfb8e0>
+    <matplotlib.legend.Legend object at 0x7f7d005a38b0>
 
 
 
@@ -916,7 +916,7 @@ fully-observed data:
  .. code-block:: none
 
 
-    array([0.98887569, 0.98960468, 0.98952852, 0.98902747, 0.98879256])
+    array([0.98878673, 0.98959476, 0.98956541, 0.98903024, 0.98873733])
 
 
 
@@ -969,7 +969,7 @@ The full data predictor can be used on the imputed data
  .. code-block:: none
 
 
-    0.5426675825527364
+    0.5425524295300377
 
 
 
@@ -1001,7 +1001,7 @@ compare it to a model trained to predict on data with missing values
  .. code-block:: none
 
 
-    0.5694496181717229
+    0.5698545499369778
 
 
 
@@ -1046,7 +1046,7 @@ is a non-linear function of X
  .. code-block:: none
 
 
-    array([0.96224758, 0.9665045 , 0.96687687, 0.96760171, 0.96134687])
+    array([0.96208281, 0.96863556, 0.96741278, 0.97021249, 0.96447848])
 
 
 
@@ -1078,7 +1078,7 @@ On data with missing values:
  .. code-block:: none
 
 
-    0.3356622003903392
+    0.33197538686512085
 
 
 
@@ -1111,17 +1111,17 @@ Now we use a model trained to predict on data with missing values
  .. code-block:: none
 
 
-    0.5125866637317389
+    0.5143497745844083
 
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 512-526
 
 The model trained on data with missing values works significantly
-better than that that was optimal for the fully-observed data.
+better than that was optimal for the fully-observed data.
 
 **Only for linear mechanism is the model on full data also optimal for
-prefectly imputed data**. When the function linking X to y has
+perfectly imputed data**. When the function linking X to y has
 curvature, this curvature turns uncertainty resulting from missingness
 into bias [#]_.
 
@@ -1135,7 +1135,7 @@ ________
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  13.532 seconds)
+   **Total running time of the script:** ( 0 minutes  13.702 seconds)
 
 
 .. _sphx_glr_download_gen_notes_01_missing_values.py:
