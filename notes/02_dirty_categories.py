@@ -9,7 +9,7 @@ variants, when they have been manually input, or assembled from diverse
 sources.
 
 Including such a column in a learning pipeline as a standard categorical
-colum leads to categories with very high cardinalities and can loose
+colum leads to categories with very high cardinalities and can lose
 information on which categories are similar.
 
 Here we look at a dataset on wages [#]_ where the column *Employee
