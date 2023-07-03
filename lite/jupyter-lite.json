@@ -5,6 +5,11 @@
     "appVersion": "0.1.0",
     "baseUrl": "./",
     "defaultKernelName": "python",
+    "disabledExtensions": [
+      "@jupyterlab/drawio-extension",
+      "jupyterlab-kernel-spy",
+      "jupyterlab-tour"
+    ],
     "faviconUrl": "./lab/favicon.ico",
     "federated_extensions": [],
     "fileTypes": {
@@ -284,11 +289,6 @@
     "fullMathjaxUrl": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js",
     "fullStaticUrl": "./build",
     "licensesUrl": "./lab/api/licenses",
-    "litePluginSettings": {
-      "@jupyterlite/pyodide-kernel-extension:kernel": {
-        "pyodideUrl": "https://cdn.jsdelivr.net/pyodide/v0.23.1/full/pyodide.js"
-      }
-    },
     "mathjaxConfig": "TeX-AMS_CHTML-full,Safe"
   },
   "jupyter-lite-schema-version": 0
