@@ -1,0 +1,37 @@
+{
+  "content": [
+    {
+      "content": null,
+      "created": "2023-07-03T08:21:06.307088Z",
+      "format": null,
+      "last_modified": "2021-07-20T17:56:55.811923Z",
+      "mimetype": null,
+      "name": "02_dirty_categories.ipynb",
+      "path": "gen_notes/02_dirty_categories.ipynb",
+      "size": 20355,
+      "type": "notebook",
+      "writable": true
+    },
+    {
+      "content": null,
+      "created": "2023-07-03T08:21:06.307088Z",
+      "format": null,
+      "last_modified": "2023-07-03T08:08:25.191689Z",
+      "mimetype": null,
+      "name": "01_missing_values.ipynb",
+      "path": "gen_notes/01_missing_values.ipynb",
+      "size": 27192,
+      "type": "notebook",
+      "writable": true
+    }
+  ],
+  "created": "2023-07-03T08:21:06.307088Z",
+  "format": "json",
+  "last_modified": "2023-07-03T08:21:06.307088Z",
+  "mimetype": null,
+  "name": "gen_notes",
+  "path": "gen_notes",
+  "size": null,
+  "type": "directory",
+  "writable": true
+}

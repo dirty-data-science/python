@@ -45,7 +45,7 @@ import numpy as np
 
 def generate_without_missing_values(n_samples, rng=42):
     mean = [0, 0]
-    cov = [[1, 0.5], [0.5, 1]]
+    cov = [[1, 0.9], [0.9, 1]]
     if not isinstance(rng, np.random.RandomState):
         rng = np.random.RandomState(rng)
     X = rng.multivariate_normal(mean, cov, size=n_samples)

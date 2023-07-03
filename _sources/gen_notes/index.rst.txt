@@ -2,10 +2,11 @@
 
 
 
-.. _sphx_glr_gen_notes:
 
 
+.. raw:: html
 
+    <div class="sphx-glr-thumbnails">
 
 
 .. raw:: html
@@ -14,10 +15,33 @@
 
 .. only:: html
 
- .. figure:: /gen_notes/images/thumb/sphx_glr_01_missing_values_thumb.png
-     :alt: Machine learning with missing values
+  .. image:: /gen_notes/images/thumb/sphx_glr_01_missing_values_thumb.png
+    :alt:
 
-     :ref:`sphx_glr_gen_notes_01_missing_values.py`
+  :ref:`sphx_glr_gen_notes_01_missing_values.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Machine learning with missing values</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Including strings that represent categories often calls for much data preparation. In particula...">
+
+.. only:: html
+
+  .. image:: /gen_notes/images/thumb/sphx_glr_02_dirty_categories_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_gen_notes_02_dirty_categories.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Dirty categories: learning with non normalized strings</div>
+    </div>
+
 
 .. raw:: html
 
@@ -28,30 +52,7 @@
    :hidden:
 
    /gen_notes/01_missing_values
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Including strings that represent categories often calls for much data preparation. In particula...">
-
-.. only:: html
-
- .. figure:: /gen_notes/images/thumb/sphx_glr_02_dirty_categories_thumb.png
-     :alt: Dirty categories: learning with non normalized strings
-
-     :ref:`sphx_glr_gen_notes_02_dirty_categories.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
    /gen_notes/02_dirty_categories
-.. raw:: html
-
-    <div class="sphx-glr-clear"></div>
 
 
 

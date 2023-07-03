@@ -10,8 +10,8 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_gen_notes_01_missing_values.py>`
-        to download the full example code or to run this example in your browser via Binder
+        :ref:`Go to the end <sphx_glr_download_gen_notes_01_missing_values.py>`
+        to download the full example code or to run this example in your browser via JupyterLite or Binder
 
 .. rst-class:: sphx-glr-example-title
 
@@ -67,7 +67,7 @@ The data-generating mechanism
 
     def generate_without_missing_values(n_samples, rng=42):
         mean = [0, 0]
-        cov = [[1, 0.5], [0.5, 1]]
+        cov = [[1, 0.9], [0.9, 1]]
         if not isinstance(rng, np.random.RandomState):
             rng = np.random.RandomState(rng)
         X = rng.multivariate_normal(mean, cov, size=n_samples)
@@ -104,19 +104,18 @@ A quick plot reveals what the data looks like
 
 
 
-.. image:: /gen_notes/images/sphx_glr_01_missing_values_001.png
-    :alt: 01 missing values
-    :class: sphx-glr-single-img
+.. image-sg:: /gen_notes/images/sphx_glr_01_missing_values_001.png
+   :alt: 01 missing values
+   :srcset: /gen_notes/images/sphx_glr_01_missing_values_001.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f7d239c6bb0>
+    <matplotlib.colorbar.Colorbar object at 0x7fd79d08b8d0>
 
 
 
@@ -173,19 +172,18 @@ A quick plot to look at the data
 
 
 
-.. image:: /gen_notes/images/sphx_glr_01_missing_values_002.png
-    :alt: 01 missing values
-    :class: sphx-glr-single-img
+.. image-sg:: /gen_notes/images/sphx_glr_01_missing_values_002.png
+   :alt: 01 missing values
+   :srcset: /gen_notes/images/sphx_glr_01_missing_values_002.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f7d238aafd0>
+    <matplotlib.legend.Legend object at 0x7fd79a391dd0>
 
 
 
@@ -235,16 +233,377 @@ missing values**
 
 
 
-.. rst-class:: sphx-glr-script-out
 
- Out:
+.. raw:: html
 
- .. code-block:: none
+    <div class="output_subarea output_html rendered_html output_result">
+    <style>#id {
+      color: black;
+    }
+    #sk-container-id-1 pre{
+      padding: 0;
+    }
+
+    #sk-container-id-1 div.sk-toggleable {
+      background-color: white;
+    }
+    #sk-container-id-1 label.sk-toggleable__label {
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 0;
+      padding: 0.3em;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    #sk-container-id-1 label.sk-toggleable__label-arrow:before {
+      content: "▸";
+      float: left;
+      margin-right: 0.25em;
+      color: #696969;
+    }
+    #sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {
+      color: black;
+    }
+    #sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {
+      color: black;
+    }
+
+    /* Drop-down, unfitted case */
+    #sk-container-id-1 div.sk-toggleable__content {
+      max-height: 0;
+      max-width: 0;
+      overflow: hidden;
+      text-align: left;
+      background-color: #fff5e6; /* Light Orange */
+    }
+
+    /* Drop-down, fitted case */
+    #sk-container-id-1 div.sk-toggleable__content.fitted {
+      background-color: #f0f8ff; /* Light Blue */
+    }
+
+    /* Content of drop-down, unfitted case */
+    #sk-container-id-1 div.sk-toggleable__content pre {
+      margin: 0.2em;
+      color: black;
+      border-radius: 0.25em;
+      background-color: #fff5e6; /* Light Orange */
+    }
+
+    /* Content of drop-down, fitted case */
+    #sk-container-id-1 div.sk-toggleable__content.fitted pre {
+      background-color: #f0f8ff; /* Light Blue */
+    }
+
+    #sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+      max-height: 200px;
+      max-width: 100%;
+      overflow: auto;
+    }
+    #sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+      content: "▾";
+    }
+
+    /* Label of estimator dropdown after selection, unfitted*/
+    #sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+      background-color: #ffe0b3; /* Dark Orange */
+    }
+
+    /* Label of estimator dropdown after selection, fitted*/
+    #sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+      background-color: #d4ebff; /* Dark Blue */
+    }
+
+    /* Label of "label" (outer block) dropdown after selection, unfitted */
+    #sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+      background-color: #ffe0b3; /* Dark Orange */
+    }
+
+    /* Label of "label" (outer block) dropdown after selection, fitted */
+    #sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+      background-color: #d4ebff;/* Dark Blue */
+    }
 
 
-    IterativeImputer()
+    #sk-container-id-1 input.sk-hidden--visually {
+      border: 0;
+      clip: rect(1px 1px 1px 1px);
+      clip: rect(1px, 1px, 1px, 1px);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+    /* Estimator box, unfitted */
+    #sk-container-id-1 div.sk-estimator {
+      font-family: monospace;
+      background-color: #fff5e6; /* Light Orange */
+      border: 1px dotted black;
+      border-radius: 0.25em;
+      box-sizing: border-box;
+      margin-bottom: 0.5em;
+    }
+
+    /* Estimator box, fitted */
+    #sk-container-id-1 div.sk-estimator.fitted {
+      background-color: #f0f8ff; /* Light Blue  */
+    }
+
+    /* Estimator box, darken color on hover, unfitted */
+    #sk-container-id-1 div.sk-estimator:hover {
+      background-color: #ffe0b3; /* Dark Orange */
+    }
+
+    /* Estimator box, darken color on hover, fitted */
+    #sk-container-id-1 div.sk-estimator.fitted:hover {
+      background-color: #d4ebff; /* Dark Blue */
+    }
 
 
+    #sk-container-id-1 div.sk-parallel-item::after {
+      content: "";
+      width: 100%;
+      border-bottom: 1px solid gray;
+      flex-grow: 1;
+    }
+
+    /* Label box, darken color on hover, unfitted */
+    #sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {
+      background-color: #ffe0b3; /* Dark Orange */
+    }
+
+    /* Label box, darken color on hover, fitted */
+    #sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+      background-color: #d4ebff; /* Dark Blue */
+    }
+
+    #sk-container-id-1 div.sk-serial::before {
+      content: "";
+      position: absolute;
+      border-left: 1px solid gray;
+      box-sizing: border-box;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      z-index: 0;
+    }
+    #sk-container-id-1 div.sk-serial {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: white;
+      padding-right: 0.2em;
+      padding-left: 0.2em;
+      position: relative;
+    }
+    #sk-container-id-1 div.sk-item {
+      position: relative;
+    }
+    #sk-container-id-1 div.sk-parallel {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      background-color: white;
+      position: relative;
+    }
+    #sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {
+      content: "";
+      position: absolute;
+      border-left: 1px solid gray;
+      box-sizing: border-box;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      z-index: -1;
+    }
+    #sk-container-id-1 div.sk-parallel-item {
+      display: flex;
+      flex-direction: column;
+      z-index: 1;
+      position: relative;
+      background-color: white;
+    }
+    #sk-container-id-1 div.sk-parallel-item:first-child::after {
+      align-self: flex-end;
+      width: 50%;
+    }
+    #sk-container-id-1 div.sk-parallel-item:last-child::after {
+      align-self: flex-start;
+      width: 50%;
+    }
+    #sk-container-id-1 div.sk-parallel-item:only-child::after {
+      width: 0;
+    }
+    #sk-container-id-1 div.sk-dashed-wrapped {
+      border: 1px dashed gray;
+      margin: 0 0.4em 0.5em 0.4em;
+      box-sizing: border-box;
+      padding-bottom: 0.4em;
+      background-color: white;
+    }
+
+    /* Estimator doc link, unfitted */
+    #sk-container-id-1 a.estimator_doc_link {
+      float: right;
+      font-size: 1rem;
+      line-height: 1em;
+      font-family: monospace;
+      background-color: white;
+      border: #f6e4d2 1pt solid; /* Border of "?", dim, light Orange */
+      border-radius: 1rem;
+      height: 1rem;
+      width: 1rem;
+      color: #f6e4d2; /* Text color of "?", dim, light Orange */
+      text-decoration: none;
+    }
+
+    /* Estimator doc link, fitted */
+    #sk-container-id-1 a.estimator_doc_link.fitted {
+      border: #afc9e0; /* Border of "?", dim, light Blue */
+      color: #afc9e0; /* Text color of "?", dim, light Blue */
+    }
+
+    /* Estimator doc link, unfitted, when hovered over */
+    #sk-container-id-1 a.estimator_doc_link:hover {
+      background-color: chocolate; /* Change background color to very strong orange */
+      color: white; /* Change text color to white */
+      text-decoration: none;
+    }
+
+    /* Estimator doc link, fitted, when hovered over */
+    #sk-container-id-1 a.estimator_doc_link.fitted:hover {
+      background-color: cornflowerblue; /* Change background color to very strong blue */
+      color: white; /* Change text color to white */
+      text-decoration: none;
+    }
+
+
+    #sk-container-id-1 div.sk-label label {
+    font-family: monospace;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 1.2em;
+    }
+    #sk-container-id-1 div.sk-label-container {
+    text-align: center;
+    }
+
+    #sk-container-id-1 div.sk-container {
+    /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+       but bootstrap.min.css set `[hidden] { display: none !important; }`
+       so we also need the `!important` here to be able to override the
+       default hidden behavior on the sphinx rendered scikit-learn.org.
+       See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+    display: inline-block !important;
+    position: relative;
+    }
+    #sk-container-id-1 div.sk-text-repr-fallback {
+    display: none;
+    }
+
+    /* For the docs link and "i" explaining fitted/unfitted */
+
+    /* Default, unfitted text */
+    .sk-estimator-doc-link {
+      float: right;
+      font-size: smaller;
+      line-height: 1em;
+      font-family: monospace;
+      background-color: white;
+      border: #f6e4d2 1pt solid;
+      border-radius: 1em;
+      height: 1em;
+      width: 1em;
+      color: #f6e4d2;
+      text-decoration: none!important;
+      margin-left: 1ex;
+    }
+
+    /* Fitted text */
+    .sk-estimator-doc-link.fitted {
+      border: #afc9e0 1pt solid;
+      color: #afc9e0;
+    }
+
+
+    /* Unfitted text, when the "?" is hovered over. */
+    div.sk-estimator:hover .sk-estimator-doc-link:hover, .sk-estimator-doc-link:hover, div.sk-label-container:hover .sk-estimator-doc-link:hover, .sk-estimator-doc-link:hover  {
+      background-color: chocolate;
+      color: white;
+      text-decoration: none;
+    }
+
+    /* Fitted text, when the "?" is hovered over. */
+    div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,  .sk-estimator-doc-link.fitted:hover, div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover, .sk-estimator-doc-link.fitted:hover
+    {
+      background-color: cornflowerblue;
+      color: white;
+    }
+
+
+    /* Box that appears when hovering over the "?", unfitted */
+    .sk-estimator-doc-link span {
+      display: none;
+      z-index: 200;
+      position: absolute;
+      background: #fff5e6;
+      color: black;
+      font-weight: normal;
+      padding: .5ex;
+      margin: .5ex;
+      border: .5pt solid chocolate;
+      right: .2ex;
+      box-shadow: 2pt 2pt 4pt #999;
+      max-width: 50ex;
+      width: min-content;
+      min-width: 20ex;
+    }
+
+    /* Box that appears when hovering over the "?", fitted */
+    .sk-estimator-doc-link.fitted span {
+      background: #f0f8ff;
+      border: cornflowerblue;
+    }
+
+    .sk-estimator-doc-link:hover span {
+      display: block;
+    }
+
+    /* Color of "?" when not hovered over, unfitted */
+    div.sk-estimator .sk-estimator-doc-link {
+      color: #f6e4d2;
+      border: 1pt solid #f6e4d2;
+      background-color: #fff5e6;
+    }
+
+    /* Color of "?" when not hovered over, fitted */
+    div.sk-estimator.fitted .sk-estimator-doc-link.fitted {
+      color: #afc9e0;
+      border: 1pt solid #afc9e0;
+      background-color: #f0f8ff;
+    }
+
+    /* Color of "?" when the estimator/label box is hovered over, but the "?" isn't, unfitted */
+    div.sk-estimator:hover .sk-estimator-doc-link, div.sk-label-container:hover .sk-estimator-doc-link {
+      background-color: white;
+      border: chocolate 1pt solid;
+      color: chocolate;
+    }
+
+    /* Color of "?" when the estimator/label box is hovered over, but the "?" isn't, fitted */
+    div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted, div.sk-label-container:hover .sk-estimator-doc-link.fitted {
+      border: cornflowerblue 1pt solid;
+      background-color: white;
+      color: cornflowerblue;
+    }
+    </style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>IterativeImputer()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">IterativeImputer<a class="sk-estimator-doc-link fitted" target="_blank" href="https://scikit-learn.org/dev/modules/generated/sklearn.impute.IterativeImputer.html">?<span>Documentation for IterativeImputer</span></a></label><div class="sk-toggleable__content fitted"><pre>IterativeImputer()</pre></div> </div></div></div></div>
+    </div>
+    <br />
+    <br />
 
 .. GENERATED FROM PYTHON SOURCE LINES 124-125
 
@@ -282,19 +641,18 @@ We can display the imputed data as our previous visualization
 
 
 
-.. image:: /gen_notes/images/sphx_glr_01_missing_values_003.png
-    :alt: 01 missing values
-    :class: sphx-glr-single-img
+.. image-sg:: /gen_notes/images/sphx_glr_01_missing_values_003.png
+   :alt: 01 missing values
+   :srcset: /gen_notes/images/sphx_glr_01_missing_values_003.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f7d05144880>
+    <matplotlib.legend.Legend object at 0x7fd79c1c1750>
 
 
 
@@ -351,13 +709,11 @@ folds to 10)
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    array([0.46386365, 0.31905505, 0.62796809, 0.50172353, 0.5526797 ,
-           0.52067976, 0.66790152, 0.71185873, 0.52386641, 0.45218862])
+    array([0.61639853, 0.5814862 , 0.70136887, 0.64571923, 0.58785589,
+           0.79618649, 0.65278055, 0.8454113 , 0.81722841, 0.76948479])
 
 
 
@@ -406,19 +762,18 @@ A quick visualization reveals a larger disortion of the distribution
 
 
 
-.. image:: /gen_notes/images/sphx_glr_01_missing_values_004.png
-    :alt: 01 missing values
-    :class: sphx-glr-single-img
+.. image-sg:: /gen_notes/images/sphx_glr_01_missing_values_004.png
+   :alt: 01 missing values
+   :srcset: /gen_notes/images/sphx_glr_01_missing_values_004.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    <matplotlib.colorbar.Colorbar object at 0x7f7d050d0400>
+    <matplotlib.colorbar.Colorbar object at 0x7fd757482a90>
 
 
 
@@ -442,13 +797,11 @@ Evaluating in prediction pipeline
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    array([0.54614659, 0.43926104, 0.59187943, 0.44029222, 0.53507246,
-           0.41132337, 0.67374847, 0.79018856, 0.48898176, 0.46854395])
+    array([0.58596256, 0.55215184, 0.61081314, 0.55282029, 0.54053836,
+           0.64325051, 0.60147921, 0.84188079, 0.68152965, 0.67441335])
 
 
 
@@ -477,15 +830,13 @@ adapted to model directly missing values
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    /home/varoquau/dev/scikit-learn/sklearn/experimental/enable_hist_gradient_boosting.py:16: UserWarning: Since version 1.0, it is not needed to import enable_hist_gradient_boosting anymore. HistGradientBoostingClassifier and HistGradientBoostingRegressor are now stable and can be normally imported from sklearn.ensemble.
+    /home/varoquau/dev/scikit-learn/sklearn/experimental/enable_hist_gradient_boosting.py:15: UserWarning: Since version 1.0, it is not needed to import enable_hist_gradient_boosting anymore. HistGradientBoostingClassifier and HistGradientBoostingRegressor are now stable and can be normally imported from sklearn.ensemble.
       warnings.warn(
 
-    array([0.48104853, 0.3676542 , 0.54779672, 0.43052366, 0.53230889,
-           0.31475748, 0.66549077, 0.70964002, 0.5001503 , 0.43511816])
+    array([0.61170698, 0.56911116, 0.635685  , 0.62752111, 0.58094569,
+           0.71569692, 0.62359162, 0.83829684, 0.81283438, 0.74080482])
 
 
 
@@ -517,9 +868,10 @@ Let's plot the scores to see things better
 
 
 
-.. image:: /gen_notes/images/sphx_glr_01_missing_values_005.png
-    :alt: Prediction accuracy  linear and small data Missing Completely at Random
-    :class: sphx-glr-single-img
+.. image-sg:: /gen_notes/images/sphx_glr_01_missing_values_005.png
+   :alt: Prediction accuracy  linear and small data Missing Completely at Random
+   :srcset: /gen_notes/images/sphx_glr_01_missing_values_005.png
+   :class: sphx-glr-single-img
 
 
 
@@ -626,9 +978,10 @@ We plot the results
 
 
 
-.. image:: /gen_notes/images/sphx_glr_01_missing_values_006.png
-    :alt: Prediction accuracy  linear and large data Missing Completely at Random
-    :class: sphx-glr-single-img
+.. image-sg:: /gen_notes/images/sphx_glr_01_missing_values_006.png
+   :alt: Prediction accuracy  linear and large data Missing Completely at Random
+   :srcset: /gen_notes/images/sphx_glr_01_missing_values_006.png
+   :class: sphx-glr-single-img
 
 
 
@@ -706,19 +1059,18 @@ A quick plot to look at the data
 
 
 
-.. image:: /gen_notes/images/sphx_glr_01_missing_values_007.png
-    :alt: 01 missing values
-    :class: sphx-glr-single-img
+.. image-sg:: /gen_notes/images/sphx_glr_01_missing_values_007.png
+   :alt: 01 missing values
+   :srcset: /gen_notes/images/sphx_glr_01_missing_values_007.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f7d00601df0>
+    <matplotlib.legend.Legend object at 0x7fd754254e50>
 
 
 
@@ -754,19 +1106,18 @@ initial distribution:
 
 
 
-.. image:: /gen_notes/images/sphx_glr_01_missing_values_008.png
-    :alt: 01 missing values
-    :class: sphx-glr-single-img
+.. image-sg:: /gen_notes/images/sphx_glr_01_missing_values_008.png
+   :alt: 01 missing values
+   :srcset: /gen_notes/images/sphx_glr_01_missing_values_008.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x7f7d005a38b0>
+    <matplotlib.legend.Legend object at 0x7fd7542d1c10>
 
 
 
@@ -838,9 +1189,10 @@ Let us now evaluate predictive pipelines
 
 
 
-.. image:: /gen_notes/images/sphx_glr_01_missing_values_009.png
-    :alt: Prediction accuracy  linear and small data Missing not at Random
-    :class: sphx-glr-single-img
+.. image-sg:: /gen_notes/images/sphx_glr_01_missing_values_009.png
+   :alt: Prediction accuracy  linear and small data Missing not at Random
+   :srcset: /gen_notes/images/sphx_glr_01_missing_values_009.png
+   :class: sphx-glr-single-img
 
 
 
@@ -911,12 +1263,10 @@ fully-observed data:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    array([0.98878673, 0.98959476, 0.98956541, 0.98903024, 0.98873733])
+    array([0.98934188, 0.9897668 , 0.98932951, 0.98916616, 0.98898611])
 
 
 
@@ -964,12 +1314,10 @@ The full data predictor can be used on the imputed data
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    0.5425524295300377
+    0.7011318399077224
 
 
 
@@ -996,12 +1344,10 @@ compare it to a model trained to predict on data with missing values
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    0.5698545499369778
+    0.7036144866135492
 
 
 
@@ -1041,12 +1387,10 @@ is a non-linear function of X
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    array([0.96208281, 0.96863556, 0.96741278, 0.97021249, 0.96447848])
+    array([0.97018219, 0.96754963, 0.96600898, 0.96971664, 0.96795887])
 
 
 
@@ -1073,12 +1417,10 @@ On data with missing values:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    0.33197538686512085
+    0.5330009632809711
 
 
 
@@ -1106,12 +1448,10 @@ Now we use a model trained to predict on data with missing values
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    0.5143497745844083
+    0.657124508956336
 
 
 
@@ -1135,35 +1475,39 @@ ________
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  13.702 seconds)
+   **Total running time of the script:** ( 0 minutes  10.502 seconds)
 
 
 .. _sphx_glr_download_gen_notes_01_missing_values.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
-  .. container:: binder-badge
+    .. container:: binder-badge
 
-    .. image:: images/binder_badge_logo.svg
-      :target: https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/01_missing_values.ipynb
-      :alt: Launch binder
-      :width: 150 px
-
-
-  .. container:: sphx-glr-download sphx-glr-download-python
-
-     :download:`Download Python source code: 01_missing_values.py <01_missing_values.py>`
+      .. image:: images/binder_badge_logo.svg
+        :target: https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/01_missing_values.ipynb
+        :alt: Launch binder
+        :width: 150 px
 
 
 
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: lite-badge
 
-     :download:`Download Jupyter notebook: 01_missing_values.ipynb <01_missing_values.ipynb>`
+      .. image:: images/jupyterlite_badge_logo.svg
+        :target: ../lite/retro/notebooks/?path=gen_notes/01_missing_values.ipynb
+        :alt: Launch JupyterLite
+        :width: 150 px
+
+    .. container:: sphx-glr-download sphx-glr-download-python
+
+      :download:`Download Python source code: 01_missing_values.py <01_missing_values.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+      :download:`Download Jupyter notebook: 01_missing_values.ipynb <01_missing_values.ipynb>`
 
 
 .. only:: html
