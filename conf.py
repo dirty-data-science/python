@@ -153,7 +153,7 @@ intersphinx_mapping = {
     'statsmodels': ('http://www.statsmodels.org/stable/', None),
     'pandas': ('http://pandas.pydata.org/pandas-docs/stable/', None),
     'seaborn': ('http://seaborn.pydata.org/', None),
-    'dirty_cat': ('https://dirty-cat.github.io/stable/', None),
+    'skrub': ('https://skrub-data.org/stable/', None),
 }
 
 
