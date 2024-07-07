@@ -40,6 +40,8 @@ library ( https://skrub-data.org ).
 #
 # .. |SE| replace:: :class:`~skrub.SimilarityEncoder`
 #
+# .. |GapEncoder| replace:: :class:`~skrub.GapEncoder`
+#
 # .. |permutation importances| replace::
 #     :func:`~sklearn.inspection.permutation_importance`
 #
@@ -215,7 +217,9 @@ len(feature_names)
 # Feature importance in the statistical model
 # ---------------------------------------------
 #
-# In this section, we will train a regressor, and plot the feature importances
+# Here we consider interpretability, plot the feature importances of a
+# classifier. We can do this because the |GapEncoder| leads to
+# interpretable features even with messy categories
 #
 # .. topic:: Note:
 #
