@@ -772,15 +772,20 @@ Below the hood, `model` is a pipeline:
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 93-98
+.. GENERATED FROM PYTHON SOURCE LINES 93-95
 
-Understanding the pipeline
+We can see that it is made of first a |SV|, and an
+HistGradientBoostingRegressor
+
+.. GENERATED FROM PYTHON SOURCE LINES 97-102
+
+Understanding the vectorizer + learner pipeline
 =======================================
 
 The number one difficulty is that our input is a complex and
 heterogeneous dataframe:
 
-.. GENERATED FROM PYTHON SOURCE LINES 98-100
+.. GENERATED FROM PYTHON SOURCE LINES 102-104
 
 .. code-block:: Python
 
@@ -952,17 +957,12 @@ heterogeneous dataframe:
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-103
-
-The |SV| can to turn this dataframe into a form suited for
-machine learning.
-
 .. GENERATED FROM PYTHON SOURCE LINES 105-111
 
-Using the TableVectorizer in a supervised-learning pipeline
-------------------------------------------------------------
+The |SV| is a transformer that turns this dataframe into a
+form suited for machine learning.
 
-Assembling the |SV| in a pipeline with a powerful learner,
+Feeding it output to a powerful learner,
 such as gradient boosted trees, gives **a machine-learning method that
 can be readily applied to the dataframe**.
 
@@ -979,12 +979,18 @@ can be readily applied to the dataframe**.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 114-116
+.. GENERATED FROM PYTHON SOURCE LINES 114-117
 
-We will use it with a HistGradientBoostingRegressor, which is a good
+Assembling the pipeline
+---------------------------
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 119-121
+
+We use the |SV| with a HistGradientBoostingRegressor, which is a good
 predictor for data with heterogeneous columns
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-118
+.. GENERATED FROM PYTHON SOURCE LINES 121-123
 
 .. code-block:: Python
 
@@ -997,11 +1003,11 @@ predictor for data with heterogeneous columns
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-120
+.. GENERATED FROM PYTHON SOURCE LINES 124-125
 
 We then create a pipeline chaining our encoders to a learner
 
-.. GENERATED FROM PYTHON SOURCE LINES 120-127
+.. GENERATED FROM PYTHON SOURCE LINES 125-133
 
 .. code-block:: Python
 
@@ -1011,1315 +1017,7 @@ We then create a pipeline chaining our encoders to a learner
         TableVectorizer(),
         HistGradientBoostingRegressor()
     )
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 128-129
-
-Let's perform a cross-validation to see how well this model predicts
-
-.. GENERATED FROM PYTHON SOURCE LINES 129-138
-
-.. code-block:: Python
-
-
-    from sklearn.model_selection import cross_val_score
-    scores = cross_val_score(pipeline, df, y, scoring='r2')
-
-    import numpy as np
-    print(f'{scores=}')
-    print(f'mean={np.mean(scores)}')
-    print(f'std={np.std(scores)}')
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    scores=array([0.9282795 , 0.8945292 , 0.92494599, 0.92653209, 0.93766822])
-    mean=0.9223910013864481
-    std=0.014615228717492922
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 139-142
-
-The prediction perform here is pretty much as good as above
-but the code here is much simpler as it does not involve specifying
-columns manually.
-
-.. GENERATED FROM PYTHON SOURCE LINES 144-149
-
-Analyzing the features created
--------------------------------
-
-Let us perform the same workflow, but without the `Pipeline`, so we can
-analyze its mechanisms along the way.
-
-.. GENERATED FROM PYTHON SOURCE LINES 149-151
-
-.. code-block:: Python
-
-    tab_vec = TableVectorizer()
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 152-153
-
-We split the data between train and test, and transform them:
-
-.. GENERATED FROM PYTHON SOURCE LINES 153-161
-
-.. code-block:: Python
-
-    from sklearn.model_selection import train_test_split
-    df_train, df_test, y_train, y_test = train_test_split(
-        df, y, test_size=0.15, random_state=42
-    )
-
-    X_train_enc = tab_vec.fit_transform(df_train, y_train)
-    X_test_enc = tab_vec.transform(df_test)
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 162-163
-
-The encoded data, X_train_enc and X_test_enc are numerical arrays:
-
-.. GENERATED FROM PYTHON SOURCE LINES 163-165
-
-.. code-block:: Python
-
-    X_train_enc
-
-
-
-
-
-
-.. raw:: html
-
-    <div class="output_subarea output_html rendered_html output_result">
-    <div>
-    <style scoped>
-        .dataframe tbody tr th:only-of-type {
-            vertical-align: middle;
-        }
-
-        .dataframe tbody tr th {
-            vertical-align: top;
-        }
-
-        .dataframe thead th {
-            text-align: right;
-        }
-    </style>
-    <table border="1" class="dataframe">
-      <thead>
-        <tr style="text-align: right;">
-          <th></th>
-          <th>gender_F</th>
-          <th>gender_M</th>
-          <th>gender_nan</th>
-          <th>department_BOA</th>
-          <th>department_BOE</th>
-          <th>department_CAT</th>
-          <th>department_CCL</th>
-          <th>department_CEC</th>
-          <th>department_CEX</th>
-          <th>department_COR</th>
-          <th>department_CUS</th>
-          <th>department_DEP</th>
-          <th>department_DGS</th>
-          <th>department_DHS</th>
-          <th>department_DLC</th>
-          <th>department_DOT</th>
-          <th>department_DPS</th>
-          <th>department_DTS</th>
-          <th>department_ECM</th>
-          <th>department_FIN</th>
-          <th>department_FRS</th>
-          <th>department_HCA</th>
-          <th>department_HHS</th>
-          <th>department_HRC</th>
-          <th>department_IGR</th>
-          <th>department_LIB</th>
-          <th>department_MPB</th>
-          <th>department_NDA</th>
-          <th>department_OAG</th>
-          <th>department_OCP</th>
-          <th>department_OHR</th>
-          <th>department_OIG</th>
-          <th>department_OLO</th>
-          <th>department_OMB</th>
-          <th>department_PIO</th>
-          <th>department_POL</th>
-          <th>department_PRO</th>
-          <th>department_REC</th>
-          <th>department_SHF</th>
-          <th>department_ZAH</th>
-          <th>...</th>
-          <th>division: special, inspection, residential</th>
-          <th>division: accounts, transport, council</th>
-          <th>division: emergency, centers, center</th>
-          <th>division: operations, delivery, solid</th>
-          <th>assignment_category_Parttime-Regular</th>
-          <th>employee_position_title: coordinator, services, service</th>
-          <th>employee_position_title: purchasing, crossing, background</th>
-          <th>employee_position_title: firefighter, rescuer, master</th>
-          <th>employee_position_title: officer, office, security</th>
-          <th>employee_position_title: operator, bus, operations</th>
-          <th>employee_position_title: environmental, specialist, special</th>
-          <th>employee_position_title: manager, iii, management</th>
-          <th>employee_position_title: income, assistance, compliance</th>
-          <th>employee_position_title: assistant, attorney, library</th>
-          <th>employee_position_title: liquor, clerk, store</th>
-          <th>employee_position_title: enforcement, inspector, force</th>
-          <th>employee_position_title: correctional, correction, corporal</th>
-          <th>employee_position_title: school, room, behavioral</th>
-          <th>employee_position_title: urban, customer, district</th>
-          <th>employee_position_title: technician, mechanic, supply</th>
-          <th>employee_position_title: community, health, nurse</th>
-          <th>employee_position_title: sheriff, deputy, candidate</th>
-          <th>employee_position_title: lieutenant, captain, chief</th>
-          <th>employee_position_title: therapist, the, district</th>
-          <th>employee_position_title: communications, telecommunications, safety</th>
-          <th>employee_position_title: worker, social, works</th>
-          <th>employee_position_title: administrative, legislative, principal</th>
-          <th>employee_position_title: information, technology, technologist</th>
-          <th>employee_position_title: warehouse, welfare, driver</th>
-          <th>employee_position_title: program, programs, projects</th>
-          <th>employee_position_title: equipment, apprentice, development</th>
-          <th>employee_position_title: sergeant, police, cadet</th>
-          <th>employee_position_title: librarian, employee, psychiatric</th>
-          <th>employee_position_title: engineer, planning, senior</th>
-          <th>employee_position_title: supervisor, supervisory, investigator</th>
-          <th>date_first_hired_year</th>
-          <th>date_first_hired_month</th>
-          <th>date_first_hired_day</th>
-          <th>date_first_hired_total_seconds</th>
-          <th>year_first_hired</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>4405</th>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>...</td>
-          <td>0.082437</td>
-          <td>3.624742</td>
-          <td>0.081180</td>
-          <td>16.977688</td>
-          <td>0.0</td>
-          <td>0.073267</td>
-          <td>3.259953</td>
-          <td>0.071157</td>
-          <td>0.062101</td>
-          <td>1.792402</td>
-          <td>21.840792</td>
-          <td>0.098540</td>
-          <td>0.148002</td>
-          <td>0.136063</td>
-          <td>0.055419</td>
-          <td>0.186243</td>
-          <td>0.057852</td>
-          <td>0.053953</td>
-          <td>0.334318</td>
-          <td>0.066591</td>
-          <td>0.058340</td>
-          <td>0.238796</td>
-          <td>0.067771</td>
-          <td>1.975242</td>
-          <td>0.076774</td>
-          <td>0.074126</td>
-          <td>0.240607</td>
-          <td>0.528218</td>
-          <td>0.141957</td>
-          <td>0.051977</td>
-          <td>12.198323</td>
-          <td>0.054254</td>
-          <td>5.293050</td>
-          <td>0.199181</td>
-          <td>0.064735</td>
-          <td>2007.0</td>
-          <td>8.0</td>
-          <td>6.0</td>
-          <td>1.186358e+09</td>
-          <td>2007.0</td>
-        </tr>
-        <tr>
-          <th>5694</th>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>...</td>
-          <td>0.053933</td>
-          <td>0.051194</td>
-          <td>0.053454</td>
-          <td>0.052726</td>
-          <td>1.0</td>
-          <td>0.052047</td>
-          <td>0.050291</td>
-          <td>0.052064</td>
-          <td>0.054717</td>
-          <td>0.050000</td>
-          <td>0.052139</td>
-          <td>0.060971</td>
-          <td>0.054063</td>
-          <td>0.051962</td>
-          <td>0.052206</td>
-          <td>0.053291</td>
-          <td>0.054250</td>
-          <td>0.066332</td>
-          <td>0.072788</td>
-          <td>0.054282</td>
-          <td>34.422066</td>
-          <td>0.056926</td>
-          <td>0.050922</td>
-          <td>0.055815</td>
-          <td>0.060176</td>
-          <td>0.055112</td>
-          <td>0.051963</td>
-          <td>0.051873</td>
-          <td>0.052406</td>
-          <td>0.050986</td>
-          <td>0.050606</td>
-          <td>0.053540</td>
-          <td>0.051785</td>
-          <td>0.052842</td>
-          <td>0.051579</td>
-          <td>2005.0</td>
-          <td>8.0</td>
-          <td>8.0</td>
-          <td>1.123459e+09</td>
-          <td>2005.0</td>
-        </tr>
-        <tr>
-          <th>1516</th>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>...</td>
-          <td>0.073047</td>
-          <td>0.064461</td>
-          <td>0.061842</td>
-          <td>0.075659</td>
-          <td>0.0</td>
-          <td>0.053709</td>
-          <td>0.145831</td>
-          <td>0.069618</td>
-          <td>0.052179</td>
-          <td>0.053167</td>
-          <td>0.057053</td>
-          <td>0.053539</td>
-          <td>0.058645</td>
-          <td>0.206980</td>
-          <td>0.057771</td>
-          <td>2.065474</td>
-          <td>0.203079</td>
-          <td>0.139620</td>
-          <td>0.076827</td>
-          <td>1.526253</td>
-          <td>0.057027</td>
-          <td>0.062487</td>
-          <td>0.130984</td>
-          <td>0.051912</td>
-          <td>0.052064</td>
-          <td>0.054738</td>
-          <td>0.111287</td>
-          <td>0.122491</td>
-          <td>0.082738</td>
-          <td>0.053514</td>
-          <td>0.073807</td>
-          <td>0.052023</td>
-          <td>0.687226</td>
-          <td>16.029049</td>
-          <td>0.058909</td>
-          <td>2009.0</td>
-          <td>4.0</td>
-          <td>27.0</td>
-          <td>1.240790e+09</td>
-          <td>2009.0</td>
-        </tr>
-        <tr>
-          <th>8960</th>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>...</td>
-          <td>0.053749</td>
-          <td>0.058117</td>
-          <td>0.053497</td>
-          <td>0.050877</td>
-          <td>0.0</td>
-          <td>0.069027</td>
-          <td>0.050486</td>
-          <td>0.064271</td>
-          <td>0.062419</td>
-          <td>0.052502</td>
-          <td>0.093027</td>
-          <td>1.366253</td>
-          <td>0.073363</td>
-          <td>0.075472</td>
-          <td>0.072345</td>
-          <td>0.089780</td>
-          <td>19.411575</td>
-          <td>0.063284</td>
-          <td>0.081816</td>
-          <td>0.061505</td>
-          <td>0.112828</td>
-          <td>36.094746</td>
-          <td>1.110469</td>
-          <td>0.069366</td>
-          <td>0.181364</td>
-          <td>0.065657</td>
-          <td>0.054691</td>
-          <td>0.081776</td>
-          <td>0.054869</td>
-          <td>0.099074</td>
-          <td>0.084388</td>
-          <td>0.085265</td>
-          <td>0.062543</td>
-          <td>0.069152</td>
-          <td>0.086687</td>
-          <td>1997.0</td>
-          <td>2.0</td>
-          <td>3.0</td>
-          <td>8.549280e+08</td>
-          <td>1997.0</td>
-        </tr>
-        <tr>
-          <th>6108</th>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>...</td>
-          <td>0.054012</td>
-          <td>0.058440</td>
-          <td>0.050975</td>
-          <td>0.052365</td>
-          <td>0.0</td>
-          <td>0.064769</td>
-          <td>0.050174</td>
-          <td>0.061981</td>
-          <td>23.811228</td>
-          <td>0.053502</td>
-          <td>0.051865</td>
-          <td>0.109639</td>
-          <td>0.054098</td>
-          <td>0.051347</td>
-          <td>0.055476</td>
-          <td>0.055943</td>
-          <td>0.068407</td>
-          <td>0.051820</td>
-          <td>0.059319</td>
-          <td>0.054377</td>
-          <td>0.053506</td>
-          <td>0.055867</td>
-          <td>0.052297</td>
-          <td>0.056228</td>
-          <td>0.053796</td>
-          <td>0.067693</td>
-          <td>0.050830</td>
-          <td>0.052209</td>
-          <td>0.052467</td>
-          <td>0.055577</td>
-          <td>0.053734</td>
-          <td>0.085597</td>
-          <td>0.052992</td>
-          <td>0.052582</td>
-          <td>0.050682</td>
-          <td>2006.0</td>
-          <td>1.0</td>
-          <td>17.0</td>
-          <td>1.137456e+09</td>
-          <td>2006.0</td>
-        </tr>
-        <tr>
-          <th>...</th>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-          <td>...</td>
-        </tr>
-        <tr>
-          <th>5734</th>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>...</td>
-          <td>0.054978</td>
-          <td>0.050841</td>
-          <td>0.051823</td>
-          <td>0.060236</td>
-          <td>0.0</td>
-          <td>0.052145</td>
-          <td>0.050438</td>
-          <td>35.919521</td>
-          <td>0.056597</td>
-          <td>0.052240</td>
-          <td>0.054479</td>
-          <td>0.067201</td>
-          <td>0.054840</td>
-          <td>0.059364</td>
-          <td>0.057266</td>
-          <td>0.050767</td>
-          <td>0.052573</td>
-          <td>0.051402</td>
-          <td>0.051928</td>
-          <td>0.051994</td>
-          <td>0.050011</td>
-          <td>0.052011</td>
-          <td>0.074137</td>
-          <td>0.056136</td>
-          <td>0.051074</td>
-          <td>0.054625</td>
-          <td>0.052555</td>
-          <td>0.054389</td>
-          <td>0.054260</td>
-          <td>0.057538</td>
-          <td>0.051746</td>
-          <td>0.051803</td>
-          <td>0.050995</td>
-          <td>0.054694</td>
-          <td>0.051271</td>
-          <td>2005.0</td>
-          <td>5.0</td>
-          <td>16.0</td>
-          <td>1.116202e+09</td>
-          <td>2005.0</td>
-        </tr>
-        <tr>
-          <th>5191</th>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>...</td>
-          <td>0.063712</td>
-          <td>0.082597</td>
-          <td>0.294983</td>
-          <td>0.055823</td>
-          <td>0.0</td>
-          <td>0.075014</td>
-          <td>0.050727</td>
-          <td>0.110672</td>
-          <td>0.072325</td>
-          <td>0.056136</td>
-          <td>0.093880</td>
-          <td>0.219840</td>
-          <td>0.078808</td>
-          <td>0.090735</td>
-          <td>0.064158</td>
-          <td>0.159563</td>
-          <td>4.416184</td>
-          <td>0.060030</td>
-          <td>0.619067</td>
-          <td>0.071597</td>
-          <td>0.127201</td>
-          <td>0.074414</td>
-          <td>0.124389</td>
-          <td>0.508542</td>
-          <td>0.111342</td>
-          <td>0.074729</td>
-          <td>4.696214</td>
-          <td>4.305902</td>
-          <td>26.169111</td>
-          <td>0.066749</td>
-          <td>0.680179</td>
-          <td>0.071740</td>
-          <td>0.074265</td>
-          <td>0.089891</td>
-          <td>0.086594</td>
-          <td>2001.0</td>
-          <td>8.0</td>
-          <td>6.0</td>
-          <td>9.970560e+08</td>
-          <td>2001.0</td>
-        </tr>
-        <tr>
-          <th>5390</th>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>...</td>
-          <td>0.107205</td>
-          <td>0.061787</td>
-          <td>0.078849</td>
-          <td>1.678370</td>
-          <td>0.0</td>
-          <td>0.055226</td>
-          <td>0.050176</td>
-          <td>0.078004</td>
-          <td>0.090077</td>
-          <td>0.426835</td>
-          <td>0.086789</td>
-          <td>1.007777</td>
-          <td>0.070107</td>
-          <td>0.056974</td>
-          <td>0.056942</td>
-          <td>2.170596</td>
-          <td>0.063813</td>
-          <td>0.087807</td>
-          <td>0.079806</td>
-          <td>24.168652</td>
-          <td>0.068428</td>
-          <td>0.072466</td>
-          <td>0.050961</td>
-          <td>0.130690</td>
-          <td>0.061996</td>
-          <td>0.090656</td>
-          <td>0.060273</td>
-          <td>0.082702</td>
-          <td>0.060782</td>
-          <td>0.059014</td>
-          <td>0.100018</td>
-          <td>0.061081</td>
-          <td>0.064913</td>
-          <td>0.375094</td>
-          <td>0.111348</td>
-          <td>1990.0</td>
-          <td>5.0</td>
-          <td>31.0</td>
-          <td>6.441120e+08</td>
-          <td>1990.0</td>
-        </tr>
-        <tr>
-          <th>860</th>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>...</td>
-          <td>0.070087</td>
-          <td>0.231230</td>
-          <td>0.055715</td>
-          <td>26.206709</td>
-          <td>0.0</td>
-          <td>0.053448</td>
-          <td>0.051583</td>
-          <td>0.059827</td>
-          <td>0.057612</td>
-          <td>0.078201</td>
-          <td>0.053759</td>
-          <td>0.062624</td>
-          <td>0.052671</td>
-          <td>0.050978</td>
-          <td>0.060874</td>
-          <td>0.056781</td>
-          <td>0.054881</td>
-          <td>0.059407</td>
-          <td>0.052245</td>
-          <td>0.050364</td>
-          <td>0.064296</td>
-          <td>0.057714</td>
-          <td>0.051470</td>
-          <td>0.055691</td>
-          <td>0.051226</td>
-          <td>0.107547</td>
-          <td>0.054090</td>
-          <td>0.053073</td>
-          <td>50.810493</td>
-          <td>0.054914</td>
-          <td>0.059631</td>
-          <td>0.053520</td>
-          <td>0.053873</td>
-          <td>0.059148</td>
-          <td>0.058061</td>
-          <td>2012.0</td>
-          <td>11.0</td>
-          <td>5.0</td>
-          <td>1.352074e+09</td>
-          <td>2012.0</td>
-        </tr>
-        <tr>
-          <th>7270</th>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>1.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>0.0</td>
-          <td>...</td>
-          <td>0.052108</td>
-          <td>0.051717</td>
-          <td>0.052676</td>
-          <td>0.053016</td>
-          <td>0.0</td>
-          <td>0.052044</td>
-          <td>0.050107</td>
-          <td>0.057559</td>
-          <td>0.061196</td>
-          <td>0.053443</td>
-          <td>0.060698</td>
-          <td>0.082232</td>
-          <td>0.056583</td>
-          <td>0.050988</td>
-          <td>0.056262</td>
-          <td>0.054536</td>
-          <td>0.061149</td>
-          <td>0.054730</td>
-          <td>0.052791</td>
-          <td>0.055481</td>
-          <td>0.053240</td>
-          <td>0.052825</td>
-          <td>0.050011</td>
-          <td>0.058447</td>
-          <td>0.052833</td>
-          <td>20.883778</td>
-          <td>0.052204</td>
-          <td>0.055315</td>
-          <td>0.058654</td>
-          <td>0.055525</td>
-          <td>0.053278</td>
-          <td>0.051283</td>
-          <td>0.052981</td>
-          <td>0.056578</td>
-          <td>0.053248</td>
-          <td>2014.0</td>
-          <td>6.0</td>
-          <td>16.0</td>
-          <td>1.402877e+09</td>
-          <td>2014.0</td>
-        </tr>
-      </tbody>
-    </table>
-    <p>7843 rows × 143 columns</p>
-    </div>
-    </div>
-    <br />
-    <br />
-
-.. GENERATED FROM PYTHON SOURCE LINES 166-167
-
-They have more columns than the original dataframe, but not much more:
-
-.. GENERATED FROM PYTHON SOURCE LINES 167-169
-
-.. code-block:: Python
-
-    X_train_enc.shape
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    (7843, 143)
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 170-175
-
-Inspecting the features created
-.................................
-
-The |SV| assigns a transformer for each column. We can inspect this
-choice:
-
-.. GENERATED FROM PYTHON SOURCE LINES 175-177
-
-.. code-block:: Python
-
-    tab_vec.transformers_
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    {'year_first_hired': PassThrough(), 'date_first_hired': DatetimeEncoder(), 'gender': OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
-                  sparse_output=False), 'department': OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
-                  sparse_output=False), 'department_name': OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
-                  sparse_output=False), 'assignment_category': OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
-                  sparse_output=False), 'division': GapEncoder(n_components=30), 'employee_position_title': GapEncoder(n_components=30)}
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 178-190
-
-This is what is being passed to transform the different columns under the hood.
-We can notice it classified the columns "gender" and "assignment_category"
-as low cardinality string variables.
-A |OneHotEncoder| will be applied to these columns.
-
-The vectorizer actually makes the difference between string variables
-(data type ``object`` and ``string``) and categorical variables
-(data type ``category``).
-
-Next, we can have a look at the encoded feature names.
-
-Before encoding:
-
-.. GENERATED FROM PYTHON SOURCE LINES 190-192
-
-.. code-block:: Python
-
-    df.columns.to_list()
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    ['gender', 'department', 'department_name', 'division', 'assignment_category', 'employee_position_title', 'date_first_hired', 'year_first_hired']
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 193-194
-
-After encoding (we only plot the first 8 feature names):
-
-.. GENERATED FROM PYTHON SOURCE LINES 194-197
-
-.. code-block:: Python
-
-    feature_names = tab_vec.get_feature_names_out()
-    feature_names[:8]
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    array(['gender_F', 'gender_M', 'gender_nan', 'department_BOA',
-           'department_BOE', 'department_CAT', 'department_CCL',
-           'department_CEC'], dtype='<U68')
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 198-204
-
-As we can see, it created a new column for each unique value.
-This is because we used |SE| on the column "division",
-which was classified as a high cardinality string variable.
-(default values, see |SV|'s docstring).
-
-In total, we have reasonnable number of encoded columns.
-
-.. GENERATED FROM PYTHON SOURCE LINES 204-207
-
-.. code-block:: Python
-
-    len(feature_names)
-
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    143
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 208-220
-
-Feature importance in the statistical model
----------------------------------------------
-
-In this section, we will train a regressor, and plot the feature importances
-
-.. topic:: Note:
-
-   To minimize compute time, use the feature importances computed by the
-   |RandomForestRegressor|, but you should prefer |permutation importances|
-   instead (which are less subject to biases)
-
-First, let's train the |RandomForestRegressor|,
-
-.. GENERATED FROM PYTHON SOURCE LINES 220-226
-
-.. code-block:: Python
-
-
-    from sklearn.ensemble import RandomForestRegressor
-    regressor = RandomForestRegressor()
-    regressor.fit(X_train_enc, y_train)
-
+    pipeline
 
 
 
@@ -2733,16 +1431,1741 @@ First, let's train the |RandomForestRegressor|,
       /* fitted */
       background-color: var(--sklearn-color-fitted-level-3);
     }
-    </style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>RandomForestRegressor()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-12" type="checkbox" checked><label for="sk-estimator-id-12" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;RandomForestRegressor<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.RandomForestRegressor.html">?<span>Documentation for RandomForestRegressor</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>RandomForestRegressor()</pre></div> </div></div></div></div>
+    </style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[(&#x27;tablevectorizer&#x27;, TableVectorizer()),
+                    (&#x27;histgradientboostingregressor&#x27;,
+                     HistGradientBoostingRegressor())])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-12" type="checkbox" ><label for="sk-estimator-id-12" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;&nbsp;Pipeline<a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.pipeline.Pipeline.html">?<span>Documentation for Pipeline</span></a><span class="sk-estimator-doc-link ">i<span>Not fitted</span></span></label><div class="sk-toggleable__content "><pre>Pipeline(steps=[(&#x27;tablevectorizer&#x27;, TableVectorizer()),
+                    (&#x27;histgradientboostingregressor&#x27;,
+                     HistGradientBoostingRegressor())])</pre></div> </div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-13" type="checkbox" ><label for="sk-estimator-id-13" class="sk-toggleable__label  sk-toggleable__label-arrow ">tablevectorizer: TableVectorizer</label><div class="sk-toggleable__content "><pre>TableVectorizer()</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-14" type="checkbox" ><label for="sk-estimator-id-14" class="sk-toggleable__label  sk-toggleable__label-arrow ">datetime: DatetimeEncoder</label><div class="sk-toggleable__content "><pre>DatetimeEncoder()</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-15" type="checkbox" ><label for="sk-estimator-id-15" class="sk-toggleable__label  sk-toggleable__label-arrow ">DatetimeEncoder</label><div class="sk-toggleable__content "><pre>DatetimeEncoder()</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-16" type="checkbox" ><label for="sk-estimator-id-16" class="sk-toggleable__label  sk-toggleable__label-arrow ">high_cardinality: GapEncoder</label><div class="sk-toggleable__content "><pre>GapEncoder(n_components=30)</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-17" type="checkbox" ><label for="sk-estimator-id-17" class="sk-toggleable__label  sk-toggleable__label-arrow ">GapEncoder</label><div class="sk-toggleable__content "><pre>GapEncoder(n_components=30)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-18" type="checkbox" ><label for="sk-estimator-id-18" class="sk-toggleable__label  sk-toggleable__label-arrow ">low_cardinality: OneHotEncoder</label><div class="sk-toggleable__content "><pre>OneHotEncoder(drop=&#x27;if_binary&#x27;, dtype=&#x27;float32&#x27;, handle_unknown=&#x27;ignore&#x27;,
+                  sparse_output=False)</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-19" type="checkbox" ><label for="sk-estimator-id-19" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;OneHotEncoder<a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.preprocessing.OneHotEncoder.html">?<span>Documentation for OneHotEncoder</span></a></label><div class="sk-toggleable__content "><pre>OneHotEncoder(drop=&#x27;if_binary&#x27;, dtype=&#x27;float32&#x27;, handle_unknown=&#x27;ignore&#x27;,
+                  sparse_output=False)</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-20" type="checkbox" ><label for="sk-estimator-id-20" class="sk-toggleable__label  sk-toggleable__label-arrow ">numeric: PassThrough</label><div class="sk-toggleable__content "><pre>PassThrough()</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-21" type="checkbox" ><label for="sk-estimator-id-21" class="sk-toggleable__label  sk-toggleable__label-arrow ">PassThrough</label><div class="sk-toggleable__content "><pre>PassThrough()</pre></div> </div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-22" type="checkbox" ><label for="sk-estimator-id-22" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;HistGradientBoostingRegressor<a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html">?<span>Documentation for HistGradientBoostingRegressor</span></a></label><div class="sk-toggleable__content "><pre>HistGradientBoostingRegressor()</pre></div> </div></div></div></div></div></div>
     </div>
     <br />
     <br />
 
-.. GENERATED FROM PYTHON SOURCE LINES 227-228
+.. GENERATED FROM PYTHON SOURCE LINES 134-135
+
+Let's perform a cross-validation to see how well this model predicts
+
+.. GENERATED FROM PYTHON SOURCE LINES 135-144
+
+.. code-block:: Python
+
+
+    from sklearn.model_selection import cross_val_score
+    scores = cross_val_score(pipeline, df, y, scoring='r2')
+
+    import numpy as np
+    print(f'{scores=}')
+    print(f'mean={np.mean(scores)}')
+    print(f'std={np.std(scores)}')
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    scores=array([0.9202429 , 0.88894278, 0.92884641, 0.92717239, 0.9274788 ])
+    mean=0.918536657815382
+    std=0.01509660512610078
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 145-148
+
+The prediction perform here is pretty much as good as above
+but the code here is much simpler as it does not involve specifying
+columns manually.
+
+.. GENERATED FROM PYTHON SOURCE LINES 150-155
+
+Analyzing the features created
+-------------------------------
+
+Let us perform the same workflow, but without the `Pipeline`, so we can
+analyze its mechanisms along the way.
+
+.. GENERATED FROM PYTHON SOURCE LINES 155-157
+
+.. code-block:: Python
+
+    tab_vec = TableVectorizer()
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 158-159
+
+We split the data between train and test, and transform them:
+
+.. GENERATED FROM PYTHON SOURCE LINES 159-167
+
+.. code-block:: Python
+
+    from sklearn.model_selection import train_test_split
+    df_train, df_test, y_train, y_test = train_test_split(
+        df, y, test_size=0.15, random_state=42
+    )
+
+    X_train_enc = tab_vec.fit_transform(df_train, y_train)
+    X_test_enc = tab_vec.transform(df_test)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 168-169
+
+The encoded data, X_train_enc and X_test_enc are numerical arrays:
+
+.. GENERATED FROM PYTHON SOURCE LINES 169-171
+
+.. code-block:: Python
+
+    X_train_enc
+
+
+
+
+
+
+.. raw:: html
+
+    <div class="output_subarea output_html rendered_html output_result">
+    <div>
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
+
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
+
+        .dataframe thead th {
+            text-align: right;
+        }
+    </style>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>gender_F</th>
+          <th>gender_M</th>
+          <th>gender_nan</th>
+          <th>department_BOA</th>
+          <th>department_BOE</th>
+          <th>department_CAT</th>
+          <th>department_CCL</th>
+          <th>department_CEC</th>
+          <th>department_CEX</th>
+          <th>department_COR</th>
+          <th>department_CUS</th>
+          <th>department_DEP</th>
+          <th>department_DGS</th>
+          <th>department_DHS</th>
+          <th>department_DLC</th>
+          <th>department_DOT</th>
+          <th>department_DPS</th>
+          <th>department_DTS</th>
+          <th>department_ECM</th>
+          <th>department_FIN</th>
+          <th>department_FRS</th>
+          <th>department_HCA</th>
+          <th>department_HHS</th>
+          <th>department_HRC</th>
+          <th>department_IGR</th>
+          <th>department_LIB</th>
+          <th>department_MPB</th>
+          <th>department_NDA</th>
+          <th>department_OAG</th>
+          <th>department_OCP</th>
+          <th>department_OHR</th>
+          <th>department_OIG</th>
+          <th>department_OLO</th>
+          <th>department_OMB</th>
+          <th>department_PIO</th>
+          <th>department_POL</th>
+          <th>department_PRO</th>
+          <th>department_REC</th>
+          <th>department_SHF</th>
+          <th>department_ZAH</th>
+          <th>...</th>
+          <th>division: engineering, parking, marking</th>
+          <th>division: mechanical, director, residential</th>
+          <th>division: maintenance, facilities, facility</th>
+          <th>division: district, payroll, squad</th>
+          <th>assignment_category_Parttime-Regular</th>
+          <th>employee_position_title: coordinator, coordinating, depot</th>
+          <th>employee_position_title: sergeant, cadet, emergency</th>
+          <th>employee_position_title: master, firefighter, registered</th>
+          <th>employee_position_title: police, officer, office</th>
+          <th>employee_position_title: specialist, special, resource</th>
+          <th>employee_position_title: supervisory, supervisor, therapist</th>
+          <th>employee_position_title: school, room, behavioral</th>
+          <th>employee_position_title: manager, budget, investigator</th>
+          <th>employee_position_title: operator, equipment, bus</th>
+          <th>employee_position_title: technician, mechanic, supply</th>
+          <th>employee_position_title: lieutenant, captain, chief</th>
+          <th>employee_position_title: information, technology, senior</th>
+          <th>employee_position_title: services, service, urban</th>
+          <th>employee_position_title: liquor, clerk, store</th>
+          <th>employee_position_title: corporal, pfc, dietary</th>
+          <th>employee_position_title: librarian, psychiatric, attendant</th>
+          <th>employee_position_title: administrative, legislative, principal</th>
+          <th>employee_position_title: community, health, nurse</th>
+          <th>employee_position_title: enforcement, permitting, inspector</th>
+          <th>employee_position_title: recreation, renovation, occupational</th>
+          <th>employee_position_title: rescuer, recruit, firefighter</th>
+          <th>employee_position_title: worker, social, works</th>
+          <th>employee_position_title: crossing, purchasing, background</th>
+          <th>employee_position_title: program, programs, projects</th>
+          <th>employee_position_title: communications, telecommunications, safety</th>
+          <th>employee_position_title: sheriff, deputy, autobody</th>
+          <th>employee_position_title: candidate, security, consumer</th>
+          <th>employee_position_title: income, assistance, client</th>
+          <th>employee_position_title: accountant, assistant, library</th>
+          <th>employee_position_title: warehouse, welfare, driver</th>
+          <th>date_first_hired_year</th>
+          <th>date_first_hired_month</th>
+          <th>date_first_hired_day</th>
+          <th>date_first_hired_total_seconds</th>
+          <th>year_first_hired</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>4405</th>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>...</td>
+          <td>0.057483</td>
+          <td>2.096813</td>
+          <td>0.083886</td>
+          <td>0.064516</td>
+          <td>0.0</td>
+          <td>0.074145</td>
+          <td>0.058884</td>
+          <td>0.068406</td>
+          <td>0.055800</td>
+          <td>15.103652</td>
+          <td>19.652449</td>
+          <td>0.054757</td>
+          <td>0.062988</td>
+          <td>4.084665</td>
+          <td>0.066134</td>
+          <td>0.078695</td>
+          <td>0.502557</td>
+          <td>0.153796</td>
+          <td>0.054234</td>
+          <td>0.055846</td>
+          <td>0.088054</td>
+          <td>0.162437</td>
+          <td>0.053727</td>
+          <td>4.834642</td>
+          <td>0.066882</td>
+          <td>0.075395</td>
+          <td>0.065248</td>
+          <td>2.886313</td>
+          <td>0.052131</td>
+          <td>0.064640</td>
+          <td>0.088134</td>
+          <td>0.051593</td>
+          <td>0.118265</td>
+          <td>0.143778</td>
+          <td>0.621756</td>
+          <td>2007.0</td>
+          <td>8.0</td>
+          <td>6.0</td>
+          <td>1.186358e+09</td>
+          <td>2007.0</td>
+        </tr>
+        <tr>
+          <th>5694</th>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>...</td>
+          <td>0.051392</td>
+          <td>0.054187</td>
+          <td>0.052071</td>
+          <td>0.051999</td>
+          <td>1.0</td>
+          <td>0.052116</td>
+          <td>0.053695</td>
+          <td>0.050005</td>
+          <td>0.055896</td>
+          <td>0.054049</td>
+          <td>0.053289</td>
+          <td>0.066431</td>
+          <td>0.057850</td>
+          <td>0.050001</td>
+          <td>0.054450</td>
+          <td>0.050919</td>
+          <td>0.052581</td>
+          <td>0.066904</td>
+          <td>0.052332</td>
+          <td>0.054278</td>
+          <td>0.051465</td>
+          <td>0.052284</td>
+          <td>34.424175</td>
+          <td>0.053153</td>
+          <td>0.053040</td>
+          <td>0.053141</td>
+          <td>0.054983</td>
+          <td>0.050362</td>
+          <td>0.052040</td>
+          <td>0.061187</td>
+          <td>0.058617</td>
+          <td>0.051003</td>
+          <td>0.054496</td>
+          <td>0.052664</td>
+          <td>0.052594</td>
+          <td>2005.0</td>
+          <td>8.0</td>
+          <td>8.0</td>
+          <td>1.123459e+09</td>
+          <td>2005.0</td>
+        </tr>
+        <tr>
+          <th>1516</th>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>...</td>
+          <td>0.065229</td>
+          <td>0.067920</td>
+          <td>0.061561</td>
+          <td>0.085653</td>
+          <td>0.0</td>
+          <td>0.063172</td>
+          <td>0.058882</td>
+          <td>0.059537</td>
+          <td>0.055173</td>
+          <td>0.056964</td>
+          <td>0.057216</td>
+          <td>0.074638</td>
+          <td>0.059212</td>
+          <td>0.059680</td>
+          <td>0.108783</td>
+          <td>0.058649</td>
+          <td>7.692924</td>
+          <td>0.096310</td>
+          <td>0.067561</td>
+          <td>0.110231</td>
+          <td>11.004569</td>
+          <td>0.071658</td>
+          <td>0.115507</td>
+          <td>1.914766</td>
+          <td>0.125157</td>
+          <td>0.060148</td>
+          <td>0.066052</td>
+          <td>0.066457</td>
+          <td>0.057278</td>
+          <td>0.054036</td>
+          <td>0.050444</td>
+          <td>0.056734</td>
+          <td>0.054948</td>
+          <td>0.062550</td>
+          <td>0.060766</td>
+          <td>2009.0</td>
+          <td>4.0</td>
+          <td>27.0</td>
+          <td>1.240790e+09</td>
+          <td>2009.0</td>
+        </tr>
+        <tr>
+          <th>8960</th>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>...</td>
+          <td>0.059046</td>
+          <td>0.062216</td>
+          <td>0.059055</td>
+          <td>0.062736</td>
+          <td>0.0</td>
+          <td>0.072292</td>
+          <td>0.100089</td>
+          <td>0.093593</td>
+          <td>0.069898</td>
+          <td>0.059780</td>
+          <td>0.063775</td>
+          <td>0.061928</td>
+          <td>2.095238</td>
+          <td>0.057029</td>
+          <td>0.061194</td>
+          <td>10.830738</td>
+          <td>0.063696</td>
+          <td>0.086991</td>
+          <td>0.065480</td>
+          <td>0.118187</td>
+          <td>0.072456</td>
+          <td>0.054842</td>
+          <td>0.104617</td>
+          <td>0.103872</td>
+          <td>42.444580</td>
+          <td>0.073083</td>
+          <td>0.081634</td>
+          <td>0.051361</td>
+          <td>0.110850</td>
+          <td>0.113547</td>
+          <td>2.600955</td>
+          <td>0.083521</td>
+          <td>0.067356</td>
+          <td>0.077694</td>
+          <td>0.059723</td>
+          <td>1997.0</td>
+          <td>2.0</td>
+          <td>3.0</td>
+          <td>8.549280e+08</td>
+          <td>1997.0</td>
+        </tr>
+        <tr>
+          <th>6108</th>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>...</td>
+          <td>0.052727</td>
+          <td>0.053078</td>
+          <td>0.050670</td>
+          <td>24.539032</td>
+          <td>0.0</td>
+          <td>0.062956</td>
+          <td>0.078597</td>
+          <td>0.055671</td>
+          <td>23.681025</td>
+          <td>0.054379</td>
+          <td>0.053364</td>
+          <td>0.051695</td>
+          <td>0.079955</td>
+          <td>0.053168</td>
+          <td>0.053790</td>
+          <td>0.052189</td>
+          <td>0.052320</td>
+          <td>0.058441</td>
+          <td>0.055315</td>
+          <td>0.071622</td>
+          <td>0.051728</td>
+          <td>0.050935</td>
+          <td>0.052880</td>
+          <td>0.055294</td>
+          <td>0.050690</td>
+          <td>0.063568</td>
+          <td>0.064539</td>
+          <td>0.050197</td>
+          <td>0.057129</td>
+          <td>0.053305</td>
+          <td>0.056340</td>
+          <td>0.221015</td>
+          <td>0.053967</td>
+          <td>0.051459</td>
+          <td>0.052471</td>
+          <td>2006.0</td>
+          <td>1.0</td>
+          <td>17.0</td>
+          <td>1.137456e+09</td>
+          <td>2006.0</td>
+        </tr>
+        <tr>
+          <th>...</th>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+          <td>...</td>
+        </tr>
+        <tr>
+          <th>5734</th>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>...</td>
+          <td>0.050439</td>
+          <td>0.051169</td>
+          <td>0.051029</td>
+          <td>0.053335</td>
+          <td>0.0</td>
+          <td>0.051670</td>
+          <td>0.051516</td>
+          <td>35.768665</td>
+          <td>0.054229</td>
+          <td>0.051381</td>
+          <td>0.052701</td>
+          <td>0.051126</td>
+          <td>0.057341</td>
+          <td>0.051417</td>
+          <td>0.051071</td>
+          <td>0.074457</td>
+          <td>0.051807</td>
+          <td>0.051953</td>
+          <td>0.054052</td>
+          <td>0.052592</td>
+          <td>0.050816</td>
+          <td>0.051040</td>
+          <td>0.050080</td>
+          <td>0.050927</td>
+          <td>0.051823</td>
+          <td>0.242051</td>
+          <td>0.053698</td>
+          <td>0.050182</td>
+          <td>0.053875</td>
+          <td>0.050225</td>
+          <td>0.051241</td>
+          <td>0.060433</td>
+          <td>0.051608</td>
+          <td>0.052264</td>
+          <td>0.053755</td>
+          <td>2005.0</td>
+          <td>5.0</td>
+          <td>16.0</td>
+          <td>1.116202e+09</td>
+          <td>2005.0</td>
+        </tr>
+        <tr>
+          <th>5191</th>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>...</td>
+          <td>0.057698</td>
+          <td>9.384285</td>
+          <td>7.138956</td>
+          <td>0.054230</td>
+          <td>0.0</td>
+          <td>0.075124</td>
+          <td>0.062604</td>
+          <td>0.078542</td>
+          <td>0.125599</td>
+          <td>0.095069</td>
+          <td>0.085665</td>
+          <td>0.064036</td>
+          <td>0.677363</td>
+          <td>0.056483</td>
+          <td>0.090254</td>
+          <td>0.104296</td>
+          <td>0.435007</td>
+          <td>0.221919</td>
+          <td>0.069135</td>
+          <td>0.286842</td>
+          <td>0.088562</td>
+          <td>5.142676</td>
+          <td>0.139336</td>
+          <td>0.304973</td>
+          <td>7.692374</td>
+          <td>0.200524</td>
+          <td>0.103933</td>
+          <td>0.052061</td>
+          <td>0.088930</td>
+          <td>0.112537</td>
+          <td>0.088569</td>
+          <td>0.052951</td>
+          <td>0.082670</td>
+          <td>0.086473</td>
+          <td>26.735493</td>
+          <td>2001.0</td>
+          <td>8.0</td>
+          <td>6.0</td>
+          <td>9.970560e+08</td>
+          <td>2001.0</td>
+        </tr>
+        <tr>
+          <th>5390</th>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>...</td>
+          <td>4.199140</td>
+          <td>0.088558</td>
+          <td>0.099849</td>
+          <td>0.103600</td>
+          <td>0.0</td>
+          <td>0.059686</td>
+          <td>0.065139</td>
+          <td>0.070606</td>
+          <td>0.115187</td>
+          <td>0.092478</td>
+          <td>0.109953</td>
+          <td>0.101651</td>
+          <td>0.472342</td>
+          <td>0.120567</td>
+          <td>20.500448</td>
+          <td>0.051082</td>
+          <td>0.081780</td>
+          <td>0.078909</td>
+          <td>0.057992</td>
+          <td>0.067949</td>
+          <td>0.063242</td>
+          <td>0.060864</td>
+          <td>0.064471</td>
+          <td>7.025106</td>
+          <td>0.058332</td>
+          <td>0.092244</td>
+          <td>0.097825</td>
+          <td>0.050577</td>
+          <td>0.062492</td>
+          <td>0.057152</td>
+          <td>0.080115</td>
+          <td>0.065375</td>
+          <td>0.060532</td>
+          <td>0.055348</td>
+          <td>0.060556</td>
+          <td>1990.0</td>
+          <td>5.0</td>
+          <td>31.0</td>
+          <td>6.441120e+08</td>
+          <td>1990.0</td>
+        </tr>
+        <tr>
+          <th>860</th>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>...</td>
+          <td>0.060577</td>
+          <td>0.057050</td>
+          <td>0.059926</td>
+          <td>0.056213</td>
+          <td>0.0</td>
+          <td>0.053384</td>
+          <td>0.054082</td>
+          <td>0.060126</td>
+          <td>0.057310</td>
+          <td>0.054722</td>
+          <td>0.062521</td>
+          <td>0.059271</td>
+          <td>0.060298</td>
+          <td>0.072823</td>
+          <td>0.050261</td>
+          <td>0.051455</td>
+          <td>0.053926</td>
+          <td>0.052801</td>
+          <td>0.060782</td>
+          <td>0.054991</td>
+          <td>0.053100</td>
+          <td>0.054772</td>
+          <td>0.063930</td>
+          <td>0.058201</td>
+          <td>0.054020</td>
+          <td>0.059708</td>
+          <td>0.106784</td>
+          <td>0.051417</td>
+          <td>0.055078</td>
+          <td>0.050987</td>
+          <td>0.058380</td>
+          <td>0.057289</td>
+          <td>0.052378</td>
+          <td>0.051205</td>
+          <td>50.813999</td>
+          <td>2012.0</td>
+          <td>11.0</td>
+          <td>5.0</td>
+          <td>1.352074e+09</td>
+          <td>2012.0</td>
+        </tr>
+        <tr>
+          <th>7270</th>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>1.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>...</td>
+          <td>0.051309</td>
+          <td>0.052914</td>
+          <td>0.054546</td>
+          <td>0.051068</td>
+          <td>0.0</td>
+          <td>0.051971</td>
+          <td>0.051505</td>
+          <td>0.053773</td>
+          <td>0.063710</td>
+          <td>0.066605</td>
+          <td>0.055259</td>
+          <td>0.054917</td>
+          <td>0.073528</td>
+          <td>0.052863</td>
+          <td>0.055694</td>
+          <td>0.050006</td>
+          <td>0.055801</td>
+          <td>0.052555</td>
+          <td>0.056260</td>
+          <td>0.061619</td>
+          <td>0.052634</td>
+          <td>0.051840</td>
+          <td>0.053441</td>
+          <td>0.055048</td>
+          <td>0.058925</td>
+          <td>0.059876</td>
+          <td>20.880444</td>
+          <td>0.050186</td>
+          <td>0.057740</td>
+          <td>0.051823</td>
+          <td>0.053469</td>
+          <td>0.053687</td>
+          <td>0.054994</td>
+          <td>0.051264</td>
+          <td>0.058565</td>
+          <td>2014.0</td>
+          <td>6.0</td>
+          <td>16.0</td>
+          <td>1.402877e+09</td>
+          <td>2014.0</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>7843 rows × 143 columns</p>
+    </div>
+    </div>
+    <br />
+    <br />
+
+.. GENERATED FROM PYTHON SOURCE LINES 172-173
+
+They have more columns than the original dataframe, but not much more:
+
+.. GENERATED FROM PYTHON SOURCE LINES 173-175
+
+.. code-block:: Python
+
+    X_train_enc.shape
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    (7843, 143)
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 176-181
+
+Inspecting the features created
+.................................
+
+The |SV| assigns a transformer for each column. We can inspect this
+choice:
+
+.. GENERATED FROM PYTHON SOURCE LINES 181-183
+
+.. code-block:: Python
+
+    tab_vec.transformers_
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    {'year_first_hired': PassThrough(), 'date_first_hired': DatetimeEncoder(), 'gender': OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+                  sparse_output=False), 'department': OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+                  sparse_output=False), 'department_name': OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+                  sparse_output=False), 'assignment_category': OneHotEncoder(drop='if_binary', dtype='float32', handle_unknown='ignore',
+                  sparse_output=False), 'division': GapEncoder(n_components=30), 'employee_position_title': GapEncoder(n_components=30)}
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 184-196
+
+This is what is being passed to transform the different columns under the hood.
+We can notice it classified the columns "gender" and "assignment_category"
+as low cardinality string variables.
+A |OneHotEncoder| will be applied to these columns.
+
+The vectorizer actually makes the difference between string variables
+(data type ``object`` and ``string``) and categorical variables
+(data type ``category``).
+
+Next, we can have a look at the encoded feature names.
+
+Before encoding:
+
+.. GENERATED FROM PYTHON SOURCE LINES 196-198
+
+.. code-block:: Python
+
+    df.columns.to_list()
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    ['gender', 'department', 'department_name', 'division', 'assignment_category', 'employee_position_title', 'date_first_hired', 'year_first_hired']
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 199-200
+
+After encoding (we only plot the first 8 feature names):
+
+.. GENERATED FROM PYTHON SOURCE LINES 200-203
+
+.. code-block:: Python
+
+    feature_names = tab_vec.get_feature_names_out()
+    feature_names[:8]
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    array(['gender_F', 'gender_M', 'gender_nan', 'department_BOA',
+           'department_BOE', 'department_CAT', 'department_CCL',
+           'department_CEC'], dtype='<U68')
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 204-210
+
+As we can see, it created a new column for each unique value.
+This is because we used |SE| on the column "division",
+which was classified as a high cardinality string variable.
+(default values, see |SV|'s docstring).
+
+In total, we have reasonnable number of encoded columns.
+
+.. GENERATED FROM PYTHON SOURCE LINES 210-213
+
+.. code-block:: Python
+
+    len(feature_names)
+
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    143
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 214-226
+
+Feature importance in the statistical model
+---------------------------------------------
+
+In this section, we will train a regressor, and plot the feature importances
+
+.. topic:: Note:
+
+   To minimize compute time, use the feature importances computed by the
+   |RandomForestRegressor|, but you should prefer |permutation importances|
+   instead (which are less subject to biases)
+
+First, let's train the |RandomForestRegressor|,
+
+.. GENERATED FROM PYTHON SOURCE LINES 226-232
+
+.. code-block:: Python
+
+
+    from sklearn.ensemble import RandomForestRegressor
+    regressor = RandomForestRegressor()
+    regressor.fit(X_train_enc, y_train)
+
+
+
+
+
+
+
+.. raw:: html
+
+    <div class="output_subarea output_html rendered_html output_result">
+    <style>#sk-container-id-3 {
+      /* Definition of color scheme common for light and dark mode */
+      --sklearn-color-text: black;
+      --sklearn-color-line: gray;
+      /* Definition of color scheme for unfitted estimators */
+      --sklearn-color-unfitted-level-0: #fff5e6;
+      --sklearn-color-unfitted-level-1: #f6e4d2;
+      --sklearn-color-unfitted-level-2: #ffe0b3;
+      --sklearn-color-unfitted-level-3: chocolate;
+      /* Definition of color scheme for fitted estimators */
+      --sklearn-color-fitted-level-0: #f0f8ff;
+      --sklearn-color-fitted-level-1: #d4ebff;
+      --sklearn-color-fitted-level-2: #b3dbfd;
+      --sklearn-color-fitted-level-3: cornflowerblue;
+
+      /* Specific color for light theme */
+      --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+      --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+      --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+      --sklearn-color-icon: #696969;
+
+      @media (prefers-color-scheme: dark) {
+        /* Redefinition of color scheme for dark theme */
+        --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+        --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+        --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+        --sklearn-color-icon: #878787;
+      }
+    }
+
+    #sk-container-id-3 {
+      color: var(--sklearn-color-text);
+    }
+
+    #sk-container-id-3 pre {
+      padding: 0;
+    }
+
+    #sk-container-id-3 input.sk-hidden--visually {
+      border: 0;
+      clip: rect(1px 1px 1px 1px);
+      clip: rect(1px, 1px, 1px, 1px);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+    #sk-container-id-3 div.sk-dashed-wrapped {
+      border: 1px dashed var(--sklearn-color-line);
+      margin: 0 0.4em 0.5em 0.4em;
+      box-sizing: border-box;
+      padding-bottom: 0.4em;
+      background-color: var(--sklearn-color-background);
+    }
+
+    #sk-container-id-3 div.sk-container {
+      /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+         but bootstrap.min.css set `[hidden] { display: none !important; }`
+         so we also need the `!important` here to be able to override the
+         default hidden behavior on the sphinx rendered scikit-learn.org.
+         See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+      display: inline-block !important;
+      position: relative;
+    }
+
+    #sk-container-id-3 div.sk-text-repr-fallback {
+      display: none;
+    }
+
+    div.sk-parallel-item,
+    div.sk-serial,
+    div.sk-item {
+      /* draw centered vertical line to link estimators */
+      background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+      background-size: 2px 100%;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+
+    /* Parallel-specific style estimator block */
+
+    #sk-container-id-3 div.sk-parallel-item::after {
+      content: "";
+      width: 100%;
+      border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+      flex-grow: 1;
+    }
+
+    #sk-container-id-3 div.sk-parallel {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      background-color: var(--sklearn-color-background);
+      position: relative;
+    }
+
+    #sk-container-id-3 div.sk-parallel-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #sk-container-id-3 div.sk-parallel-item:first-child::after {
+      align-self: flex-end;
+      width: 50%;
+    }
+
+    #sk-container-id-3 div.sk-parallel-item:last-child::after {
+      align-self: flex-start;
+      width: 50%;
+    }
+
+    #sk-container-id-3 div.sk-parallel-item:only-child::after {
+      width: 0;
+    }
+
+    /* Serial-specific style estimator block */
+
+    #sk-container-id-3 div.sk-serial {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: var(--sklearn-color-background);
+      padding-right: 1em;
+      padding-left: 1em;
+    }
+
+
+    /* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+    clickable and can be expanded/collapsed.
+    - Pipeline and ColumnTransformer use this feature and define the default style
+    - Estimators will overwrite some part of the style using the `sk-estimator` class
+    */
+
+    /* Pipeline and ColumnTransformer style (default) */
+
+    #sk-container-id-3 div.sk-toggleable {
+      /* Default theme specific background. It is overwritten whether we have a
+      specific estimator or a Pipeline/ColumnTransformer */
+      background-color: var(--sklearn-color-background);
+    }
+
+    /* Toggleable label */
+    #sk-container-id-3 label.sk-toggleable__label {
+      cursor: pointer;
+      display: block;
+      width: 100%;
+      margin-bottom: 0;
+      padding: 0.5em;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    #sk-container-id-3 label.sk-toggleable__label-arrow:before {
+      /* Arrow on the left of the label */
+      content: "▸";
+      float: left;
+      margin-right: 0.25em;
+      color: var(--sklearn-color-icon);
+    }
+
+    #sk-container-id-3 label.sk-toggleable__label-arrow:hover:before {
+      color: var(--sklearn-color-text);
+    }
+
+    /* Toggleable content - dropdown */
+
+    #sk-container-id-3 div.sk-toggleable__content {
+      max-height: 0;
+      max-width: 0;
+      overflow: hidden;
+      text-align: left;
+      /* unfitted */
+      background-color: var(--sklearn-color-unfitted-level-0);
+    }
+
+    #sk-container-id-3 div.sk-toggleable__content.fitted {
+      /* fitted */
+      background-color: var(--sklearn-color-fitted-level-0);
+    }
+
+    #sk-container-id-3 div.sk-toggleable__content pre {
+      margin: 0.2em;
+      border-radius: 0.25em;
+      color: var(--sklearn-color-text);
+      /* unfitted */
+      background-color: var(--sklearn-color-unfitted-level-0);
+    }
+
+    #sk-container-id-3 div.sk-toggleable__content.fitted pre {
+      /* unfitted */
+      background-color: var(--sklearn-color-fitted-level-0);
+    }
+
+    #sk-container-id-3 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+      /* Expand drop-down */
+      max-height: 200px;
+      max-width: 100%;
+      overflow: auto;
+    }
+
+    #sk-container-id-3 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+      content: "▾";
+    }
+
+    /* Pipeline/ColumnTransformer-specific style */
+
+    #sk-container-id-3 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+      color: var(--sklearn-color-text);
+      background-color: var(--sklearn-color-unfitted-level-2);
+    }
+
+    #sk-container-id-3 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+      background-color: var(--sklearn-color-fitted-level-2);
+    }
+
+    /* Estimator-specific style */
+
+    /* Colorize estimator box */
+    #sk-container-id-3 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+      /* unfitted */
+      background-color: var(--sklearn-color-unfitted-level-2);
+    }
+
+    #sk-container-id-3 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+      /* fitted */
+      background-color: var(--sklearn-color-fitted-level-2);
+    }
+
+    #sk-container-id-3 div.sk-label label.sk-toggleable__label,
+    #sk-container-id-3 div.sk-label label {
+      /* The background is the default theme color */
+      color: var(--sklearn-color-text-on-default-background);
+    }
+
+    /* On hover, darken the color of the background */
+    #sk-container-id-3 div.sk-label:hover label.sk-toggleable__label {
+      color: var(--sklearn-color-text);
+      background-color: var(--sklearn-color-unfitted-level-2);
+    }
+
+    /* Label box, darken color on hover, fitted */
+    #sk-container-id-3 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+      color: var(--sklearn-color-text);
+      background-color: var(--sklearn-color-fitted-level-2);
+    }
+
+    /* Estimator label */
+
+    #sk-container-id-3 div.sk-label label {
+      font-family: monospace;
+      font-weight: bold;
+      display: inline-block;
+      line-height: 1.2em;
+    }
+
+    #sk-container-id-3 div.sk-label-container {
+      text-align: center;
+    }
+
+    /* Estimator-specific */
+    #sk-container-id-3 div.sk-estimator {
+      font-family: monospace;
+      border: 1px dotted var(--sklearn-color-border-box);
+      border-radius: 0.25em;
+      box-sizing: border-box;
+      margin-bottom: 0.5em;
+      /* unfitted */
+      background-color: var(--sklearn-color-unfitted-level-0);
+    }
+
+    #sk-container-id-3 div.sk-estimator.fitted {
+      /* fitted */
+      background-color: var(--sklearn-color-fitted-level-0);
+    }
+
+    /* on hover */
+    #sk-container-id-3 div.sk-estimator:hover {
+      /* unfitted */
+      background-color: var(--sklearn-color-unfitted-level-2);
+    }
+
+    #sk-container-id-3 div.sk-estimator.fitted:hover {
+      /* fitted */
+      background-color: var(--sklearn-color-fitted-level-2);
+    }
+
+    /* Specification for estimator info (e.g. "i" and "?") */
+
+    /* Common style for "i" and "?" */
+
+    .sk-estimator-doc-link,
+    a:link.sk-estimator-doc-link,
+    a:visited.sk-estimator-doc-link {
+      float: right;
+      font-size: smaller;
+      line-height: 1em;
+      font-family: monospace;
+      background-color: var(--sklearn-color-background);
+      border-radius: 1em;
+      height: 1em;
+      width: 1em;
+      text-decoration: none !important;
+      margin-left: 1ex;
+      /* unfitted */
+      border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+      color: var(--sklearn-color-unfitted-level-1);
+    }
+
+    .sk-estimator-doc-link.fitted,
+    a:link.sk-estimator-doc-link.fitted,
+    a:visited.sk-estimator-doc-link.fitted {
+      /* fitted */
+      border: var(--sklearn-color-fitted-level-1) 1pt solid;
+      color: var(--sklearn-color-fitted-level-1);
+    }
+
+    /* On hover */
+    div.sk-estimator:hover .sk-estimator-doc-link:hover,
+    .sk-estimator-doc-link:hover,
+    div.sk-label-container:hover .sk-estimator-doc-link:hover,
+    .sk-estimator-doc-link:hover {
+      /* unfitted */
+      background-color: var(--sklearn-color-unfitted-level-3);
+      color: var(--sklearn-color-background);
+      text-decoration: none;
+    }
+
+    div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+    .sk-estimator-doc-link.fitted:hover,
+    div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+    .sk-estimator-doc-link.fitted:hover {
+      /* fitted */
+      background-color: var(--sklearn-color-fitted-level-3);
+      color: var(--sklearn-color-background);
+      text-decoration: none;
+    }
+
+    /* Span, style for the box shown on hovering the info icon */
+    .sk-estimator-doc-link span {
+      display: none;
+      z-index: 9999;
+      position: relative;
+      font-weight: normal;
+      right: .2ex;
+      padding: .5ex;
+      margin: .5ex;
+      width: min-content;
+      min-width: 20ex;
+      max-width: 50ex;
+      color: var(--sklearn-color-text);
+      box-shadow: 2pt 2pt 4pt #999;
+      /* unfitted */
+      background: var(--sklearn-color-unfitted-level-0);
+      border: .5pt solid var(--sklearn-color-unfitted-level-3);
+    }
+
+    .sk-estimator-doc-link.fitted span {
+      /* fitted */
+      background: var(--sklearn-color-fitted-level-0);
+      border: var(--sklearn-color-fitted-level-3);
+    }
+
+    .sk-estimator-doc-link:hover span {
+      display: block;
+    }
+
+    /* "?"-specific style due to the `<a>` HTML tag */
+
+    #sk-container-id-3 a.estimator_doc_link {
+      float: right;
+      font-size: 1rem;
+      line-height: 1em;
+      font-family: monospace;
+      background-color: var(--sklearn-color-background);
+      border-radius: 1rem;
+      height: 1rem;
+      width: 1rem;
+      text-decoration: none;
+      /* unfitted */
+      color: var(--sklearn-color-unfitted-level-1);
+      border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+    }
+
+    #sk-container-id-3 a.estimator_doc_link.fitted {
+      /* fitted */
+      border: var(--sklearn-color-fitted-level-1) 1pt solid;
+      color: var(--sklearn-color-fitted-level-1);
+    }
+
+    /* On hover */
+    #sk-container-id-3 a.estimator_doc_link:hover {
+      /* unfitted */
+      background-color: var(--sklearn-color-unfitted-level-3);
+      color: var(--sklearn-color-background);
+      text-decoration: none;
+    }
+
+    #sk-container-id-3 a.estimator_doc_link.fitted:hover {
+      /* fitted */
+      background-color: var(--sklearn-color-fitted-level-3);
+    }
+    </style><div id="sk-container-id-3" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>RandomForestRegressor()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-23" type="checkbox" checked><label for="sk-estimator-id-23" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;RandomForestRegressor<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.RandomForestRegressor.html">?<span>Documentation for RandomForestRegressor</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>RandomForestRegressor()</pre></div> </div></div></div></div>
+    </div>
+    <br />
+    <br />
+
+.. GENERATED FROM PYTHON SOURCE LINES 233-234
 
 Retrieving the feature importances
 
-.. GENERATED FROM PYTHON SOURCE LINES 228-238
+.. GENERATED FROM PYTHON SOURCE LINES 234-244
 
 .. code-block:: Python
 
@@ -2763,11 +3186,11 @@ Retrieving the feature importances
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 239-240
+.. GENERATED FROM PYTHON SOURCE LINES 245-246
 
 Plotting the results:
 
-.. GENERATED FROM PYTHON SOURCE LINES 240-252
+.. GENERATED FROM PYTHON SOURCE LINES 246-258
 
 .. code-block:: Python
 
@@ -2795,13 +3218,13 @@ Plotting the results:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 253-256
+.. GENERATED FROM PYTHON SOURCE LINES 259-262
 
 We can deduce from this data that the three factors that define the
 most the salary are: being hired for a long time, being a manager, and
 having a permanent, full-time job :).
 
-.. GENERATED FROM PYTHON SOURCE LINES 259-267
+.. GENERATED FROM PYTHON SOURCE LINES 265-273
 
 Exploring different machine-learning pipeline to encode the data
 =================================================================
@@ -2812,7 +3235,7 @@ The learning pipeline
 To build a learning pipeline, we need to assemble encoders for each
 column, and apply a supervised learning model on top.
 
-.. GENERATED FROM PYTHON SOURCE LINES 270-275
+.. GENERATED FROM PYTHON SOURCE LINES 276-281
 
 Encoding the table
 ........................
@@ -2820,7 +3243,7 @@ Encoding the table
 The TableVectorizer applies different transformations to the different
 columns to turn them into numerical values suitable for learning
 
-.. GENERATED FROM PYTHON SOURCE LINES 275-279
+.. GENERATED FROM PYTHON SOURCE LINES 281-285
 
 .. code-block:: Python
 
@@ -2835,14 +3258,14 @@ columns to turn them into numerical values suitable for learning
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 280-284
+.. GENERATED FROM PYTHON SOURCE LINES 286-290
 
 Pipelining an encoder with a learner
 ....................................
 
 Here again we use a pipeline with HistGradientBoostingRegressor
 
-.. GENERATED FROM PYTHON SOURCE LINES 284-287
+.. GENERATED FROM PYTHON SOURCE LINES 290-293
 
 .. code-block:: Python
 
@@ -2856,11 +3279,11 @@ Here again we use a pipeline with HistGradientBoostingRegressor
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 288-289
+.. GENERATED FROM PYTHON SOURCE LINES 294-295
 
 The pipeline can be readily applied to the dataframe for prediction
 
-.. GENERATED FROM PYTHON SOURCE LINES 289-300
+.. GENERATED FROM PYTHON SOURCE LINES 295-306
 
 .. code-block:: Python
 
@@ -2882,7 +3305,7 @@ The pipeline can be readily applied to the dataframe for prediction
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 301-308
+.. GENERATED FROM PYTHON SOURCE LINES 307-314
 
 Dirty-category encoding
 -------------------------
@@ -2892,7 +3315,7 @@ Position Title' column, as this columns contains 400 different entries.
 
 We will now experiments with different encoders for dirty columns
 
-.. GENERATED FROM PYTHON SOURCE LINES 308-324
+.. GENERATED FROM PYTHON SOURCE LINES 314-330
 
 .. code-block:: Python
 
@@ -2919,13 +3342,13 @@ We will now experiments with different encoders for dirty columns
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 325-328
+.. GENERATED FROM PYTHON SOURCE LINES 331-334
 
 We now loop over the different encoding methods,
 instantiate each time a new pipeline, fit it
 and store the returned cross-validation score:
 
-.. GENERATED FROM PYTHON SOURCE LINES 328-341
+.. GENERATED FROM PYTHON SOURCE LINES 334-347
 
 .. code-block:: Python
 
@@ -2957,25 +3380,25 @@ and store the returned cross-validation score:
     r2 score:  mean: 0.930; std: 0.011
 
     target encoding
-    r2 score:  mean: 0.903; std: 0.016
+    r2 score:  mean: 0.898; std: 0.025
 
     minhash encoding
     r2 score:  mean: 0.924; std: 0.012
 
     gap encoding
-    r2 score:  mean: 0.923; std: 0.015
+    r2 score:  mean: 0.926; std: 0.013
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 342-345
+.. GENERATED FROM PYTHON SOURCE LINES 348-351
 
 Plotting the results
 .....................
 Finally, we plot the scores on a boxplot:
 
-.. GENERATED FROM PYTHON SOURCE LINES 345-355
+.. GENERATED FROM PYTHON SOURCE LINES 351-361
 
 .. code-block:: Python
 
@@ -3001,7 +3424,7 @@ Finally, we plot the scores on a boxplot:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 356-367
+.. GENERATED FROM PYTHON SOURCE LINES 362-373
 
 The clear trend is that encoders that use the string form
 of the category (similarity, minhash, and gap) perform better than
@@ -3010,12 +3433,12 @@ those that discard it.
 SimilarityEncoder is the best performer, but it is less scalable on big
 data than MinHashEncoder and GapEncoder. The most scalable encoder is
 the MinHashEncoder. GapEncoder, on the other hand, has the benefit that
-it provides interpretable features (see :ref:`sphx_glr_auto_examples_04_feature_interpretation_gap_encoder.py`)
+it provides interpretable features, as shown above
 
 |
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 367-375
+.. GENERATED FROM PYTHON SOURCE LINES 373-381
 
 .. code-block:: Python
 
@@ -3037,7 +3460,7 @@ it provides interpretable features (see :ref:`sphx_glr_auto_examples_04_feature_
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (2 minutes 19.261 seconds)
+   **Total running time of the script:** (2 minutes 17.891 seconds)
 
 
 .. _sphx_glr_download_gen_notes_02_dirty_categories.py:

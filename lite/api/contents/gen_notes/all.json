@@ -2,7 +2,7 @@
   "content": [
     {
       "content": null,
-      "created": "2024-07-07T20:50:15.382887Z",
+      "created": "2024-07-07T21:00:37.575486Z",
       "format": null,
       "hash": null,
       "hash_algorithm": null,
@@ -16,24 +16,24 @@
     },
     {
       "content": null,
-      "created": "2024-07-07T20:50:15.383887Z",
+      "created": "2024-07-07T21:00:37.576486Z",
       "format": null,
       "hash": null,
       "hash_algorithm": null,
-      "last_modified": "2024-07-07T20:50:12.564125Z",
+      "last_modified": "2024-07-07T21:00:34.653329Z",
       "mimetype": null,
       "name": "02_dirty_categories.ipynb",
       "path": "gen_notes/02_dirty_categories.ipynb",
-      "size": 19258,
+      "size": 19386,
       "type": "notebook",
       "writable": true
     }
   ],
-  "created": "2024-07-07T20:50:15.383887Z",
+  "created": "2024-07-07T21:00:37.576486Z",
   "format": "json",
   "hash": null,
   "hash_algorithm": null,
-  "last_modified": "2024-07-07T20:50:15.383887Z",
+  "last_modified": "2024-07-07T21:00:37.576486Z",
   "mimetype": null,
   "name": "gen_notes",
   "path": "gen_notes",

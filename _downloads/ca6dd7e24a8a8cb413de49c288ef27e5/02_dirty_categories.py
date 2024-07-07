@@ -90,7 +90,11 @@ np.mean(results)
 model
 
 # %%
-# Understanding the pipeline
+# We can see that it is made of first a |SV|, and an
+# HistGradientBoostingRegressor
+
+# %%
+# Understanding the vectorizer + learner pipeline
 # =======================================
 #
 # The number one difficulty is that our input is a complex and
@@ -98,20 +102,21 @@ model
 df
 
 # %%
-# The |SV| can to turn this dataframe into a form suited for
-# machine learning.
-
-# %%
-# Using the TableVectorizer in a supervised-learning pipeline
-# ------------------------------------------------------------
+# The |SV| is a transformer that turns this dataframe into a
+# form suited for machine learning.
 #
-# Assembling the |SV| in a pipeline with a powerful learner,
+# Feeding it output to a powerful learner,
 # such as gradient boosted trees, gives **a machine-learning method that
 # can be readily applied to the dataframe**.
 from skrub import TableVectorizer
 
 # %%
-# We will use it with a HistGradientBoostingRegressor, which is a good
+# Assembling the pipeline
+# ---------------------------
+#
+
+# %%
+# We use the |SV| with a HistGradientBoostingRegressor, which is a good
 # predictor for data with heterogeneous columns
 from sklearn.ensemble import HistGradientBoostingRegressor
 
@@ -123,6 +128,7 @@ pipeline = make_pipeline(
     TableVectorizer(),
     HistGradientBoostingRegressor()
 )
+pipeline
 
 # %%
 # Let's perform a cross-validation to see how well this model predicts
@@ -360,7 +366,7 @@ plt.tight_layout()
 # SimilarityEncoder is the best performer, but it is less scalable on big
 # data than MinHashEncoder and GapEncoder. The most scalable encoder is
 # the MinHashEncoder. GapEncoder, on the other hand, has the benefit that
-# it provides interpretable features (see :ref:`sphx_glr_auto_examples_04_feature_interpretation_gap_encoder.py`)
+# it provides interpretable features, as shown above
 #
 # |
 #
