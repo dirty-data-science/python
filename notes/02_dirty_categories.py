@@ -26,6 +26,24 @@ library ( https://skrub-data.org ).
 
 # %%
 #
+# .. |SV| replace::
+#     :class:`~skrub.TableVectorizer`
+#
+# .. |tabular_learner| replace::
+#     :func:`~skrub.tabular_learner`
+#
+# .. |OneHotEncoder| replace::
+#     :class:`~sklearn.preprocessing.OneHotEncoder`
+#
+# .. |RandomForestRegressor| replace::
+#     :class:`~sklearn.ensemble.RandomForestRegressor`
+#
+# .. |SE| replace:: :class:`~skrub.SimilarityEncoder`
+#
+# .. |permutation importances| replace::
+#     :func:`~sklearn.inspection.permutation_importance`
+#
+#
 # The data
 # ========
 #
@@ -44,22 +62,203 @@ df = employee_salaries.X.copy()
 df
 
 # %%
-
-# %%
 # Recover the target
 
 y = employee_salaries.y
 
 # %%
 #
-# Assembling a machine-learning pipeline that encodes the data
-# =============================================================
+# A simple default as a learner
+# ===============================
+#
+# The function |tabular_learner| is a simple way of creating a default
+# learner for tabular_learner data:
+from skrub import tabular_learner
+model = tabular_learner("regressor")
+
+# %%
+# We can quickly compute its cross-validation score using the
+# corresponding scikit-learn utility
+from sklearn.model_selection import cross_val_score
+import numpy as np
+
+results = cross_val_score(model, df, y)
+np.mean(results)
+
+# %%
+# Understanding the pipeline
+# =======================================
+#
+# Let's start again from the raw data:
+X = employee_salaries.X.copy()
+y = employee_salaries.y
+
+
+# %%
+# We have a complex and heterogeneous dataframe:
+X
+
+# %%
+# The |SV| can to turn this dataframe into a form suited for
+# machine learning.
+
+# %%
+# Using the TableVectorizer in a supervised-learning pipeline
+# ------------------------------------------------------------
+#
+# Assembling the |SV| in a pipeline with a powerful learner,
+# such as gradient boosted trees, gives **a machine-learning method that
+# can be readily applied to the dataframe**.
+
+
+from skrub import TableVectorizer
+
+pipeline = make_pipeline(
+    TableVectorizer(),
+    HistGradientBoostingRegressor()
+)
+
+# %%
+# Let's perform a cross-validation to see how well this model predicts
+
+from sklearn.model_selection import cross_val_score
+scores = cross_val_score(pipeline, X, y, scoring='r2')
+
+import numpy as np
+print(f'{scores=}')
+print(f'mean={np.mean(scores)}')
+print(f'std={np.std(scores)}')
+
+# %%
+# The prediction perform here is pretty much as good as above
+# but the code here is much simpler as it does not involve specifying
+# columns manually.
+
+# %%
+# Analyzing the features created
+# -------------------------------
+#
+# Let us perform the same workflow, but without the `Pipeline`, so we can
+# analyze its mechanisms along the way.
+tab_vec = TableVectorizer()
+
+# %%
+# We split the data between train and test, and transform them:
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.15, random_state=42
+)
+
+X_train_enc = tab_vec.fit_transform(X_train, y_train)
+X_test_enc = tab_vec.transform(X_test)
+
+# %%
+# The encoded data, X_train_enc and X_test_enc are numerical arrays:
+X_train_enc
+
+# %%
+# They have more columns than the original dataframe, but not much more:
+X_train_enc.shape
+
+# %%
+# Inspecting the features created
+# .................................
+#
+# The |SV| assigns a transformer for each column. We can inspect this
+# choice:
+tab_vec.transformers_
+
+# %%
+# This is what is being passed to transform the different columns under the hood.
+# We can notice it classified the columns "gender" and "assignment_category"
+# as low cardinality string variables.
+# A |OneHotEncoder| will be applied to these columns.
+#
+# The vectorizer actually makes the difference between string variables
+# (data type ``object`` and ``string``) and categorical variables
+# (data type ``category``).
+#
+# Next, we can have a look at the encoded feature names.
+#
+# Before encoding:
+X.columns.to_list()
+
+# %%
+# After encoding (we only plot the first 8 feature names):
+feature_names = tab_vec.get_feature_names_out()
+feature_names[:8]
+
+# %%
+# As we can see, it created a new column for each unique value.
+# This is because we used |SE| on the column "division",
+# which was classified as a high cardinality string variable.
+# (default values, see |SV|'s docstring).
+#
+# In total, we have reasonnable number of encoded columns.
+len(feature_names)
+
+
+# %%
+# Feature importance in the statistical model
+# ---------------------------------------------
+#
+# In this section, we will train a regressor, and plot the feature importances
+#
+# .. topic:: Note:
+#
+#    To minimize compute time, use the feature importances computed by the
+#    |RandomForestRegressor|, but you should prefer |permutation importances|
+#    instead (which are less subject to biases)
+#
+# First, let's train the |RandomForestRegressor|,
+
+from sklearn.ensemble import RandomForestRegressor
+regressor = RandomForestRegressor()
+regressor.fit(X_train_enc, y_train)
+
+
+# %%
+# Retreiving the feature importances
+importances = regressor.feature_importances_
+std = np.std(
+    [
+        tree.feature_importances_
+        for tree in regressor.estimators_
+    ],
+    axis=0
+)
+indices = np.argsort(importances)[::-1]
+
+# %%
+# Plotting the results:
+
+import matplotlib.pyplot as plt
+plt.figure(figsize=(12, 9))
+plt.title("Feature importances")
+n = 20
+n_indices = indices[:n]
+labels = np.array(feature_names)[n_indices]
+plt.barh(range(n), importances[n_indices], color="b", yerr=std[n_indices])
+plt.yticks(range(n), labels, size=15)
+plt.tight_layout(pad=1)
+plt.show()
+
+# %%
+# We can deduce from this data that the three factors that define the
+# most the salary are: being hired for a long time, being a manager, and
+# having a permanent, full-time job :).
+
+
+# %%
+#
+# Exploring different machine-learning pipeline to encode the data
+# =================================================================
 #
 # The learning pipeline
 # ----------------------------
 #
 # To build a learning pipeline, we need to assemble encoders for each
-# column, and apply a supvervised learning model on top.
+# column, and apply a supervised learning model on top.
 
 # %%
 # Encoding the table
@@ -125,9 +324,6 @@ encoders = {
 # instantiate each time a new pipeline, fit it
 # and store the returned cross-validation score:
 
-from sklearn.model_selection import cross_val_score
-import numpy as np
-
 all_scores = dict()
 
 for name, method in encoders.items():
@@ -167,186 +363,6 @@ plt.tight_layout()
 # |
 #
 
-# %%
-# An easier way: automatic vectorization
-# =======================================
-#
-# .. |SV| replace::
-#     :class:`~skrub.TableVectorizer`
-#
-# .. |OneHotEncoder| replace::
-#     :class:`~sklearn.preprocessing.OneHotEncoder`
-#
-# .. |RandomForestRegressor| replace::
-#     :class:`~sklearn.ensemble.RandomForestRegressor`
-#
-# .. |SE| replace:: :class:`~skrub.SimilarityEncoder`
-#
-# .. |permutation importances| replace::
-#     :func:`~sklearn.inspection.permutation_importance`
-#
-# The code to assemble the column transformer is a bit tedious. We will
-# now explore a simpler, automated, way of encoding the data.
-#
-# Let's start again from the raw data:
-X = employee_salaries.X.copy()
-y = employee_salaries.y
-
-
-# %%
-# We have a complex and heterogeneous dataframe:
-X
-
-# %%
-# The |SV| can to turn this dataframe into a form suited for
-# machine learning.
-
-# %%
-# Using the TableVectorizer in a supervised-learning pipeline
-# ------------------------------------------------------------
-#
-# Assembling the |SV| in a pipeline with a powerful learner,
-# such as gradient boosted trees, gives **a machine-learning method that
-# can be readily applied to the dataframe**.
-
-
-from skrub import TableVectorizer
-
-pipeline = make_pipeline(
-    TableVectorizer(),
-    HistGradientBoostingRegressor()
-)
-
-# %%
-# Let's perform a cross-validation to see how well this model predicts
-
-from sklearn.model_selection import cross_val_score
-scores = cross_val_score(pipeline, X, y, scoring='r2')
-
-import numpy as np
-print(f'{scores=}')
-print(f'mean={np.mean(scores)}')
-print(f'std={np.std(scores)}')
-
-# %%
-# The prediction perform here is pretty much as good as above
-# but the code here is much simpler as it does not involve specifying
-# columns manually.
-
-# %%
-# Analyzing the features created
-# -------------------------------
-#
-# Let us perform the same workflow, but without the `Pipeline`, so we can
-# analyze its mechanisms along the way.
-tab_vec = TableVectorizer(auto_cast=True)
-
-# %%
-# We split the data between train and test, and transform them:
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.15, random_state=42
-)
-
-X_train_enc = tab_vec.fit_transform(X_train, y_train)
-X_test_enc = tab_vec.transform(X_test)
-
-# %%
-# The encoded data, X_train_enc and X_test_enc are numerical arrays:
-X_train_enc
-
-# %%
-# They have more columns than the original dataframe, but not much more:
-X_train_enc.shape
-
-# %%
-# Inspecting the features created
-# .................................
-#
-# The |SV| assigns a transformer for each column. We can inspect this
-# choice:
-tab_vec.transformers_
-
-# %%
-# This is what is being passed to transform the different columns under the hood.
-# We can notice it classified the columns "gender" and "assignment_category"
-# as low cardinality string variables.
-# A |OneHotEncoder| will be applied to these columns.
-#
-# The vectorizer actually makes the difference between string variables
-# (data type ``object`` and ``string``) and categorical variables
-# (data type ``category``).
-#
-# Next, we can have a look at the encoded feature names.
-#
-# Before encoding:
-X.columns.to_list()
-
-# %%
-# After encoding (we only plot the first 8 feature names):
-feature_names = tab_vec.get_feature_names()
-feature_names[:8]
-
-# %%
-# As we can see, it created a new column for each unique value.
-# This is because we used |SE| on the column "division",
-# which was classified as a high cardinality string variable.
-# (default values, see |SV|'s docstring).
-#
-# In total, we have reasonnable number of encoded columns.
-len(feature_names)
-
-
-# %%
-# Feature importance in the statistical model
-# ---------------------------------------------
-#
-# In this section, we will train a regressor, and plot the feature importances
-#
-# .. topic:: Note:
-#
-#    To minimize compute time, use the feature importances computed by the
-#    |RandomForestRegressor|, but you should prefer |permutation importances|
-#    instead (which are less subject to biases)
-#
-# First, let's train the |RandomForestRegressor|,
-
-from sklearn.ensemble import RandomForestRegressor
-regressor = RandomForestRegressor()
-regressor.fit(X_train_enc, y_train)
-
-
-# %%
-# Retreiving the feature importances
-importances = regressor.feature_importances_
-std = np.std(
-    [
-        tree.feature_importances_
-        for tree in regressor.estimators_
-    ],
-    axis=0
-)
-indices = np.argsort(importances)[::-1]
-
-# %%
-# Plotting the results:
-
-import matplotlib.pyplot as plt
-plt.figure(figsize=(12, 9))
-plt.title("Feature importances")
-n = 20
-n_indices = indices[:n]
-labels = np.array(feature_names)[n_indices]
-plt.barh(range(n), importances[n_indices], color="b", yerr=std[n_indices])
-plt.yticks(range(n), labels, size=15)
-plt.tight_layout(pad=1)
-plt.show()
-
-# %%
-# We can deduce from this data that the three factors that define the
-# most the salary are: being hired for a long time, being a manager, and
-# having a permanent, full-time job :).
-#
 #
 # .. topic:: The TableVectorizer automates preprocessing
 #
