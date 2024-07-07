@@ -79,55 +79,68 @@ model = tabular_learner("regressor")
 # %%
 # We can quickly compute its cross-validation score using the
 # corresponding scikit-learn utility
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_validate
 import numpy as np
 
-results = cross_val_score(model, df, y)
-np.mean(results)
+results = cross_validate(model, df, y)
+print(f"Prediction score: {np.mean(results['test_score'])}")
+print(f"Training time: {np.mean(results['fit_time'])}")
 
 # %%
-# Understanding the pipeline
+# Below the hood, `model` is a pipeline:
+model
+
+# %%
+# We can see that it is made of first a |SV|, and an
+# HistGradientBoostingRegressor
+
+# %%
+# Understanding the vectorizer + learner pipeline
 # =======================================
 #
-# Let's start again from the raw data:
-X = employee_salaries.X.copy()
-y = employee_salaries.y
-
-
-# %%
-# We have a complex and heterogeneous dataframe:
-X
+# The number one difficulty is that our input is a complex and
+# heterogeneous dataframe:
+df
 
 # %%
-# The |SV| can to turn this dataframe into a form suited for
-# machine learning.
-
-# %%
-# Using the TableVectorizer in a supervised-learning pipeline
-# ------------------------------------------------------------
+# The |SV| is a transformer that turns this dataframe into a
+# form suited for machine learning.
 #
-# Assembling the |SV| in a pipeline with a powerful learner,
+# Feeding it output to a powerful learner,
 # such as gradient boosted trees, gives **a machine-learning method that
 # can be readily applied to the dataframe**.
-
-
 from skrub import TableVectorizer
+
+# %%
+# Assembling the pipeline
+# ---------------------------
+#
+
+# %%
+# We use the |SV| with a HistGradientBoostingRegressor, which is a good
+# predictor for data with heterogeneous columns
+from sklearn.ensemble import HistGradientBoostingRegressor
+
+# %%
+# We then create a pipeline chaining our encoders to a learner
+from sklearn.pipeline import make_pipeline
 
 pipeline = make_pipeline(
     TableVectorizer(),
     HistGradientBoostingRegressor()
 )
+pipeline
 
 # %%
+# Note that it is almost the same model as above (can you spot the
+# differences)
+#
 # Let's perform a cross-validation to see how well this model predicts
 
-from sklearn.model_selection import cross_val_score
-scores = cross_val_score(pipeline, X, y, scoring='r2')
+results = cross_validate(pipeline, df, y)
+print(f"Prediction score: {np.mean(results['test_score'])}")
+print(f"Training time: {np.mean(results['fit_time'])}")
 
-import numpy as np
-print(f'{scores=}')
-print(f'mean={np.mean(scores)}')
-print(f'std={np.std(scores)}')
 
 # %%
 # The prediction perform here is pretty much as good as above
@@ -145,12 +158,12 @@ tab_vec = TableVectorizer()
 # %%
 # We split the data between train and test, and transform them:
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.15, random_state=42
+df_train, df_test, y_train, y_test = train_test_split(
+    df, y, test_size=0.15, random_state=42
 )
 
-X_train_enc = tab_vec.fit_transform(X_train, y_train)
-X_test_enc = tab_vec.transform(X_test)
+X_train_enc = tab_vec.fit_transform(df_train, y_train)
+X_test_enc = tab_vec.transform(df_test)
 
 # %%
 # The encoded data, X_train_enc and X_test_enc are numerical arrays:
@@ -181,7 +194,7 @@ tab_vec.transformers_
 # Next, we can have a look at the encoded feature names.
 #
 # Before encoding:
-X.columns.to_list()
+df.columns.to_list()
 
 # %%
 # After encoding (we only plot the first 8 feature names):
@@ -218,7 +231,7 @@ regressor.fit(X_train_enc, y_train)
 
 
 # %%
-# Retreiving the feature importances
+# Retrieving the feature importances
 importances = regressor.feature_importances_
 std = np.std(
     [
@@ -274,12 +287,8 @@ encoder = TableVectorizer()
 # Pipelining an encoder with a learner
 # ....................................
 #
-# We will use a HistGradientBoostingRegressor, which is a good predictor
-# for data with heterogeneous columns
+# Here again we use a pipeline with HistGradientBoostingRegressor
 from sklearn.ensemble import HistGradientBoostingRegressor
-
-# We then create a pipeline chaining our encoders to a learner
-from sklearn.pipeline import make_pipeline
 pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
 
 # %%
@@ -305,17 +314,17 @@ one_hot = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
 # We will now experiments with different encoders for dirty columns
 from skrub import SimilarityEncoder, MinHashEncoder,\
     GapEncoder
-#TargetEncoder, 
+from sklearn.preprocessing import TargetEncoder
 
 similarity = SimilarityEncoder()
-#target = TargetEncoder(handle_unknown='ignore')
+target = TargetEncoder()
 minhash = MinHashEncoder(n_components=100)
 gap = GapEncoder(n_components=100)
 
 encoders = {
     'one-hot': one_hot,
     'similarity': similarity,
-    #'target': target,
+    'target': target,
     'minhash': minhash,
     'gap': gap}
 
@@ -330,11 +339,13 @@ for name, method in encoders.items():
     encoder = TableVectorizer(high_cardinality=method)
 
     pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
-    scores = cross_val_score(pipeline, df, y)
+    scores = cross_validate(pipeline, df, y)
     print('{} encoding'.format(name))
     print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
-        np.mean(scores), np.std(scores)))
-    all_scores[name] = scores
+        np.mean(scores['test_score']), np.std(scores['test_score'])))
+    print('time:  {:.3f}\n'.format(
+        np.mean(scores['fit_time'])))
+    all_scores[name] = scores['test_score']
 
 # %%
 # Plotting the results
@@ -358,7 +369,7 @@ plt.tight_layout()
 # SimilarityEncoder is the best performer, but it is less scalable on big
 # data than MinHashEncoder and GapEncoder. The most scalable encoder is
 # the MinHashEncoder. GapEncoder, on the other hand, has the benefit that
-# it provides interpretable features (see :ref:`sphx_glr_auto_examples_04_feature_interpretation_gap_encoder.py`)
+# it provides interpretable features, as shown above
 #
 # |
 #
