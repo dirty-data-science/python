@@ -19,8 +19,8 @@ Position Title* contains dirty categories.
 
 We investigate encodings to include such compare different categorical
 encodings for the dirty column to predict the *Current Annual Salary*,
-using gradient boosted trees. For this purpose, we use the dirty-cat
-library ( https://dirty-cat.github.io ).
+using gradient boosted trees. For this purpose, we use the skrub
+library ( https://skrub-data.org ).
 
 """
 
@@ -33,7 +33,7 @@ library ( https://dirty-cat.github.io ).
 # --------------------------------
 #
 # We first download the dataset:
-from dirty_cat.datasets import fetch_employee_salaries
+from skrub.datasets import fetch_employee_salaries
 employee_salaries = fetch_employee_salaries()
 print(employee_salaries['DESCR'])
 
@@ -119,7 +119,7 @@ pipeline.fit(df, y)
 # Position Title' column, as this columns contains 400 different entries.
 #
 # We will now experiments with encoders for dirty columns
-from dirty_cat import SimilarityEncoder, TargetEncoder, MinHashEncoder,\
+from skrub import SimilarityEncoder, TargetEncoder, MinHashEncoder,\
     GapEncoder
 
 similarity = SimilarityEncoder(similarity='ngram')
@@ -192,7 +192,7 @@ plt.tight_layout()
 # =======================================
 #
 # .. |SV| replace::
-#     :class:`~dirty_cat.SuperVectorizer`
+#     :class:`~skrub.TableVectorizer`
 #
 # .. |OneHotEncoder| replace::
 #     :class:`~sklearn.preprocessing.OneHotEncoder`
@@ -203,7 +203,7 @@ plt.tight_layout()
 # .. |RandomForestRegressor| replace::
 #     :class:`~sklearn.ensemble.RandomForestRegressor`
 #
-# .. |SE| replace:: :class:`~dirty_cat.SimilarityEncoder`
+# .. |SE| replace:: :class:`~skrub.SimilarityEncoder`
 #
 # .. |permutation importances| replace::
 #     :func:`~sklearn.inspection.permutation_importance`
@@ -234,23 +234,18 @@ X
 # machine learning.
 
 # %%
-# Using the SuperVectorizer in a supervised-learning pipeline
+# Using the TableVectorizer in a supervised-learning pipeline
 # ------------------------------------------------------------
 #
 # Assembling the |SV| in a pipeline with a powerful learner,
 # such as gradient boosted trees, gives **a machine-learning method that
 # can be readily applied to the dataframe**.
 
-# The supervectorizer requires dirty_cat 0.2.0a1. If you have an older
-# version, you can install the alpha release with
-#
-#   pip install -pre dirty_cat==0.2.0a1
-#
 
-from dirty_cat import SuperVectorizer
+from skrub import TableVectorizer
 
 pipeline = make_pipeline(
-    SuperVectorizer(auto_cast=True),
+    TableVectorizer(auto_cast=True),
     HistGradientBoostingRegressor()
 )
 
@@ -276,7 +271,7 @@ print(f'std={np.std(scores)}')
 #
 # Let us perform the same workflow, but without the `Pipeline`, so we can
 # analyze its mechanisms along the way.
-sup_vec = SuperVectorizer(auto_cast=True)
+tab_vec = TableVectorizer(auto_cast=True)
 
 # %%
 # We split the data between train and test, and transform them:
@@ -285,8 +280,8 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.15, random_state=42
 )
 
-X_train_enc = sup_vec.fit_transform(X_train, y_train)
-X_test_enc = sup_vec.transform(X_test)
+X_train_enc = tab_vec.fit_transform(X_train, y_train)
+X_test_enc = tab_vec.transform(X_test)
 
 # %%
 # The encoded data, X_train_enc and X_test_enc are numerical arrays:
@@ -302,7 +297,7 @@ X_train_enc.shape
 #
 # The |SV| assigns a transformer for each column. We can inspect this
 # choice:
-sup_vec.transformers_
+tab_vec.transformers_
 
 # %%
 # This is what is being passed to the |ColumnTransformer| under the hood.
@@ -322,7 +317,7 @@ X.columns.to_list()
 
 # %%
 # After encoding (we only plot the first 8 feature names):
-feature_names = sup_vec.get_feature_names()
+feature_names = tab_vec.get_feature_names()
 feature_names[:8]
 
 # %%
@@ -386,7 +381,7 @@ plt.show()
 # having a permanent, full-time job :).
 #
 #
-# .. topic:: The SuperVectorizer automates preprocessing
+# .. topic:: The TableVectorizer automates preprocessing
 #
 #   As this notebook demonstrates, many preprocessing steps can be
 #   automated by the |SV|, and the resulting pipeline can still be

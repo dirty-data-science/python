@@ -32,6 +32,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.githubpages',
               'sphinx_gallery.gen_gallery',
+              'jupyterlite_sphinx',
               ]
 
 try:
@@ -146,7 +147,7 @@ intersphinx_mapping = {
     'numpy': ('https://docs.scipy.org/doc/numpy', None),
     'scipy': ('https://docs.scipy.org/doc/scipy/reference', None),
     'matplotlib': ('https://matplotlib.org/', None),
-    'sklearn': ('https://scikit-learn.org/0.20', None),
+    'sklearn': ('https://scikit-learn.org/stable', None),
     'skimage': ('http://scikit-image.org/docs/stable/', None),
     'mayavi': ('http://docs.enthought.com/mayavi/mayavi/', None),
     'statsmodels': ('http://www.statsmodels.org/stable/', None),
@@ -162,15 +163,15 @@ sphinx_gallery_conf = {
     'filename_pattern': '',
     'backreferences_dir': os.path.join('generated'),
     'reference_url': {
-        'dirty_cat': 'https://dirty-cat.github.io/stable/',
+#        'dirty_cat': 'https://dirty-cat.github.io/stable/',
         'numpy': 'http://docs.scipy.org/doc/numpy',
-        'scipy': 'http://docs.scipy.org/doc/scipy/reference',
-        'pandas': 'http://pandas.pydata.org/pandas-docs/stable',
-        'seaborn': 'http://seaborn.pydata.org/',
+#        'scipy': 'http://docs.scipy.org/doc/scipy/reference',
+#        'pandas': 'http://pandas.pydata.org/pandas-docs/stable',
+#        'seaborn': 'http://seaborn.pydata.org/',
         'matplotlib': 'http://matplotlib.org/stable',
-        'sklearn': 'http://scikit-learn.org/0.20',
-        #'scikit-image': 'http://scikit-image.org/docs/stable/',
-        #'mayavi': 'http://docs.enthought.com/mayavi/mayavi/',
+        'sklearn': 'http://scikit-learn.org/stable',
+#        #'scikit-image': 'http://scikit-image.org/docs/stable/',
+#        #'mayavi': 'http://docs.enthought.com/mayavi/mayavi/',
         #'statsmodels': 'http://www.statsmodels.org/stable/',
         },
     'examples_dirs':'notes',
@@ -184,7 +185,11 @@ sphinx_gallery_conf = {
         'branch': 'gh-pages',
         'dependencies': ['requirements.txt',],
         'notebooks_dir': 'notes'
-    }
+    },
+    'jupyterlite': {
+        'use_jupyter_lab': False,
+    },
+    "inspect_global_variables": False,
 }
 
 # -- sphinxext.opengraph configuration -------------------------------------

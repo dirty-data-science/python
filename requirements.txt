@@ -8,5 +8,6 @@ seaborn
 joblib
 pandas
 scikit-learn
-dirty-cat==0.2.0a1
+skrub
 
+jupyterlite-pyodide-kernel

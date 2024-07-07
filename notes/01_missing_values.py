@@ -45,7 +45,7 @@ import numpy as np
 
 def generate_without_missing_values(n_samples, rng=42):
     mean = [0, 0]
-    cov = [[1, 0.5], [0.5, 1]]
+    cov = [[1, 0.9], [0.9, 1]]
     if not isinstance(rng, np.random.RandomState):
         rng = np.random.RandomState(rng)
     X = rng.multivariate_normal(mean, cov, size=n_samples)
@@ -372,7 +372,7 @@ scores['Mean imputation + Ridge'] = model_selection.cross_val_score(
     mean_and_ridge, X, y, cv=10)
 
 # IterativeImputer and non-linear model
-iterative_and_gb = make_pipeline(impute.SimpleImputer(),
+iterative_and_gb = make_pipeline(impute.IterativeImputer(),
                             HistGradientBoostingRegressor())
 scores['Mean imputation\n+ HistGradientBoostingRegressor'] = model_selection.cross_val_score(
     iterative_and_gb, X, y, cv=10)
