@@ -372,7 +372,7 @@ scores['Mean imputation + Ridge'] = model_selection.cross_val_score(
     mean_and_ridge, X, y, cv=10)
 
 # IterativeImputer and non-linear model
-iterative_and_gb = make_pipeline(impute.SimpleImputer(),
+iterative_and_gb = make_pipeline(impute.IterativeImputer(),
                             HistGradientBoostingRegressor())
 scores['Mean imputation\n+ HistGradientBoostingRegressor'] = model_selection.cross_val_score(
     iterative_and_gb, X, y, cv=10)

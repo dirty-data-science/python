@@ -2,7 +2,7 @@
   "jupyter-config-data": {
     "appName": "JupyterLite",
     "appUrl": "./lab",
-    "appVersion": "0.1.0",
+    "appVersion": "0.3.0",
     "baseUrl": "./",
     "defaultKernelName": "python",
     "disabledExtensions": [
@@ -11,7 +11,21 @@
       "jupyterlab-tour"
     ],
     "faviconUrl": "./lab/favicon.ico",
-    "federated_extensions": [],
+    "federated_extensions": [
+      {
+        "extension": "./extension",
+        "liteExtension": true,
+        "load": "static/remoteEntry.7af44f20e4662309de92.js",
+        "name": "@jupyterlite/pyodide-kernel-extension"
+      },
+      {
+        "extension": "./extension",
+        "liteExtension": false,
+        "load": "static/remoteEntry.5cbb9d2323598fbda535.js",
+        "name": "jupyterlab_pygments",
+        "style": "./style"
+      }
+    ],
     "fileTypes": {
       "css": {
         "extensions": [
@@ -286,15 +300,16 @@
       }
     },
     "fullLabextensionsUrl": "./extensions",
-    "fullMathjaxUrl": "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js",
     "fullStaticUrl": "./build",
     "licensesUrl": "./lab/api/licenses",
     "litePluginSettings": {
       "@jupyterlite/pyodide-kernel-extension:kernel": {
+        "pipliteUrls": [
+          "./extensions/@jupyterlite/pyodide-kernel-extension/static/pypi/all.json?sha256=1b78ca78aa8231a4d8f2e338cd5fdc79dd29c8557e213c38e69a745747e19d81"
+        ],
         "pyodideUrl": "https://cdn.jsdelivr.net/pyodide/v0.23.1/full/pyodide.js"
       }
-    },
-    "mathjaxConfig": "TeX-AMS_CHTML-full,Safe"
+    }
   },
   "jupyter-lite-schema-version": 0
 }

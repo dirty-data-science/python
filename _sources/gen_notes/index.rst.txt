@@ -8,6 +8,7 @@
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -42,6 +43,8 @@
       <div class="sphx-glr-thumbnail-title">Dirty categories: learning with non normalized strings</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 
