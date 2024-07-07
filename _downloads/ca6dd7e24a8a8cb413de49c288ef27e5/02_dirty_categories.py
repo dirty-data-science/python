@@ -79,11 +79,12 @@ model = tabular_learner("regressor")
 # %%
 # We can quickly compute its cross-validation score using the
 # corresponding scikit-learn utility
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_validate
 import numpy as np
 
-results = cross_val_score(model, df, y)
-np.mean(results)
+results = cross_validate(model, df, y)
+print(f"Prediction score: {np.mean(results['test_score'])}")
+print(f"Training time: {np.mean(results['fit_time'])}")
 
 # %%
 # Below the hood, `model` is a pipeline:
@@ -131,15 +132,15 @@ pipeline = make_pipeline(
 pipeline
 
 # %%
+# Note that it is almost the same model as above (can you spot the
+# differences)
+#
 # Let's perform a cross-validation to see how well this model predicts
 
-from sklearn.model_selection import cross_val_score
-scores = cross_val_score(pipeline, df, y, scoring='r2')
+results = cross_validate(pipeline, df, y)
+print(f"Prediction score: {np.mean(results['test_score'])}")
+print(f"Training time: {np.mean(results['fit_time'])}")
 
-import numpy as np
-print(f'{scores=}')
-print(f'mean={np.mean(scores)}')
-print(f'std={np.std(scores)}')
 
 # %%
 # The prediction perform here is pretty much as good as above
@@ -338,11 +339,13 @@ for name, method in encoders.items():
     encoder = TableVectorizer(high_cardinality=method)
 
     pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
-    scores = cross_val_score(pipeline, df, y)
+    scores = cross_validate(pipeline, df, y)
     print('{} encoding'.format(name))
     print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
-        np.mean(scores), np.std(scores)))
-    all_scores[name] = scores
+        np.mean(scores['test_score']), np.std(scores['test_score'])))
+    print('time:  {:.3f}\n'.format(
+        np.mean(scores['fit_time'])))
+    all_scores[name] = scores['test_score']
 
 # %%
 # Plotting the results
