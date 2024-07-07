@@ -333,7 +333,7 @@ corresponding scikit-learn utility
  .. code-block:: none
 
     Prediction score: 0.9108276644460975
-    Training time: 0.4577568531036377
+    Training time: 0.40625977516174316
 
 
 
@@ -1469,8 +1469,8 @@ Let's perform a cross-validation to see how well this model predicts
 
  .. code-block:: none
 
-    Prediction score: 0.9208826801809588
-    Training time: 3.878239965438843
+    Prediction score: 0.9225302141623015
+    Training time: 3.5466490745544434
 
 
 
@@ -1602,41 +1602,41 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
           <th>department_SHF</th>
           <th>department_ZAH</th>
           <th>...</th>
-          <th>division: director, automated, office</th>
-          <th>division: collection, recycling, solid</th>
-          <th>division: operations, delivery, cloverly</th>
-          <th>division: technology, parking, information</th>
+          <th>division: delivery, warehouse, liquor</th>
+          <th>division: accounts, council, members</th>
+          <th>division: emergency, commuter, centers</th>
+          <th>division: mechanical, special, assault</th>
           <th>assignment_category_Parttime-Regular</th>
-          <th>employee_position_title: psychiatrist, psychiatric, associate</th>
+          <th>employee_position_title: operator, equipment, apprentice</th>
+          <th>employee_position_title: manager, projects, project</th>
+          <th>employee_position_title: firefighter, rescuer, recruit</th>
+          <th>employee_position_title: program, programs, procurement</th>
           <th>employee_position_title: officer, office, traffic</th>
-          <th>employee_position_title: operator, equipment, bus</th>
-          <th>employee_position_title: school, health, room</th>
-          <th>employee_position_title: firefighter, rescuer, rescue</th>
-          <th>employee_position_title: recreation, occupational, paralegal</th>
-          <th>employee_position_title: program, programs, projects</th>
-          <th>employee_position_title: enforcement, permitting, inspector</th>
-          <th>employee_position_title: coordinator, coordinating, services</th>
-          <th>employee_position_title: accountant, assistant, crossing</th>
-          <th>employee_position_title: manager, budget, engineer</th>
-          <th>employee_position_title: corporal, pfc, dietary</th>
-          <th>employee_position_title: specialist, special, background</th>
-          <th>employee_position_title: information, technologist, technology</th>
-          <th>employee_position_title: lieutenant, captain, chief</th>
+          <th>employee_position_title: captain, chief, mcfrs</th>
           <th>employee_position_title: income, assistance, client</th>
-          <th>employee_position_title: communications, telecommunications, safety</th>
-          <th>employee_position_title: principal, executive, administrative</th>
-          <th>employee_position_title: community, security, nurse</th>
-          <th>employee_position_title: plumber, worker, social</th>
-          <th>employee_position_title: librarian, library, libraries</th>
+          <th>employee_position_title: mechanic, technician, hvac</th>
+          <th>employee_position_title: coordinator, coordinating, justice</th>
+          <th>employee_position_title: correctional, correction, corporal</th>
+          <th>employee_position_title: administrative, legislative, principal</th>
+          <th>employee_position_title: school, room, behavioral</th>
+          <th>employee_position_title: information, technology, technologist</th>
+          <th>employee_position_title: accountant, assistant, library</th>
           <th>employee_position_title: sergeant, police, cadet</th>
-          <th>employee_position_title: master, registered, water</th>
-          <th>employee_position_title: service, public, craftsworker</th>
-          <th>employee_position_title: technician, mechanic, supply</th>
-          <th>employee_position_title: warehouse, welfare, caseworker</th>
-          <th>employee_position_title: liquor, clerk, store</th>
-          <th>employee_position_title: representative, legislative, investment</th>
-          <th>employee_position_title: planning, administrator, training</th>
+          <th>employee_position_title: estate, district, state</th>
+          <th>employee_position_title: craftsworker, worker, social</th>
+          <th>employee_position_title: communications, telecommunications, safety</th>
           <th>employee_position_title: therapist, sheriff, deputy</th>
+          <th>employee_position_title: enforcement, permitting, inspector</th>
+          <th>employee_position_title: warehouse, welfare, driver</th>
+          <th>employee_position_title: community, health, security</th>
+          <th>employee_position_title: liquor, clerk, store</th>
+          <th>employee_position_title: services, service, urban</th>
+          <th>employee_position_title: recreation, planning, renovation</th>
+          <th>employee_position_title: master, registered, water</th>
+          <th>employee_position_title: supervisor, supervisory, transit</th>
+          <th>employee_position_title: engineer, supply, systems</th>
+          <th>employee_position_title: crossing, librarian, guard</th>
+          <th>employee_position_title: lieutenant, facilities, maintenance</th>
           <th>date_first_hired_year</th>
           <th>date_first_hired_month</th>
           <th>date_first_hired_day</th>
@@ -1688,41 +1688,41 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
           <td>0.0</td>
           <td>0.0</td>
           <td>...</td>
-          <td>0.133843</td>
-          <td>0.130606</td>
-          <td>15.134894</td>
-          <td>0.170248</td>
+          <td>13.241892</td>
+          <td>0.700089</td>
+          <td>0.120621</td>
+          <td>0.113140</td>
           <td>0.0</td>
-          <td>0.182702</td>
-          <td>0.054569</td>
-          <td>4.279172</td>
-          <td>0.054688</td>
-          <td>0.068539</td>
-          <td>0.068300</td>
-          <td>0.051443</td>
-          <td>4.822724</td>
-          <td>0.091581</td>
-          <td>1.768295</td>
-          <td>0.095225</td>
-          <td>0.054544</td>
-          <td>17.083241</td>
-          <td>0.953236</td>
-          <td>0.072411</td>
-          <td>0.148630</td>
-          <td>0.079918</td>
-          <td>0.072677</td>
-          <td>0.053086</td>
-          <td>0.063813</td>
-          <td>0.105552</td>
-          <td>0.058380</td>
-          <td>0.062718</td>
-          <td>0.061726</td>
-          <td>0.069604</td>
-          <td>0.987551</td>
-          <td>0.054176</td>
-          <td>2.862003</td>
-          <td>0.351838</td>
-          <td>14.767658</td>
+          <td>4.213130</td>
+          <td>0.054231</td>
+          <td>0.077396</td>
+          <td>0.187629</td>
+          <td>0.054808</td>
+          <td>0.083112</td>
+          <td>0.273847</td>
+          <td>0.074721</td>
+          <td>0.076664</td>
+          <td>0.056017</td>
+          <td>0.061094</td>
+          <td>0.056083</td>
+          <td>0.822386</td>
+          <td>0.754205</td>
+          <td>0.059528</td>
+          <td>10.164184</td>
+          <td>0.066041</td>
+          <td>0.085935</td>
+          <td>18.095703</td>
+          <td>6.507651</td>
+          <td>0.573410</td>
+          <td>0.053697</td>
+          <td>0.054457</td>
+          <td>0.129841</td>
+          <td>5.448394</td>
+          <td>0.068507</td>
+          <td>0.075249</td>
+          <td>0.183895</td>
+          <td>1.005718</td>
+          <td>0.082468</td>
           <td>2007.0</td>
           <td>8.0</td>
           <td>6.0</td>
@@ -1772,41 +1772,41 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
           <td>0.0</td>
           <td>0.0</td>
           <td>...</td>
-          <td>0.053691</td>
-          <td>0.068064</td>
-          <td>0.052183</td>
-          <td>0.050959</td>
+          <td>0.052427</td>
+          <td>0.052355</td>
+          <td>0.053408</td>
+          <td>0.053517</td>
           <td>1.0</td>
-          <td>0.050786</td>
-          <td>0.054074</td>
           <td>0.050002</td>
-          <td>0.078005</td>
-          <td>0.052412</td>
-          <td>0.053141</td>
-          <td>0.051121</td>
-          <td>0.052607</td>
-          <td>0.051856</td>
-          <td>0.051133</td>
-          <td>0.056430</td>
-          <td>0.054092</td>
-          <td>0.053569</td>
-          <td>0.052331</td>
-          <td>0.050855</td>
-          <td>0.053964</td>
-          <td>0.059683</td>
-          <td>0.052064</td>
-          <td>34.435616</td>
-          <td>0.055124</td>
-          <td>0.052973</td>
-          <td>0.054049</td>
+          <td>0.055312</td>
+          <td>0.053177</td>
+          <td>0.053291</td>
+          <td>0.055138</td>
+          <td>0.051015</td>
+          <td>0.054632</td>
+          <td>0.054347</td>
+          <td>0.052196</td>
+          <td>0.054592</td>
+          <td>0.052032</td>
+          <td>0.067105</td>
+          <td>0.052532</td>
+          <td>0.052909</td>
+          <td>0.053874</td>
+          <td>0.054867</td>
+          <td>0.054736</td>
+          <td>0.061490</td>
+          <td>0.057859</td>
+          <td>0.053199</td>
+          <td>0.052427</td>
+          <td>34.421841</td>
+          <td>0.052361</td>
+          <td>0.069148</td>
+          <td>0.051851</td>
           <td>0.050004</td>
-          <td>0.051660</td>
-          <td>0.053533</td>
-          <td>0.052834</td>
-          <td>0.052013</td>
-          <td>0.052716</td>
-          <td>0.054078</td>
-          <td>0.057275</td>
+          <td>0.051985</td>
+          <td>0.054773</td>
+          <td>0.050502</td>
+          <td>0.050801</td>
           <td>2005.0</td>
           <td>8.0</td>
           <td>8.0</td>
@@ -1856,41 +1856,41 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
           <td>0.0</td>
           <td>0.0</td>
           <td>...</td>
-          <td>0.057144</td>
-          <td>0.077169</td>
-          <td>0.092677</td>
-          <td>0.063202</td>
+          <td>0.075130</td>
+          <td>0.058018</td>
+          <td>0.063482</td>
+          <td>0.062025</td>
           <td>0.0</td>
-          <td>0.155723</td>
-          <td>0.052948</td>
-          <td>0.056473</td>
-          <td>0.062774</td>
-          <td>0.057296</td>
-          <td>0.139805</td>
-          <td>0.055849</td>
-          <td>2.760593</td>
-          <td>0.055103</td>
-          <td>0.093189</td>
-          <td>0.055221</td>
-          <td>0.126938</td>
-          <td>0.059747</td>
-          <td>16.119564</td>
-          <td>0.639429</td>
-          <td>0.060209</td>
-          <td>0.052539</td>
-          <td>0.119301</td>
-          <td>0.093722</td>
-          <td>0.061401</td>
-          <td>0.551004</td>
-          <td>0.053791</td>
-          <td>0.058298</td>
-          <td>0.057803</td>
-          <td>0.080035</td>
-          <td>0.112814</td>
-          <td>0.058809</td>
-          <td>0.546041</td>
-          <td>0.053308</td>
-          <td>0.050273</td>
+          <td>0.058686</td>
+          <td>0.056087</td>
+          <td>0.057564</td>
+          <td>0.050980</td>
+          <td>0.052712</td>
+          <td>0.849811</td>
+          <td>0.063541</td>
+          <td>0.083922</td>
+          <td>0.057135</td>
+          <td>0.201066</td>
+          <td>0.139138</td>
+          <td>0.062701</td>
+          <td>16.413002</td>
+          <td>0.174957</td>
+          <td>0.053467</td>
+          <td>0.052722</td>
+          <td>0.059102</td>
+          <td>0.052319</td>
+          <td>0.050633</td>
+          <td>2.704662</td>
+          <td>0.086700</td>
+          <td>0.090775</td>
+          <td>0.058165</td>
+          <td>0.100571</td>
+          <td>0.066551</td>
+          <td>0.058148</td>
+          <td>0.105106</td>
+          <td>0.069231</td>
+          <td>0.490478</td>
+          <td>0.080068</td>
           <td>2009.0</td>
           <td>4.0</td>
           <td>27.0</td>
@@ -1940,41 +1940,41 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
           <td>0.0</td>
           <td>0.0</td>
           <td>...</td>
-          <td>0.053854</td>
-          <td>0.054336</td>
-          <td>0.050568</td>
-          <td>0.053918</td>
+          <td>0.052769</td>
+          <td>0.056074</td>
+          <td>0.053312</td>
+          <td>0.053968</td>
           <td>0.0</td>
-          <td>0.064152</td>
-          <td>0.071043</td>
-          <td>0.058587</td>
-          <td>0.063287</td>
-          <td>0.073953</td>
-          <td>43.137535</td>
-          <td>0.116463</td>
-          <td>0.103859</td>
-          <td>0.068546</td>
-          <td>0.071332</td>
-          <td>2.135223</td>
-          <td>0.114869</td>
-          <td>0.058654</td>
-          <td>0.063664</td>
-          <td>11.911528</td>
-          <td>0.071480</td>
-          <td>0.162808</td>
-          <td>0.062435</td>
-          <td>0.722505</td>
-          <td>0.086525</td>
-          <td>0.059153</td>
-          <td>0.099902</td>
-          <td>0.100624</td>
-          <td>0.069219</td>
-          <td>0.060249</td>
-          <td>0.060433</td>
-          <td>0.065477</td>
-          <td>0.064641</td>
-          <td>0.056059</td>
-          <td>0.145793</td>
+          <td>0.051699</td>
+          <td>1.170589</td>
+          <td>0.064297</td>
+          <td>0.055965</td>
+          <td>0.067718</td>
+          <td>0.066150</td>
+          <td>0.064498</td>
+          <td>0.057469</td>
+          <td>0.067975</td>
+          <td>0.349408</td>
+          <td>0.057328</td>
+          <td>0.059661</td>
+          <td>0.065187</td>
+          <td>0.060876</td>
+          <td>0.061268</td>
+          <td>0.059196</td>
+          <td>0.079205</td>
+          <td>0.098434</td>
+          <td>0.085569</td>
+          <td>0.075350</td>
+          <td>0.054852</td>
+          <td>0.084084</td>
+          <td>0.064261</td>
+          <td>0.068499</td>
+          <td>0.066610</td>
+          <td>0.072290</td>
+          <td>43.704323</td>
+          <td>0.055406</td>
+          <td>0.052474</td>
+          <td>13.059359</td>
           <td>1997.0</td>
           <td>2.0</td>
           <td>3.0</td>
@@ -2024,41 +2024,41 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
           <td>0.0</td>
           <td>0.0</td>
           <td>...</td>
-          <td>0.053252</td>
-          <td>0.054206</td>
-          <td>0.052000</td>
-          <td>0.058940</td>
+          <td>0.052404</td>
+          <td>0.053037</td>
+          <td>0.051160</td>
+          <td>0.053514</td>
           <td>0.0</td>
-          <td>0.050743</td>
-          <td>23.818939</td>
-          <td>0.053078</td>
-          <td>0.051744</td>
-          <td>0.065161</td>
-          <td>0.050645</td>
-          <td>0.056667</td>
-          <td>0.055760</td>
-          <td>0.062124</td>
-          <td>0.050265</td>
-          <td>0.089291</td>
-          <td>0.073653</td>
-          <td>0.053604</td>
-          <td>0.052284</td>
-          <td>0.052080</td>
-          <td>0.054225</td>
-          <td>0.053272</td>
-          <td>0.050795</td>
-          <td>0.054749</td>
-          <td>0.068880</td>
-          <td>0.054313</td>
-          <td>0.085017</td>
+          <td>0.053054</td>
+          <td>0.075228</td>
+          <td>0.065239</td>
+          <td>0.053622</td>
+          <td>23.832617</td>
+          <td>0.051881</td>
+          <td>0.054200</td>
+          <td>0.054263</td>
+          <td>0.062887</td>
+          <td>0.071109</td>
+          <td>0.050789</td>
+          <td>0.051785</td>
+          <td>0.052349</td>
+          <td>0.052149</td>
+          <td>0.093500</td>
+          <td>0.055822</td>
+          <td>0.065739</td>
+          <td>0.053752</td>
+          <td>0.057262</td>
+          <td>0.055983</td>
+          <td>0.052309</td>
+          <td>0.053239</td>
+          <td>0.055461</td>
+          <td>0.059019</td>
+          <td>0.051126</td>
           <td>0.055473</td>
-          <td>0.060129</td>
-          <td>0.054354</td>
-          <td>0.052466</td>
-          <td>0.055432</td>
-          <td>0.053101</td>
-          <td>0.054739</td>
-          <td>0.057015</td>
+          <td>0.051443</td>
+          <td>0.055456</td>
+          <td>0.050905</td>
+          <td>0.052339</td>
           <td>2006.0</td>
           <td>1.0</td>
           <td>17.0</td>
@@ -2192,41 +2192,41 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
           <td>0.0</td>
           <td>0.0</td>
           <td>...</td>
-          <td>0.051173</td>
-          <td>0.055882</td>
-          <td>0.058785</td>
-          <td>0.054509</td>
+          <td>0.055709</td>
+          <td>0.051484</td>
+          <td>0.051814</td>
+          <td>0.050977</td>
           <td>0.0</td>
-          <td>0.051336</td>
-          <td>0.054359</td>
-          <td>0.051422</td>
-          <td>0.051073</td>
-          <td>0.303827</td>
-          <td>0.051640</td>
-          <td>0.053741</td>
-          <td>0.050870</td>
-          <td>0.052223</td>
-          <td>0.051410</td>
-          <td>0.056902</td>
-          <td>0.052660</td>
-          <td>0.050879</td>
-          <td>0.051538</td>
-          <td>0.074490</td>
-          <td>0.051260</td>
-          <td>0.050288</td>
-          <td>0.050663</td>
-          <td>0.050031</td>
-          <td>0.053819</td>
-          <td>0.050353</td>
-          <td>0.051401</td>
-          <td>35.716618</td>
-          <td>0.052409</td>
-          <td>0.050971</td>
-          <td>0.053558</td>
-          <td>0.053785</td>
-          <td>0.053518</td>
-          <td>0.051202</td>
-          <td>0.051755</td>
+          <td>0.051411</td>
+          <td>0.057245</td>
+          <td>0.299026</td>
+          <td>0.050523</td>
+          <td>0.054368</td>
+          <td>0.079020</td>
+          <td>0.051399</td>
+          <td>0.050863</td>
+          <td>0.051741</td>
+          <td>0.052509</td>
+          <td>0.050729</td>
+          <td>0.051118</td>
+          <td>0.051608</td>
+          <td>0.051782</td>
+          <td>0.051204</td>
+          <td>0.051282</td>
+          <td>0.053604</td>
+          <td>0.050274</td>
+          <td>0.051836</td>
+          <td>0.050857</td>
+          <td>0.053612</td>
+          <td>0.050078</td>
+          <td>0.053887</td>
+          <td>0.052106</td>
+          <td>0.051616</td>
+          <td>35.704914</td>
+          <td>0.051879</td>
+          <td>0.051191</td>
+          <td>0.050028</td>
+          <td>0.068287</td>
           <td>2005.0</td>
           <td>5.0</td>
           <td>16.0</td>
@@ -2276,41 +2276,41 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
           <td>0.0</td>
           <td>0.0</td>
           <td>...</td>
-          <td>0.060107</td>
-          <td>0.060080</td>
-          <td>0.051996</td>
-          <td>0.059872</td>
+          <td>0.054165</td>
+          <td>0.065828</td>
+          <td>3.270737</td>
+          <td>10.657083</td>
           <td>0.0</td>
-          <td>0.084716</td>
-          <td>0.057127</td>
-          <td>0.052337</td>
-          <td>0.053378</td>
-          <td>0.060742</td>
-          <td>0.220427</td>
-          <td>0.054385</td>
-          <td>0.061141</td>
-          <td>0.058123</td>
-          <td>0.054714</td>
-          <td>0.063743</td>
-          <td>0.119899</td>
-          <td>0.055171</td>
-          <td>0.091324</td>
-          <td>0.057640</td>
-          <td>0.058208</td>
-          <td>0.074989</td>
-          <td>0.081122</td>
-          <td>0.068338</td>
-          <td>0.057313</td>
-          <td>0.055928</td>
-          <td>0.055587</td>
-          <td>0.054726</td>
-          <td>0.054040</td>
-          <td>0.057134</td>
-          <td>0.070030</td>
-          <td>0.055087</td>
-          <td>41.478119</td>
-          <td>0.077785</td>
-          <td>0.056723</td>
+          <td>0.058813</td>
+          <td>0.078532</td>
+          <td>0.113334</td>
+          <td>0.090029</td>
+          <td>0.069233</td>
+          <td>0.147743</td>
+          <td>0.077155</td>
+          <td>0.076578</td>
+          <td>0.068544</td>
+          <td>4.844641</td>
+          <td>5.363266</td>
+          <td>0.066026</td>
+          <td>3.331386</td>
+          <td>0.109499</td>
+          <td>0.068637</td>
+          <td>0.266860</td>
+          <td>0.067497</td>
+          <td>0.134108</td>
+          <td>0.086751</td>
+          <td>0.252789</td>
+          <td>24.620207</td>
+          <td>0.130431</td>
+          <td>0.064776</td>
+          <td>2.441154</td>
+          <td>0.363510</td>
+          <td>0.078083</td>
+          <td>0.139778</td>
+          <td>0.092470</td>
+          <td>0.057213</td>
+          <td>0.140959</td>
           <td>2001.0</td>
           <td>8.0</td>
           <td>6.0</td>
@@ -2360,41 +2360,41 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
           <td>0.0</td>
           <td>0.0</td>
           <td>...</td>
-          <td>0.060522</td>
-          <td>0.130001</td>
-          <td>1.691849</td>
-          <td>0.080200</td>
+          <td>0.103699</td>
+          <td>0.064044</td>
+          <td>0.095057</td>
+          <td>1.232723</td>
           <td>0.0</td>
-          <td>0.077394</td>
-          <td>0.098034</td>
-          <td>0.122504</td>
-          <td>0.095854</td>
-          <td>0.091096</td>
-          <td>0.060002</td>
-          <td>0.061616</td>
-          <td>6.970021</td>
-          <td>0.057381</td>
-          <td>0.053321</td>
-          <td>0.401518</td>
-          <td>0.067585</td>
-          <td>0.075161</td>
-          <td>0.078849</td>
-          <td>0.051278</td>
-          <td>0.060918</td>
-          <td>0.061037</td>
-          <td>0.058126</td>
-          <td>0.073255</td>
-          <td>0.098138</td>
-          <td>0.063732</td>
-          <td>0.064776</td>
-          <td>0.072956</td>
-          <td>0.078272</td>
-          <td>20.651062</td>
-          <td>0.063939</td>
-          <td>0.058429</td>
-          <td>0.056652</td>
-          <td>0.091490</td>
-          <td>0.085602</td>
+          <td>0.136496</td>
+          <td>0.090168</td>
+          <td>0.075015</td>
+          <td>0.066812</td>
+          <td>0.078337</td>
+          <td>0.050625</td>
+          <td>0.059713</td>
+          <td>0.938369</td>
+          <td>0.058201</td>
+          <td>0.061402</td>
+          <td>0.059729</td>
+          <td>0.111027</td>
+          <td>0.081277</td>
+          <td>0.055935</td>
+          <td>0.063016</td>
+          <td>0.098986</td>
+          <td>0.078118</td>
+          <td>0.059958</td>
+          <td>0.071240</td>
+          <td>6.150228</td>
+          <td>0.060310</td>
+          <td>0.062842</td>
+          <td>0.057224</td>
+          <td>0.073773</td>
+          <td>0.064332</td>
+          <td>0.068617</td>
+          <td>0.089099</td>
+          <td>20.970713</td>
+          <td>0.055953</td>
+          <td>0.052485</td>
           <td>1990.0</td>
           <td>5.0</td>
           <td>31.0</td>
@@ -2444,41 +2444,41 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
           <td>0.0</td>
           <td>0.0</td>
           <td>...</td>
-          <td>0.055502</td>
-          <td>0.067735</td>
-          <td>23.035276</td>
-          <td>0.066901</td>
+          <td>49.120232</td>
+          <td>0.063371</td>
+          <td>0.055404</td>
+          <td>0.058738</td>
           <td>0.0</td>
-          <td>0.052025</td>
-          <td>0.059441</td>
-          <td>0.066262</td>
-          <td>0.057628</td>
-          <td>0.060989</td>
-          <td>0.054538</td>
-          <td>0.056437</td>
-          <td>0.056945</td>
-          <td>0.052828</td>
-          <td>0.050743</td>
-          <td>0.063974</td>
-          <td>0.055743</td>
-          <td>0.052757</td>
-          <td>0.053700</td>
-          <td>0.051714</td>
-          <td>0.051952</td>
-          <td>0.051293</td>
-          <td>0.054132</td>
-          <td>0.057548</td>
-          <td>0.095197</td>
-          <td>0.052831</td>
-          <td>0.053572</td>
-          <td>0.060828</td>
-          <td>0.059594</td>
-          <td>0.050242</td>
-          <td>50.840218</td>
-          <td>0.059912</td>
-          <td>0.055244</td>
-          <td>0.054653</td>
-          <td>0.057060</td>
+          <td>0.071190</td>
+          <td>0.062274</td>
+          <td>0.060380</td>
+          <td>0.052218</td>
+          <td>0.058416</td>
+          <td>0.051654</td>
+          <td>0.052390</td>
+          <td>0.050375</td>
+          <td>0.053367</td>
+          <td>0.054975</td>
+          <td>0.054134</td>
+          <td>0.058594</td>
+          <td>0.054360</td>
+          <td>0.051125</td>
+          <td>0.053691</td>
+          <td>0.054850</td>
+          <td>0.100076</td>
+          <td>0.051156</td>
+          <td>0.057846</td>
+          <td>0.057615</td>
+          <td>50.833340</td>
+          <td>0.062738</td>
+          <td>0.060955</td>
+          <td>0.052954</td>
+          <td>0.053882</td>
+          <td>0.060532</td>
+          <td>0.060815</td>
+          <td>0.050473</td>
+          <td>0.052363</td>
+          <td>0.051262</td>
           <td>2012.0</td>
           <td>11.0</td>
           <td>5.0</td>
@@ -2528,41 +2528,41 @@ The encoded data, X_train_enc and X_test_enc are numerical arrays:
           <td>0.0</td>
           <td>0.0</td>
           <td>...</td>
-          <td>0.053798</td>
-          <td>0.067922</td>
-          <td>0.052879</td>
-          <td>0.050850</td>
+          <td>0.054531</td>
+          <td>0.052060</td>
+          <td>0.052339</td>
+          <td>0.051920</td>
           <td>0.0</td>
-          <td>0.056495</td>
-          <td>0.060788</td>
-          <td>0.053121</td>
-          <td>0.054888</td>
-          <td>0.059162</td>
-          <td>0.057737</td>
-          <td>0.056239</td>
-          <td>0.054509</td>
-          <td>0.051978</td>
-          <td>0.050857</td>
-          <td>0.072470</td>
-          <td>0.060595</td>
-          <td>0.062733</td>
-          <td>0.055584</td>
-          <td>0.050004</td>
-          <td>0.054948</td>
-          <td>0.053382</td>
-          <td>0.052143</td>
-          <td>0.053191</td>
-          <td>20.875149</td>
-          <td>0.053081</td>
-          <td>0.051547</td>
-          <td>0.053939</td>
-          <td>0.057282</td>
-          <td>0.055823</td>
-          <td>0.061541</td>
-          <td>0.056165</td>
-          <td>0.051584</td>
-          <td>0.058651</td>
-          <td>0.054414</td>
+          <td>0.052976</td>
+          <td>0.071013</td>
+          <td>0.060427</td>
+          <td>0.059471</td>
+          <td>0.062626</td>
+          <td>0.050061</td>
+          <td>0.054859</td>
+          <td>0.055557</td>
+          <td>0.052034</td>
+          <td>0.062479</td>
+          <td>0.052389</td>
+          <td>0.055218</td>
+          <td>0.056276</td>
+          <td>0.051620</td>
+          <td>0.051180</td>
+          <td>0.061423</td>
+          <td>20.876356</td>
+          <td>0.053314</td>
+          <td>0.054627</td>
+          <td>0.055236</td>
+          <td>0.059483</td>
+          <td>0.053621</td>
+          <td>0.056539</td>
+          <td>0.052989</td>
+          <td>0.060994</td>
+          <td>0.053892</td>
+          <td>0.055501</td>
+          <td>0.056675</td>
+          <td>0.051157</td>
+          <td>0.050006</td>
           <td>2014.0</td>
           <td>6.0</td>
           <td>16.0</td>
@@ -3362,7 +3362,7 @@ and store the returned cross-validation score:
         pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
         scores = cross_validate(pipeline, df, y)
         print('{} encoding'.format(name))
-        print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
+        print('r2 score:  mean: {:.3f}; std: {:.3f}'.format(
             np.mean(scores['test_score']), np.std(scores['test_score'])))
         print('time:  {:.3f}\n'.format(
             np.mean(scores['fit_time'])))
@@ -3378,40 +3378,40 @@ and store the returned cross-validation score:
 
     one-hot encoding
     r2 score:  mean: 0.790; std: 0.035
-
-    time:  3.972
+    time:  3.029
 
     similarity encoding
     r2 score:  mean: 0.930; std: 0.011
-
-    time:  5.645
+    time:  4.694
 
     target encoding
-    r2 score:  mean: 0.900; std: 0.017
-
-    time:  0.467
+    r2 score:  mean: 0.898; std: 0.026
+    time:  0.506
 
     minhash encoding
     r2 score:  mean: 0.924; std: 0.012
-
-    time:  2.087
+    time:  1.511
 
     gap encoding
-    r2 score:  mean: 0.930; std: 0.011
-
-    time:  7.517
-
+    r2 score:  mean: 0.927; std: 0.012
+    time:  7.001
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 351-354
+
+.. GENERATED FROM PYTHON SOURCE LINES 351-353
+
+Note that the time it takes to fit varies also a lot, and not only the
+prediction score
+
+.. GENERATED FROM PYTHON SOURCE LINES 355-358
 
 Plotting the results
 .....................
 Finally, we plot the scores on a boxplot:
 
-.. GENERATED FROM PYTHON SOURCE LINES 354-364
+.. GENERATED FROM PYTHON SOURCE LINES 358-368
 
 .. code-block:: Python
 
@@ -3437,7 +3437,7 @@ Finally, we plot the scores on a boxplot:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 365-376
+.. GENERATED FROM PYTHON SOURCE LINES 369-387
 
 The clear trend is that encoders that use the string form
 of the category (similarity, minhash, and gap) perform better than
@@ -3451,29 +3451,17 @@ it provides interpretable features, as shown above
 |
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 376-384
+.. topic:: The TableVectorizer automates preprocessing
 
-.. code-block:: Python
-
-
-    #
-    # .. topic:: The TableVectorizer automates preprocessing
-    #
-    #   As this notebook demonstrates, many preprocessing steps can be
-    #   automated by the |SV|, and the resulting pipeline can still be
-    #   inspected, even with non-normalized entries.
-    #
-
-
-
-
-
+  As this notebook demonstrates, many preprocessing steps can be
+  automated by the |SV|, and the resulting pipeline can still be
+  inspected, even with non-normalized entries.
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (2 minutes 35.113 seconds)
+   **Total running time of the script:** (2 minutes 20.395 seconds)
 
 
 .. _sphx_glr_download_gen_notes_02_dirty_categories.py:
