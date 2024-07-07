@@ -341,11 +341,15 @@ for name, method in encoders.items():
     pipeline = make_pipeline(encoder, HistGradientBoostingRegressor())
     scores = cross_validate(pipeline, df, y)
     print('{} encoding'.format(name))
-    print('r2 score:  mean: {:.3f}; std: {:.3f}\n'.format(
+    print('r2 score:  mean: {:.3f}; std: {:.3f}'.format(
         np.mean(scores['test_score']), np.std(scores['test_score'])))
     print('time:  {:.3f}\n'.format(
         np.mean(scores['fit_time'])))
     all_scores[name] = scores['test_score']
+
+# %%
+# Note that the time it takes to fit varies also a lot, and not only the
+# prediction score
 
 # %%
 # Plotting the results
@@ -373,7 +377,6 @@ plt.tight_layout()
 #
 # |
 #
-
 #
 # .. topic:: The TableVectorizer automates preprocessing
 #
