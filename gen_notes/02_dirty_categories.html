@@ -334,1344 +334,8 @@ corresponding scikit-learn utility</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>np.float64(0.9108276644460975)
 </pre></div>
 </div>
-</section>
-<section id="understanding-the-pipeline">
-<h2>Understanding the pipeline<a class="headerlink" href="#understanding-the-pipeline" title="Link to this heading">¶</a></h2>
-<p>Let’s start again from the raw data:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">employee_salaries</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">employee_salaries</span><span class="o">.</span><span class="n">y</span>
-</pre></div>
-</div>
-<p>We have a complex and heterogeneous dataframe:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">X</span>
-</pre></div>
-</div>
-<div class="output_subarea output_html rendered_html output_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>gender</th>
-      <th>department</th>
-      <th>department_name</th>
-      <th>division</th>
-      <th>assignment_category</th>
-      <th>employee_position_title</th>
-      <th>date_first_hired</th>
-      <th>year_first_hired</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>F</td>
-      <td>POL</td>
-      <td>Department of Police</td>
-      <td>MSB Information Mgmt and Tech Division Records...</td>
-      <td>Fulltime-Regular</td>
-      <td>Office Services Coordinator</td>
-      <td>09/22/1986</td>
-      <td>1986</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>M</td>
-      <td>POL</td>
-      <td>Department of Police</td>
-      <td>ISB Major Crimes Division Fugitive Section</td>
-      <td>Fulltime-Regular</td>
-      <td>Master Police Officer</td>
-      <td>09/12/1988</td>
-      <td>1988</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>F</td>
-      <td>HHS</td>
-      <td>Department of Health and Human Services</td>
-      <td>Adult Protective and Case Management Services</td>
-      <td>Fulltime-Regular</td>
-      <td>Social Worker IV</td>
-      <td>11/19/1989</td>
-      <td>1989</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>M</td>
-      <td>COR</td>
-      <td>Correction and Rehabilitation</td>
-      <td>PRRS Facility and Security</td>
-      <td>Fulltime-Regular</td>
-      <td>Resident Supervisor II</td>
-      <td>05/05/2014</td>
-      <td>2014</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>M</td>
-      <td>HCA</td>
-      <td>Department of Housing and Community Affairs</td>
-      <td>Affordable Housing Programs</td>
-      <td>Fulltime-Regular</td>
-      <td>Planning Specialist III</td>
-      <td>03/05/2007</td>
-      <td>2007</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>9223</th>
-      <td>F</td>
-      <td>HHS</td>
-      <td>Department of Health and Human Services</td>
-      <td>School Based Health Centers</td>
-      <td>Fulltime-Regular</td>
-      <td>Community Health Nurse II</td>
-      <td>11/03/2015</td>
-      <td>2015</td>
-    </tr>
-    <tr>
-      <th>9224</th>
-      <td>F</td>
-      <td>FRS</td>
-      <td>Fire and Rescue Services</td>
-      <td>Human Resources Division</td>
-      <td>Fulltime-Regular</td>
-      <td>Fire/Rescue Division Chief</td>
-      <td>11/28/1988</td>
-      <td>1988</td>
-    </tr>
-    <tr>
-      <th>9225</th>
-      <td>M</td>
-      <td>HHS</td>
-      <td>Department of Health and Human Services</td>
-      <td>Child and Adolescent Mental Health Clinic Serv...</td>
-      <td>Parttime-Regular</td>
-      <td>Medical Doctor IV - Psychiatrist</td>
-      <td>04/30/2001</td>
-      <td>2001</td>
-    </tr>
-    <tr>
-      <th>9226</th>
-      <td>M</td>
-      <td>CCL</td>
-      <td>County Council</td>
-      <td>Council Central Staff</td>
-      <td>Fulltime-Regular</td>
-      <td>Manager II</td>
-      <td>09/05/2006</td>
-      <td>2006</td>
-    </tr>
-    <tr>
-      <th>9227</th>
-      <td>M</td>
-      <td>DLC</td>
-      <td>Department of Liquor Control</td>
-      <td>Licensure, Regulation and Education</td>
-      <td>Fulltime-Regular</td>
-      <td>Alcohol/Tobacco Enforcement Specialist II</td>
-      <td>01/30/2012</td>
-      <td>2012</td>
-    </tr>
-  </tbody>
-</table>
-<p>9228 rows × 8 columns</p>
-</div>
-</div>
-<br />
-<br /><p>The <a class="reference external" href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="(in skrub v0.2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TableVectorizer</span></code></a> can to turn this dataframe into a form suited for
-machine learning.</p>
-<section id="using-the-tablevectorizer-in-a-supervised-learning-pipeline">
-<h3>Using the TableVectorizer in a supervised-learning pipeline<a class="headerlink" href="#using-the-tablevectorizer-in-a-supervised-learning-pipeline" title="Link to this heading">¶</a></h3>
-<p>Assembling the <a class="reference external" href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="(in skrub v0.2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TableVectorizer</span></code></a> in a pipeline with a powerful learner,
-such as gradient boosted trees, gives <strong>a machine-learning method that
-can be readily applied to the dataframe</strong>.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skrub</span> <span class="kn">import</span> <a href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="skrub.TableVectorizer" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">TableVectorizer</span></a>
-</pre></div>
-</div>
-<p>We will use it with a HistGradientBoostingRegressor, which is a good
-predictor for data with heterogeneous columns</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html#sklearn.ensemble.HistGradientBoostingRegressor" title="sklearn.ensemble.HistGradientBoostingRegressor" class="sphx-glr-backref-module-sklearn-ensemble sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">HistGradientBoostingRegressor</span></a>
-</pre></div>
-</div>
-<p>We then create a pipeline chaining our encoders to a learner</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline" title="sklearn.pipeline.make_pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-function"><span class="n">make_pipeline</span></a>
-
-<span class="n">pipeline</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline" title="sklearn.pipeline.make_pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-function"><span class="n">make_pipeline</span></a><span class="p">(</span>
-    <a href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="skrub.TableVectorizer" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">TableVectorizer</span></a><span class="p">(),</span>
-    <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html#sklearn.ensemble.HistGradientBoostingRegressor" title="sklearn.ensemble.HistGradientBoostingRegressor" class="sphx-glr-backref-module-sklearn-ensemble sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">HistGradientBoostingRegressor</span></a><span class="p">()</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>Let’s perform a cross-validation to see how well this model predicts</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="sklearn.model_selection.cross_val_score" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">cross_val_score</span></a>
-<span class="n">scores</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="sklearn.model_selection.cross_val_score" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">cross_val_score</span></a><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;r2&#39;</span><span class="p">)</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mean=</span><span class="si">{</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.mean.html#numpy.mean" title="numpy.mean" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">mean</span></a><span class="p">(</span><span class="n">scores</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;std=</span><span class="si">{</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.std.html#numpy.std" title="numpy.std" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">std</span></a><span class="p">(</span><span class="n">scores</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>scores=array([0.91722464, 0.89540173, 0.93245198, 0.92736712, 0.93651227])
-mean=0.9217915470850576
-std=0.014688161834584452
-</pre></div>
-</div>
-<p>The prediction perform here is pretty much as good as above
-but the code here is much simpler as it does not involve specifying
-columns manually.</p>
-</section>
-<section id="analyzing-the-features-created">
-<h3>Analyzing the features created<a class="headerlink" href="#analyzing-the-features-created" title="Link to this heading">¶</a></h3>
-<p>Let us perform the same workflow, but without the <cite>Pipeline</cite>, so we can
-analyze its mechanisms along the way.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">tab_vec</span> <span class="o">=</span> <a href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="skrub.TableVectorizer" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">TableVectorizer</span></a><span class="p">()</span>
-</pre></div>
-</div>
-<p>We split the data between train and test, and transform them:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html#sklearn.model_selection.train_test_split" title="sklearn.model_selection.train_test_split" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">train_test_split</span></a>
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html#sklearn.model_selection.train_test_split" title="sklearn.model_selection.train_test_split" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">train_test_split</span></a><span class="p">(</span>
-    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
-<span class="p">)</span>
-
-<span class="n">X_train_enc</span> <span class="o">=</span> <span class="n">tab_vec</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">X_test_enc</span> <span class="o">=</span> <span class="n">tab_vec</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The encoded data, X_train_enc and X_test_enc are numerical arrays:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">X_train_enc</span>
-</pre></div>
-</div>
-<div class="output_subarea output_html rendered_html output_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>gender_F</th>
-      <th>gender_M</th>
-      <th>gender_nan</th>
-      <th>department_BOA</th>
-      <th>department_BOE</th>
-      <th>department_CAT</th>
-      <th>department_CCL</th>
-      <th>department_CEC</th>
-      <th>department_CEX</th>
-      <th>department_COR</th>
-      <th>department_CUS</th>
-      <th>department_DEP</th>
-      <th>department_DGS</th>
-      <th>department_DHS</th>
-      <th>department_DLC</th>
-      <th>department_DOT</th>
-      <th>department_DPS</th>
-      <th>department_DTS</th>
-      <th>department_ECM</th>
-      <th>department_FIN</th>
-      <th>department_FRS</th>
-      <th>department_HCA</th>
-      <th>department_HHS</th>
-      <th>department_HRC</th>
-      <th>department_IGR</th>
-      <th>department_LIB</th>
-      <th>department_MPB</th>
-      <th>department_NDA</th>
-      <th>department_OAG</th>
-      <th>department_OCP</th>
-      <th>department_OHR</th>
-      <th>department_OIG</th>
-      <th>department_OLO</th>
-      <th>department_OMB</th>
-      <th>department_PIO</th>
-      <th>department_POL</th>
-      <th>department_PRO</th>
-      <th>department_REC</th>
-      <th>department_SHF</th>
-      <th>department_ZAH</th>
-      <th>...</th>
-      <th>division: investigative, investigations, criminal</th>
-      <th>division: building, design, construction</th>
-      <th>division: nicholson, transit, taxicab</th>
-      <th>division: accounts, development, landlord</th>
-      <th>assignment_category_Parttime-Regular</th>
-      <th>employee_position_title: officer, office, traffic</th>
-      <th>employee_position_title: operator, equipment, bus</th>
-      <th>employee_position_title: lieutenant, captain, chief</th>
-      <th>employee_position_title: specialist, special, procurement</th>
-      <th>employee_position_title: firefighter, rescuer, master</th>
-      <th>employee_position_title: community, security, health</th>
-      <th>employee_position_title: information, technologist, technology</th>
-      <th>employee_position_title: manager, budget, investigator</th>
-      <th>employee_position_title: school, room, pool</th>
-      <th>employee_position_title: enforcement, permitting, inspector</th>
-      <th>employee_position_title: liquor, clerk, store</th>
-      <th>employee_position_title: coordinator, coordinating, transit</th>
-      <th>employee_position_title: technician, mechanic, supply</th>
-      <th>employee_position_title: legislative, principal, executive</th>
-      <th>employee_position_title: associate, library, appellate</th>
-      <th>employee_position_title: correctional, correction, environmental</th>
-      <th>employee_position_title: recreation, renovation, resource</th>
-      <th>employee_position_title: crossing, purchasing, background</th>
-      <th>employee_position_title: accountant, assistant, attorney</th>
-      <th>employee_position_title: administrative, administration, administrator</th>
-      <th>employee_position_title: corporal, pfc, private</th>
-      <th>employee_position_title: sergeant, police, cadet</th>
-      <th>employee_position_title: craftsworker, public, urban</th>
-      <th>employee_position_title: warehouse, welfare, caseworker</th>
-      <th>employee_position_title: psychiatric, employee, attendant</th>
-      <th>employee_position_title: therapist, sheriff, deputy</th>
-      <th>employee_position_title: communications, telecommunications, safety</th>
-      <th>employee_position_title: income, assistance, client</th>
-      <th>employee_position_title: services, service, president</th>
-      <th>employee_position_title: program, programs, projects</th>
-      <th>date_first_hired_year</th>
-      <th>date_first_hired_month</th>
-      <th>date_first_hired_day</th>
-      <th>date_first_hired_total_seconds</th>
-      <th>year_first_hired</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>4405</th>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.082526</td>
-      <td>0.086296</td>
-      <td>0.065845</td>
-      <td>1.158715</td>
-      <td>0.0</td>
-      <td>0.055234</td>
-      <td>3.898660</td>
-      <td>0.102113</td>
-      <td>18.377623</td>
-      <td>0.095721</td>
-      <td>0.053326</td>
-      <td>0.237525</td>
-      <td>0.064906</td>
-      <td>0.053707</td>
-      <td>4.643124</td>
-      <td>0.054317</td>
-      <td>0.097979</td>
-      <td>0.061125</td>
-      <td>0.108701</td>
-      <td>0.088707</td>
-      <td>0.060723</td>
-      <td>0.098018</td>
-      <td>2.553727</td>
-      <td>0.306366</td>
-      <td>0.317221</td>
-      <td>0.054437</td>
-      <td>0.056922</td>
-      <td>0.055537</td>
-      <td>0.066883</td>
-      <td>17.134558</td>
-      <td>0.082473</td>
-      <td>0.069323</td>
-      <td>0.118592</td>
-      <td>0.479933</td>
-      <td>0.052522</td>
-      <td>2007.0</td>
-      <td>8.0</td>
-      <td>6.0</td>
-      <td>1.186358e+09</td>
-      <td>2007.0</td>
-    </tr>
-    <tr>
-      <th>5694</th>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.052668</td>
-      <td>0.051270</td>
-      <td>0.055674</td>
-      <td>0.050959</td>
-      <td>1.0</td>
-      <td>0.054969</td>
-      <td>0.050001</td>
-      <td>0.050910</td>
-      <td>0.053845</td>
-      <td>0.052150</td>
-      <td>34.419083</td>
-      <td>0.052498</td>
-      <td>0.057989</td>
-      <td>0.066735</td>
-      <td>0.053037</td>
-      <td>0.052251</td>
-      <td>0.052029</td>
-      <td>0.054304</td>
-      <td>0.051995</td>
-      <td>0.052480</td>
-      <td>0.053473</td>
-      <td>0.051355</td>
-      <td>0.050357</td>
-      <td>0.052719</td>
-      <td>0.054325</td>
-      <td>0.054313</td>
-      <td>0.053712</td>
-      <td>0.052253</td>
-      <td>0.054209</td>
-      <td>0.051336</td>
-      <td>0.058101</td>
-      <td>0.061700</td>
-      <td>0.054547</td>
-      <td>0.071293</td>
-      <td>0.052029</td>
-      <td>2005.0</td>
-      <td>8.0</td>
-      <td>8.0</td>
-      <td>1.123459e+09</td>
-      <td>2005.0</td>
-    </tr>
-    <tr>
-      <th>1516</th>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.077653</td>
-      <td>44.600155</td>
-      <td>0.061732</td>
-      <td>0.063686</td>
-      <td>0.0</td>
-      <td>0.052739</td>
-      <td>0.058493</td>
-      <td>0.097883</td>
-      <td>0.051748</td>
-      <td>0.057744</td>
-      <td>0.104592</td>
-      <td>16.383930</td>
-      <td>0.054830</td>
-      <td>0.062572</td>
-      <td>2.441779</td>
-      <td>0.058371</td>
-      <td>0.058777</td>
-      <td>0.076688</td>
-      <td>0.122113</td>
-      <td>0.208777</td>
-      <td>0.297332</td>
-      <td>0.060926</td>
-      <td>0.105378</td>
-      <td>0.078577</td>
-      <td>0.052933</td>
-      <td>0.112364</td>
-      <td>0.053717</td>
-      <td>0.058363</td>
-      <td>0.060913</td>
-      <td>1.399023</td>
-      <td>0.050618</td>
-      <td>0.052706</td>
-      <td>0.060446</td>
-      <td>0.110604</td>
-      <td>0.055065</td>
-      <td>2009.0</td>
-      <td>4.0</td>
-      <td>27.0</td>
-      <td>1.240790e+09</td>
-      <td>2009.0</td>
-    </tr>
-    <tr>
-      <th>8960</th>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.054070</td>
-      <td>0.053580</td>
-      <td>0.052682</td>
-      <td>0.055198</td>
-      <td>0.0</td>
-      <td>0.070402</td>
-      <td>0.055064</td>
-      <td>11.076848</td>
-      <td>0.059618</td>
-      <td>0.075034</td>
-      <td>0.081233</td>
-      <td>0.064251</td>
-      <td>1.512149</td>
-      <td>0.059238</td>
-      <td>0.081923</td>
-      <td>0.064362</td>
-      <td>0.067165</td>
-      <td>0.059916</td>
-      <td>0.057092</td>
-      <td>0.055138</td>
-      <td>45.472214</td>
-      <td>0.062002</td>
-      <td>0.050705</td>
-      <td>0.078197</td>
-      <td>0.055524</td>
-      <td>0.091452</td>
-      <td>0.085584</td>
-      <td>0.063715</td>
-      <td>0.067490</td>
-      <td>0.066738</td>
-      <td>0.108211</td>
-      <td>0.094479</td>
-      <td>0.063388</td>
-      <td>0.079625</td>
-      <td>0.121242</td>
-      <td>1997.0</td>
-      <td>2.0</td>
-      <td>3.0</td>
-      <td>8.549280e+08</td>
-      <td>1997.0</td>
-    </tr>
-    <tr>
-      <th>6108</th>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.054742</td>
-      <td>0.055978</td>
-      <td>0.053776</td>
-      <td>0.056543</td>
-      <td>0.0</td>
-      <td>23.824232</td>
-      <td>0.053066</td>
-      <td>0.052212</td>
-      <td>0.054112</td>
-      <td>0.061967</td>
-      <td>0.053349</td>
-      <td>0.052471</td>
-      <td>0.089135</td>
-      <td>0.051806</td>
-      <td>0.056017</td>
-      <td>0.055547</td>
-      <td>0.062418</td>
-      <td>0.054329</td>
-      <td>0.050839</td>
-      <td>0.052227</td>
-      <td>0.051996</td>
-      <td>0.050648</td>
-      <td>0.050141</td>
-      <td>0.051632</td>
-      <td>0.054363</td>
-      <td>0.074501</td>
-      <td>0.086072</td>
-      <td>0.061946</td>
-      <td>0.060725</td>
-      <td>0.051805</td>
-      <td>0.057434</td>
-      <td>0.053072</td>
-      <td>0.054386</td>
-      <td>0.059162</td>
-      <td>0.058389</td>
-      <td>2006.0</td>
-      <td>1.0</td>
-      <td>17.0</td>
-      <td>1.137456e+09</td>
-      <td>2006.0</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>5734</th>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.058358</td>
-      <td>0.052813</td>
-      <td>0.052566</td>
-      <td>0.050397</td>
-      <td>0.0</td>
-      <td>0.056383</td>
-      <td>0.051916</td>
-      <td>0.073191</td>
-      <td>0.054357</td>
-      <td>35.917694</td>
-      <td>0.050080</td>
-      <td>0.054274</td>
-      <td>0.064327</td>
-      <td>0.051384</td>
-      <td>0.050983</td>
-      <td>0.057324</td>
-      <td>0.051866</td>
-      <td>0.051953</td>
-      <td>0.052464</td>
-      <td>0.053239</td>
-      <td>0.052806</td>
-      <td>0.055544</td>
-      <td>0.050341</td>
-      <td>0.059061</td>
-      <td>0.055767</td>
-      <td>0.052774</td>
-      <td>0.052107</td>
-      <td>0.052410</td>
-      <td>0.054254</td>
-      <td>0.051830</td>
-      <td>0.054092</td>
-      <td>0.050940</td>
-      <td>0.055622</td>
-      <td>0.053007</td>
-      <td>0.058012</td>
-      <td>2005.0</td>
-      <td>5.0</td>
-      <td>16.0</td>
-      <td>1.116202e+09</td>
-      <td>2005.0</td>
-    </tr>
-    <tr>
-      <th>5191</th>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.055469</td>
-      <td>0.080793</td>
-      <td>0.052181</td>
-      <td>0.062110</td>
-      <td>0.0</td>
-      <td>0.067366</td>
-      <td>0.052561</td>
-      <td>0.072747</td>
-      <td>0.064287</td>
-      <td>0.067213</td>
-      <td>0.087528</td>
-      <td>0.075529</td>
-      <td>0.086105</td>
-      <td>0.054536</td>
-      <td>0.162606</td>
-      <td>0.059725</td>
-      <td>0.062825</td>
-      <td>0.060091</td>
-      <td>5.711314</td>
-      <td>0.055966</td>
-      <td>0.214050</td>
-      <td>26.667959</td>
-      <td>0.055666</td>
-      <td>0.105595</td>
-      <td>0.523478</td>
-      <td>0.134657</td>
-      <td>0.075274</td>
-      <td>0.061453</td>
-      <td>0.082092</td>
-      <td>0.061432</td>
-      <td>0.075137</td>
-      <td>0.074209</td>
-      <td>0.071760</td>
-      <td>8.487636</td>
-      <td>0.069202</td>
-      <td>2001.0</td>
-      <td>8.0</td>
-      <td>6.0</td>
-      <td>9.970560e+08</td>
-      <td>2001.0</td>
-    </tr>
-    <tr>
-      <th>5390</th>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.076380</td>
-      <td>50.095226</td>
-      <td>0.147106</td>
-      <td>0.058520</td>
-      <td>0.0</td>
-      <td>0.099258</td>
-      <td>0.123462</td>
-      <td>0.051216</td>
-      <td>0.080651</td>
-      <td>0.085073</td>
-      <td>0.066852</td>
-      <td>0.080458</td>
-      <td>0.483042</td>
-      <td>0.100922</td>
-      <td>6.959088</td>
-      <td>0.058760</td>
-      <td>0.060779</td>
-      <td>20.596811</td>
-      <td>0.057509</td>
-      <td>0.059185</td>
-      <td>0.064303</td>
-      <td>0.059648</td>
-      <td>0.050470</td>
-      <td>0.060013</td>
-      <td>0.087908</td>
-      <td>0.068117</td>
-      <td>0.066632</td>
-      <td>0.066488</td>
-      <td>0.081976</td>
-      <td>0.060997</td>
-      <td>0.086280</td>
-      <td>0.061724</td>
-      <td>0.059918</td>
-      <td>0.098170</td>
-      <td>0.064292</td>
-      <td>1990.0</td>
-      <td>5.0</td>
-      <td>31.0</td>
-      <td>6.441120e+08</td>
-      <td>1990.0</td>
-    </tr>
-    <tr>
-      <th>860</th>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.087792</td>
-      <td>0.089230</td>
-      <td>0.063692</td>
-      <td>0.100628</td>
-      <td>0.0</td>
-      <td>0.054715</td>
-      <td>0.116939</td>
-      <td>0.055366</td>
-      <td>0.059659</td>
-      <td>0.062790</td>
-      <td>0.088616</td>
-      <td>0.055021</td>
-      <td>0.054197</td>
-      <td>0.071810</td>
-      <td>0.063383</td>
-      <td>0.059963</td>
-      <td>0.054079</td>
-      <td>0.050704</td>
-      <td>0.062869</td>
-      <td>0.058405</td>
-      <td>0.058087</td>
-      <td>0.062217</td>
-      <td>0.053713</td>
-      <td>0.051396</td>
-      <td>0.066472</td>
-      <td>0.053415</td>
-      <td>0.057449</td>
-      <td>0.062018</td>
-      <td>50.722256</td>
-      <td>0.057398</td>
-      <td>0.069484</td>
-      <td>0.053946</td>
-      <td>0.055402</td>
-      <td>0.055785</td>
-      <td>0.052447</td>
-      <td>2012.0</td>
-      <td>11.0</td>
-      <td>5.0</td>
-      <td>1.352074e+09</td>
-      <td>2012.0</td>
-    </tr>
-    <tr>
-      <th>7270</th>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>1.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>...</td>
-      <td>0.052328</td>
-      <td>0.051883</td>
-      <td>0.052241</td>
-      <td>0.051691</td>
-      <td>0.0</td>
-      <td>0.069777</td>
-      <td>0.053407</td>
-      <td>0.050002</td>
-      <td>0.077289</td>
-      <td>0.061996</td>
-      <td>0.055056</td>
-      <td>0.058398</td>
-      <td>0.098837</td>
-      <td>0.057505</td>
-      <td>0.057744</td>
-      <td>0.058682</td>
-      <td>0.052411</td>
-      <td>0.059579</td>
-      <td>0.053016</td>
-      <td>0.060605</td>
-      <td>0.063166</td>
-      <td>0.057939</td>
-      <td>0.050184</td>
-      <td>0.052616</td>
-      <td>0.062718</td>
-      <td>0.067996</td>
-      <td>0.051618</td>
-      <td>0.068640</td>
-      <td>20.760992</td>
-      <td>0.053843</td>
-      <td>0.056778</td>
-      <td>0.054392</td>
-      <td>0.056945</td>
-      <td>0.055015</td>
-      <td>0.062854</td>
-      <td>2014.0</td>
-      <td>6.0</td>
-      <td>16.0</td>
-      <td>1.402877e+09</td>
-      <td>2014.0</td>
-    </tr>
-  </tbody>
-</table>
-<p>7843 rows × 143 columns</p>
-</div>
-</div>
-<br />
-<br /><p>They have more columns than the original dataframe, but not much more:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">X_train_enc</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(7843, 143)
-</pre></div>
-</div>
-<section id="inspecting-the-features-created">
-<h4>Inspecting the features created<a class="headerlink" href="#inspecting-the-features-created" title="Link to this heading">¶</a></h4>
-<p>The <a class="reference external" href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="(in skrub v0.2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TableVectorizer</span></code></a> assigns a transformer for each column. We can inspect this
-choice:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">tab_vec</span><span class="o">.</span><span class="n">transformers_</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;year_first_hired&#39;: PassThrough(), &#39;date_first_hired&#39;: DatetimeEncoder(), &#39;gender&#39;: OneHotEncoder(drop=&#39;if_binary&#39;, dtype=&#39;float32&#39;, handle_unknown=&#39;ignore&#39;,
-              sparse_output=False), &#39;department&#39;: OneHotEncoder(drop=&#39;if_binary&#39;, dtype=&#39;float32&#39;, handle_unknown=&#39;ignore&#39;,
-              sparse_output=False), &#39;department_name&#39;: OneHotEncoder(drop=&#39;if_binary&#39;, dtype=&#39;float32&#39;, handle_unknown=&#39;ignore&#39;,
-              sparse_output=False), &#39;assignment_category&#39;: OneHotEncoder(drop=&#39;if_binary&#39;, dtype=&#39;float32&#39;, handle_unknown=&#39;ignore&#39;,
-              sparse_output=False), &#39;division&#39;: GapEncoder(n_components=30), &#39;employee_position_title&#39;: GapEncoder(n_components=30)}
-</pre></div>
-</div>
-<p>This is what is being passed to transform the different columns under the hood.
-We can notice it classified the columns “gender” and “assignment_category”
-as low cardinality string variables.
-A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OneHotEncoder</span></code></a> will be applied to these columns.</p>
-<p>The vectorizer actually makes the difference between string variables
-(data type <code class="docutils literal notranslate"><span class="pre">object</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code>) and categorical variables
-(data type <code class="docutils literal notranslate"><span class="pre">category</span></code>).</p>
-<p>Next, we can have a look at the encoded feature names.</p>
-<p>Before encoding:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;gender&#39;, &#39;department&#39;, &#39;department_name&#39;, &#39;division&#39;, &#39;assignment_category&#39;, &#39;employee_position_title&#39;, &#39;date_first_hired&#39;, &#39;year_first_hired&#39;]
-</pre></div>
-</div>
-<p>After encoding (we only plot the first 8 feature names):</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">feature_names</span> <span class="o">=</span> <span class="n">tab_vec</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()</span>
-<span class="n">feature_names</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([&#39;gender_F&#39;, &#39;gender_M&#39;, &#39;gender_nan&#39;, &#39;department_BOA&#39;,
-       &#39;department_BOE&#39;, &#39;department_CAT&#39;, &#39;department_CCL&#39;,
-       &#39;department_CEC&#39;], dtype=&#39;&lt;U70&#39;)
-</pre></div>
-</div>
-<p>As we can see, it created a new column for each unique value.
-This is because we used <a class="reference external" href="https://skrub-data.org/stable/generated/skrub.SimilarityEncoder.html#skrub.SimilarityEncoder" title="(in skrub v0.2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimilarityEncoder</span></code></a> on the column “division”,
-which was classified as a high cardinality string variable.
-(default values, see <a class="reference external" href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="(in skrub v0.2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TableVectorizer</span></code></a>’s docstring).</p>
-<p>In total, we have reasonnable number of encoded columns.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">feature_names</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>143
-</pre></div>
-</div>
-</section>
-</section>
-<section id="feature-importance-in-the-statistical-model">
-<h3>Feature importance in the statistical model<a class="headerlink" href="#feature-importance-in-the-statistical-model" title="Link to this heading">¶</a></h3>
-<p>In this section, we will train a regressor, and plot the feature importances</p>
-<aside class="topic">
-<p class="topic-title">Note:</p>
-<p>To minimize compute time, use the feature importances computed by the
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestRegressor</span></code></a>, but you should prefer <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.inspection.permutation_importance.html#sklearn.inspection.permutation_importance" title="(in scikit-learn v1.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">permutation_importance()</span></code></a>
-instead (which are less subject to biases)</p>
-</aside>
-<p>First, let’s train the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestRegressor</span></code></a>,</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor" title="sklearn.ensemble.RandomForestRegressor" class="sphx-glr-backref-module-sklearn-ensemble sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">RandomForestRegressor</span></a>
-<span class="n">regressor</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor" title="sklearn.ensemble.RandomForestRegressor" class="sphx-glr-backref-module-sklearn-ensemble sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">RandomForestRegressor</span></a><span class="p">()</span>
-<span class="n">regressor</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_enc</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<p>Below the hood, <cite>model</cite> is a pipeline:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -2079,10 +743,1763 @@ div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
   /* fitted */
   background-color: var(--sklearn-color-fitted-level-3);
 }
-</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>RandomForestRegressor()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" checked><label for="sk-estimator-id-1" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;RandomForestRegressor<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.RandomForestRegressor.html">?<span>Documentation for RandomForestRegressor</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>RandomForestRegressor()</pre></div> </div></div></div></div>
+</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[(&#x27;tablevectorizer&#x27;,
+                 TableVectorizer(high_cardinality=MinHashEncoder(),
+                                 low_cardinality=ToCategorical())),
+                (&#x27;histgradientboostingregressor&#x27;,
+                 HistGradientBoostingRegressor(categorical_features=&#x27;from_dtype&#x27;))])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" ><label for="sk-estimator-id-1" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;&nbsp;Pipeline<a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.pipeline.Pipeline.html">?<span>Documentation for Pipeline</span></a><span class="sk-estimator-doc-link ">i<span>Not fitted</span></span></label><div class="sk-toggleable__content "><pre>Pipeline(steps=[(&#x27;tablevectorizer&#x27;,
+                 TableVectorizer(high_cardinality=MinHashEncoder(),
+                                 low_cardinality=ToCategorical())),
+                (&#x27;histgradientboostingregressor&#x27;,
+                 HistGradientBoostingRegressor(categorical_features=&#x27;from_dtype&#x27;))])</pre></div> </div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" ><label for="sk-estimator-id-2" class="sk-toggleable__label  sk-toggleable__label-arrow ">tablevectorizer: TableVectorizer</label><div class="sk-toggleable__content "><pre>TableVectorizer(high_cardinality=MinHashEncoder(),
+                low_cardinality=ToCategorical())</pre></div> </div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox" ><label for="sk-estimator-id-3" class="sk-toggleable__label  sk-toggleable__label-arrow ">datetime: DatetimeEncoder</label><div class="sk-toggleable__content "><pre>DatetimeEncoder()</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox" ><label for="sk-estimator-id-4" class="sk-toggleable__label  sk-toggleable__label-arrow ">DatetimeEncoder</label><div class="sk-toggleable__content "><pre>DatetimeEncoder()</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-5" type="checkbox" ><label for="sk-estimator-id-5" class="sk-toggleable__label  sk-toggleable__label-arrow ">high_cardinality: MinHashEncoder</label><div class="sk-toggleable__content "><pre>MinHashEncoder()</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-6" type="checkbox" ><label for="sk-estimator-id-6" class="sk-toggleable__label  sk-toggleable__label-arrow ">MinHashEncoder</label><div class="sk-toggleable__content "><pre>MinHashEncoder()</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-7" type="checkbox" ><label for="sk-estimator-id-7" class="sk-toggleable__label  sk-toggleable__label-arrow ">low_cardinality: ToCategorical</label><div class="sk-toggleable__content "><pre>ToCategorical()</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-8" type="checkbox" ><label for="sk-estimator-id-8" class="sk-toggleable__label  sk-toggleable__label-arrow ">ToCategorical</label><div class="sk-toggleable__content "><pre>ToCategorical()</pre></div> </div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-9" type="checkbox" ><label for="sk-estimator-id-9" class="sk-toggleable__label  sk-toggleable__label-arrow ">numeric: PassThrough</label><div class="sk-toggleable__content "><pre>PassThrough()</pre></div> </div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-10" type="checkbox" ><label for="sk-estimator-id-10" class="sk-toggleable__label  sk-toggleable__label-arrow ">PassThrough</label><div class="sk-toggleable__content "><pre>PassThrough()</pre></div> </div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator  sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-11" type="checkbox" ><label for="sk-estimator-id-11" class="sk-toggleable__label  sk-toggleable__label-arrow ">&nbsp;HistGradientBoostingRegressor<a class="sk-estimator-doc-link " rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html">?<span>Documentation for HistGradientBoostingRegressor</span></a></label><div class="sk-toggleable__content "><pre>HistGradientBoostingRegressor(categorical_features=&#x27;from_dtype&#x27;)</pre></div> </div></div></div></div></div></div>
 </div>
 <br />
-<br /><p>Retreiving the feature importances</p>
+<br /></section>
+<section id="understanding-the-pipeline">
+<h2>Understanding the pipeline<a class="headerlink" href="#understanding-the-pipeline" title="Link to this heading">¶</a></h2>
+<p>The number one difficulty is that our input is a complex and
+heterogeneous dataframe:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>gender</th>
+      <th>department</th>
+      <th>department_name</th>
+      <th>division</th>
+      <th>assignment_category</th>
+      <th>employee_position_title</th>
+      <th>date_first_hired</th>
+      <th>year_first_hired</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>F</td>
+      <td>POL</td>
+      <td>Department of Police</td>
+      <td>MSB Information Mgmt and Tech Division Records...</td>
+      <td>Fulltime-Regular</td>
+      <td>Office Services Coordinator</td>
+      <td>09/22/1986</td>
+      <td>1986</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>M</td>
+      <td>POL</td>
+      <td>Department of Police</td>
+      <td>ISB Major Crimes Division Fugitive Section</td>
+      <td>Fulltime-Regular</td>
+      <td>Master Police Officer</td>
+      <td>09/12/1988</td>
+      <td>1988</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>F</td>
+      <td>HHS</td>
+      <td>Department of Health and Human Services</td>
+      <td>Adult Protective and Case Management Services</td>
+      <td>Fulltime-Regular</td>
+      <td>Social Worker IV</td>
+      <td>11/19/1989</td>
+      <td>1989</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>M</td>
+      <td>COR</td>
+      <td>Correction and Rehabilitation</td>
+      <td>PRRS Facility and Security</td>
+      <td>Fulltime-Regular</td>
+      <td>Resident Supervisor II</td>
+      <td>05/05/2014</td>
+      <td>2014</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>M</td>
+      <td>HCA</td>
+      <td>Department of Housing and Community Affairs</td>
+      <td>Affordable Housing Programs</td>
+      <td>Fulltime-Regular</td>
+      <td>Planning Specialist III</td>
+      <td>03/05/2007</td>
+      <td>2007</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>9223</th>
+      <td>F</td>
+      <td>HHS</td>
+      <td>Department of Health and Human Services</td>
+      <td>School Based Health Centers</td>
+      <td>Fulltime-Regular</td>
+      <td>Community Health Nurse II</td>
+      <td>11/03/2015</td>
+      <td>2015</td>
+    </tr>
+    <tr>
+      <th>9224</th>
+      <td>F</td>
+      <td>FRS</td>
+      <td>Fire and Rescue Services</td>
+      <td>Human Resources Division</td>
+      <td>Fulltime-Regular</td>
+      <td>Fire/Rescue Division Chief</td>
+      <td>11/28/1988</td>
+      <td>1988</td>
+    </tr>
+    <tr>
+      <th>9225</th>
+      <td>M</td>
+      <td>HHS</td>
+      <td>Department of Health and Human Services</td>
+      <td>Child and Adolescent Mental Health Clinic Serv...</td>
+      <td>Parttime-Regular</td>
+      <td>Medical Doctor IV - Psychiatrist</td>
+      <td>04/30/2001</td>
+      <td>2001</td>
+    </tr>
+    <tr>
+      <th>9226</th>
+      <td>M</td>
+      <td>CCL</td>
+      <td>County Council</td>
+      <td>Council Central Staff</td>
+      <td>Fulltime-Regular</td>
+      <td>Manager II</td>
+      <td>09/05/2006</td>
+      <td>2006</td>
+    </tr>
+    <tr>
+      <th>9227</th>
+      <td>M</td>
+      <td>DLC</td>
+      <td>Department of Liquor Control</td>
+      <td>Licensure, Regulation and Education</td>
+      <td>Fulltime-Regular</td>
+      <td>Alcohol/Tobacco Enforcement Specialist II</td>
+      <td>01/30/2012</td>
+      <td>2012</td>
+    </tr>
+  </tbody>
+</table>
+<p>9228 rows × 8 columns</p>
+</div>
+</div>
+<br />
+<br /><p>The <a class="reference external" href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="(in skrub v0.2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TableVectorizer</span></code></a> can to turn this dataframe into a form suited for
+machine learning.</p>
+<section id="using-the-tablevectorizer-in-a-supervised-learning-pipeline">
+<h3>Using the TableVectorizer in a supervised-learning pipeline<a class="headerlink" href="#using-the-tablevectorizer-in-a-supervised-learning-pipeline" title="Link to this heading">¶</a></h3>
+<p>Assembling the <a class="reference external" href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="(in skrub v0.2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TableVectorizer</span></code></a> in a pipeline with a powerful learner,
+such as gradient boosted trees, gives <strong>a machine-learning method that
+can be readily applied to the dataframe</strong>.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skrub</span> <span class="kn">import</span> <a href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="skrub.TableVectorizer" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">TableVectorizer</span></a>
+</pre></div>
+</div>
+<p>We will use it with a HistGradientBoostingRegressor, which is a good
+predictor for data with heterogeneous columns</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html#sklearn.ensemble.HistGradientBoostingRegressor" title="sklearn.ensemble.HistGradientBoostingRegressor" class="sphx-glr-backref-module-sklearn-ensemble sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">HistGradientBoostingRegressor</span></a>
+</pre></div>
+</div>
+<p>We then create a pipeline chaining our encoders to a learner</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline" title="sklearn.pipeline.make_pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-function"><span class="n">make_pipeline</span></a>
+
+<span class="n">pipeline</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.pipeline.make_pipeline.html#sklearn.pipeline.make_pipeline" title="sklearn.pipeline.make_pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-function"><span class="n">make_pipeline</span></a><span class="p">(</span>
+    <a href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="skrub.TableVectorizer" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">TableVectorizer</span></a><span class="p">(),</span>
+    <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.HistGradientBoostingRegressor.html#sklearn.ensemble.HistGradientBoostingRegressor" title="sklearn.ensemble.HistGradientBoostingRegressor" class="sphx-glr-backref-module-sklearn-ensemble sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">HistGradientBoostingRegressor</span></a><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Let’s perform a cross-validation to see how well this model predicts</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="sklearn.model_selection.cross_val_score" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">cross_val_score</span></a>
+<span class="n">scores</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="sklearn.model_selection.cross_val_score" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">cross_val_score</span></a><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;r2&#39;</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">scores</span><span class="si">=}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;mean=</span><span class="si">{</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.mean.html#numpy.mean" title="numpy.mean" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">mean</span></a><span class="p">(</span><span class="n">scores</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;std=</span><span class="si">{</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.std.html#numpy.std" title="numpy.std" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">std</span></a><span class="p">(</span><span class="n">scores</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>scores=array([0.9282795 , 0.8945292 , 0.92494599, 0.92653209, 0.93766822])
+mean=0.9223910013864481
+std=0.014615228717492922
+</pre></div>
+</div>
+<p>The prediction perform here is pretty much as good as above
+but the code here is much simpler as it does not involve specifying
+columns manually.</p>
+</section>
+<section id="analyzing-the-features-created">
+<h3>Analyzing the features created<a class="headerlink" href="#analyzing-the-features-created" title="Link to this heading">¶</a></h3>
+<p>Let us perform the same workflow, but without the <cite>Pipeline</cite>, so we can
+analyze its mechanisms along the way.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">tab_vec</span> <span class="o">=</span> <a href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="skrub.TableVectorizer" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">TableVectorizer</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<p>We split the data between train and test, and transform them:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html#sklearn.model_selection.train_test_split" title="sklearn.model_selection.train_test_split" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">train_test_split</span></a>
+<span class="n">df_train</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html#sklearn.model_selection.train_test_split" title="sklearn.model_selection.train_test_split" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">train_test_split</span></a><span class="p">(</span>
+    <span class="n">df</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+<span class="p">)</span>
+
+<span class="n">X_train_enc</span> <span class="o">=</span> <span class="n">tab_vec</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">X_test_enc</span> <span class="o">=</span> <span class="n">tab_vec</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df_test</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The encoded data, X_train_enc and X_test_enc are numerical arrays:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">X_train_enc</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>gender_F</th>
+      <th>gender_M</th>
+      <th>gender_nan</th>
+      <th>department_BOA</th>
+      <th>department_BOE</th>
+      <th>department_CAT</th>
+      <th>department_CCL</th>
+      <th>department_CEC</th>
+      <th>department_CEX</th>
+      <th>department_COR</th>
+      <th>department_CUS</th>
+      <th>department_DEP</th>
+      <th>department_DGS</th>
+      <th>department_DHS</th>
+      <th>department_DLC</th>
+      <th>department_DOT</th>
+      <th>department_DPS</th>
+      <th>department_DTS</th>
+      <th>department_ECM</th>
+      <th>department_FIN</th>
+      <th>department_FRS</th>
+      <th>department_HCA</th>
+      <th>department_HHS</th>
+      <th>department_HRC</th>
+      <th>department_IGR</th>
+      <th>department_LIB</th>
+      <th>department_MPB</th>
+      <th>department_NDA</th>
+      <th>department_OAG</th>
+      <th>department_OCP</th>
+      <th>department_OHR</th>
+      <th>department_OIG</th>
+      <th>department_OLO</th>
+      <th>department_OMB</th>
+      <th>department_PIO</th>
+      <th>department_POL</th>
+      <th>department_PRO</th>
+      <th>department_REC</th>
+      <th>department_SHF</th>
+      <th>department_ZAH</th>
+      <th>...</th>
+      <th>division: special, inspection, residential</th>
+      <th>division: accounts, transport, council</th>
+      <th>division: emergency, centers, center</th>
+      <th>division: operations, delivery, solid</th>
+      <th>assignment_category_Parttime-Regular</th>
+      <th>employee_position_title: coordinator, services, service</th>
+      <th>employee_position_title: purchasing, crossing, background</th>
+      <th>employee_position_title: firefighter, rescuer, master</th>
+      <th>employee_position_title: officer, office, security</th>
+      <th>employee_position_title: operator, bus, operations</th>
+      <th>employee_position_title: environmental, specialist, special</th>
+      <th>employee_position_title: manager, iii, management</th>
+      <th>employee_position_title: income, assistance, compliance</th>
+      <th>employee_position_title: assistant, attorney, library</th>
+      <th>employee_position_title: liquor, clerk, store</th>
+      <th>employee_position_title: enforcement, inspector, force</th>
+      <th>employee_position_title: correctional, correction, corporal</th>
+      <th>employee_position_title: school, room, behavioral</th>
+      <th>employee_position_title: urban, customer, district</th>
+      <th>employee_position_title: technician, mechanic, supply</th>
+      <th>employee_position_title: community, health, nurse</th>
+      <th>employee_position_title: sheriff, deputy, candidate</th>
+      <th>employee_position_title: lieutenant, captain, chief</th>
+      <th>employee_position_title: therapist, the, district</th>
+      <th>employee_position_title: communications, telecommunications, safety</th>
+      <th>employee_position_title: worker, social, works</th>
+      <th>employee_position_title: administrative, legislative, principal</th>
+      <th>employee_position_title: information, technology, technologist</th>
+      <th>employee_position_title: warehouse, welfare, driver</th>
+      <th>employee_position_title: program, programs, projects</th>
+      <th>employee_position_title: equipment, apprentice, development</th>
+      <th>employee_position_title: sergeant, police, cadet</th>
+      <th>employee_position_title: librarian, employee, psychiatric</th>
+      <th>employee_position_title: engineer, planning, senior</th>
+      <th>employee_position_title: supervisor, supervisory, investigator</th>
+      <th>date_first_hired_year</th>
+      <th>date_first_hired_month</th>
+      <th>date_first_hired_day</th>
+      <th>date_first_hired_total_seconds</th>
+      <th>year_first_hired</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4405</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.082437</td>
+      <td>3.624742</td>
+      <td>0.081180</td>
+      <td>16.977688</td>
+      <td>0.0</td>
+      <td>0.073267</td>
+      <td>3.259953</td>
+      <td>0.071157</td>
+      <td>0.062101</td>
+      <td>1.792402</td>
+      <td>21.840792</td>
+      <td>0.098540</td>
+      <td>0.148002</td>
+      <td>0.136063</td>
+      <td>0.055419</td>
+      <td>0.186243</td>
+      <td>0.057852</td>
+      <td>0.053953</td>
+      <td>0.334318</td>
+      <td>0.066591</td>
+      <td>0.058340</td>
+      <td>0.238796</td>
+      <td>0.067771</td>
+      <td>1.975242</td>
+      <td>0.076774</td>
+      <td>0.074126</td>
+      <td>0.240607</td>
+      <td>0.528218</td>
+      <td>0.141957</td>
+      <td>0.051977</td>
+      <td>12.198323</td>
+      <td>0.054254</td>
+      <td>5.293050</td>
+      <td>0.199181</td>
+      <td>0.064735</td>
+      <td>2007.0</td>
+      <td>8.0</td>
+      <td>6.0</td>
+      <td>1.186358e+09</td>
+      <td>2007.0</td>
+    </tr>
+    <tr>
+      <th>5694</th>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.053933</td>
+      <td>0.051194</td>
+      <td>0.053454</td>
+      <td>0.052726</td>
+      <td>1.0</td>
+      <td>0.052047</td>
+      <td>0.050291</td>
+      <td>0.052064</td>
+      <td>0.054717</td>
+      <td>0.050000</td>
+      <td>0.052139</td>
+      <td>0.060971</td>
+      <td>0.054063</td>
+      <td>0.051962</td>
+      <td>0.052206</td>
+      <td>0.053291</td>
+      <td>0.054250</td>
+      <td>0.066332</td>
+      <td>0.072788</td>
+      <td>0.054282</td>
+      <td>34.422066</td>
+      <td>0.056926</td>
+      <td>0.050922</td>
+      <td>0.055815</td>
+      <td>0.060176</td>
+      <td>0.055112</td>
+      <td>0.051963</td>
+      <td>0.051873</td>
+      <td>0.052406</td>
+      <td>0.050986</td>
+      <td>0.050606</td>
+      <td>0.053540</td>
+      <td>0.051785</td>
+      <td>0.052842</td>
+      <td>0.051579</td>
+      <td>2005.0</td>
+      <td>8.0</td>
+      <td>8.0</td>
+      <td>1.123459e+09</td>
+      <td>2005.0</td>
+    </tr>
+    <tr>
+      <th>1516</th>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.073047</td>
+      <td>0.064461</td>
+      <td>0.061842</td>
+      <td>0.075659</td>
+      <td>0.0</td>
+      <td>0.053709</td>
+      <td>0.145831</td>
+      <td>0.069618</td>
+      <td>0.052179</td>
+      <td>0.053167</td>
+      <td>0.057053</td>
+      <td>0.053539</td>
+      <td>0.058645</td>
+      <td>0.206980</td>
+      <td>0.057771</td>
+      <td>2.065474</td>
+      <td>0.203079</td>
+      <td>0.139620</td>
+      <td>0.076827</td>
+      <td>1.526253</td>
+      <td>0.057027</td>
+      <td>0.062487</td>
+      <td>0.130984</td>
+      <td>0.051912</td>
+      <td>0.052064</td>
+      <td>0.054738</td>
+      <td>0.111287</td>
+      <td>0.122491</td>
+      <td>0.082738</td>
+      <td>0.053514</td>
+      <td>0.073807</td>
+      <td>0.052023</td>
+      <td>0.687226</td>
+      <td>16.029049</td>
+      <td>0.058909</td>
+      <td>2009.0</td>
+      <td>4.0</td>
+      <td>27.0</td>
+      <td>1.240790e+09</td>
+      <td>2009.0</td>
+    </tr>
+    <tr>
+      <th>8960</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.053749</td>
+      <td>0.058117</td>
+      <td>0.053497</td>
+      <td>0.050877</td>
+      <td>0.0</td>
+      <td>0.069027</td>
+      <td>0.050486</td>
+      <td>0.064271</td>
+      <td>0.062419</td>
+      <td>0.052502</td>
+      <td>0.093027</td>
+      <td>1.366253</td>
+      <td>0.073363</td>
+      <td>0.075472</td>
+      <td>0.072345</td>
+      <td>0.089780</td>
+      <td>19.411575</td>
+      <td>0.063284</td>
+      <td>0.081816</td>
+      <td>0.061505</td>
+      <td>0.112828</td>
+      <td>36.094746</td>
+      <td>1.110469</td>
+      <td>0.069366</td>
+      <td>0.181364</td>
+      <td>0.065657</td>
+      <td>0.054691</td>
+      <td>0.081776</td>
+      <td>0.054869</td>
+      <td>0.099074</td>
+      <td>0.084388</td>
+      <td>0.085265</td>
+      <td>0.062543</td>
+      <td>0.069152</td>
+      <td>0.086687</td>
+      <td>1997.0</td>
+      <td>2.0</td>
+      <td>3.0</td>
+      <td>8.549280e+08</td>
+      <td>1997.0</td>
+    </tr>
+    <tr>
+      <th>6108</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.054012</td>
+      <td>0.058440</td>
+      <td>0.050975</td>
+      <td>0.052365</td>
+      <td>0.0</td>
+      <td>0.064769</td>
+      <td>0.050174</td>
+      <td>0.061981</td>
+      <td>23.811228</td>
+      <td>0.053502</td>
+      <td>0.051865</td>
+      <td>0.109639</td>
+      <td>0.054098</td>
+      <td>0.051347</td>
+      <td>0.055476</td>
+      <td>0.055943</td>
+      <td>0.068407</td>
+      <td>0.051820</td>
+      <td>0.059319</td>
+      <td>0.054377</td>
+      <td>0.053506</td>
+      <td>0.055867</td>
+      <td>0.052297</td>
+      <td>0.056228</td>
+      <td>0.053796</td>
+      <td>0.067693</td>
+      <td>0.050830</td>
+      <td>0.052209</td>
+      <td>0.052467</td>
+      <td>0.055577</td>
+      <td>0.053734</td>
+      <td>0.085597</td>
+      <td>0.052992</td>
+      <td>0.052582</td>
+      <td>0.050682</td>
+      <td>2006.0</td>
+      <td>1.0</td>
+      <td>17.0</td>
+      <td>1.137456e+09</td>
+      <td>2006.0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>5734</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.054978</td>
+      <td>0.050841</td>
+      <td>0.051823</td>
+      <td>0.060236</td>
+      <td>0.0</td>
+      <td>0.052145</td>
+      <td>0.050438</td>
+      <td>35.919521</td>
+      <td>0.056597</td>
+      <td>0.052240</td>
+      <td>0.054479</td>
+      <td>0.067201</td>
+      <td>0.054840</td>
+      <td>0.059364</td>
+      <td>0.057266</td>
+      <td>0.050767</td>
+      <td>0.052573</td>
+      <td>0.051402</td>
+      <td>0.051928</td>
+      <td>0.051994</td>
+      <td>0.050011</td>
+      <td>0.052011</td>
+      <td>0.074137</td>
+      <td>0.056136</td>
+      <td>0.051074</td>
+      <td>0.054625</td>
+      <td>0.052555</td>
+      <td>0.054389</td>
+      <td>0.054260</td>
+      <td>0.057538</td>
+      <td>0.051746</td>
+      <td>0.051803</td>
+      <td>0.050995</td>
+      <td>0.054694</td>
+      <td>0.051271</td>
+      <td>2005.0</td>
+      <td>5.0</td>
+      <td>16.0</td>
+      <td>1.116202e+09</td>
+      <td>2005.0</td>
+    </tr>
+    <tr>
+      <th>5191</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.063712</td>
+      <td>0.082597</td>
+      <td>0.294983</td>
+      <td>0.055823</td>
+      <td>0.0</td>
+      <td>0.075014</td>
+      <td>0.050727</td>
+      <td>0.110672</td>
+      <td>0.072325</td>
+      <td>0.056136</td>
+      <td>0.093880</td>
+      <td>0.219840</td>
+      <td>0.078808</td>
+      <td>0.090735</td>
+      <td>0.064158</td>
+      <td>0.159563</td>
+      <td>4.416184</td>
+      <td>0.060030</td>
+      <td>0.619067</td>
+      <td>0.071597</td>
+      <td>0.127201</td>
+      <td>0.074414</td>
+      <td>0.124389</td>
+      <td>0.508542</td>
+      <td>0.111342</td>
+      <td>0.074729</td>
+      <td>4.696214</td>
+      <td>4.305902</td>
+      <td>26.169111</td>
+      <td>0.066749</td>
+      <td>0.680179</td>
+      <td>0.071740</td>
+      <td>0.074265</td>
+      <td>0.089891</td>
+      <td>0.086594</td>
+      <td>2001.0</td>
+      <td>8.0</td>
+      <td>6.0</td>
+      <td>9.970560e+08</td>
+      <td>2001.0</td>
+    </tr>
+    <tr>
+      <th>5390</th>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.107205</td>
+      <td>0.061787</td>
+      <td>0.078849</td>
+      <td>1.678370</td>
+      <td>0.0</td>
+      <td>0.055226</td>
+      <td>0.050176</td>
+      <td>0.078004</td>
+      <td>0.090077</td>
+      <td>0.426835</td>
+      <td>0.086789</td>
+      <td>1.007777</td>
+      <td>0.070107</td>
+      <td>0.056974</td>
+      <td>0.056942</td>
+      <td>2.170596</td>
+      <td>0.063813</td>
+      <td>0.087807</td>
+      <td>0.079806</td>
+      <td>24.168652</td>
+      <td>0.068428</td>
+      <td>0.072466</td>
+      <td>0.050961</td>
+      <td>0.130690</td>
+      <td>0.061996</td>
+      <td>0.090656</td>
+      <td>0.060273</td>
+      <td>0.082702</td>
+      <td>0.060782</td>
+      <td>0.059014</td>
+      <td>0.100018</td>
+      <td>0.061081</td>
+      <td>0.064913</td>
+      <td>0.375094</td>
+      <td>0.111348</td>
+      <td>1990.0</td>
+      <td>5.0</td>
+      <td>31.0</td>
+      <td>6.441120e+08</td>
+      <td>1990.0</td>
+    </tr>
+    <tr>
+      <th>860</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.070087</td>
+      <td>0.231230</td>
+      <td>0.055715</td>
+      <td>26.206709</td>
+      <td>0.0</td>
+      <td>0.053448</td>
+      <td>0.051583</td>
+      <td>0.059827</td>
+      <td>0.057612</td>
+      <td>0.078201</td>
+      <td>0.053759</td>
+      <td>0.062624</td>
+      <td>0.052671</td>
+      <td>0.050978</td>
+      <td>0.060874</td>
+      <td>0.056781</td>
+      <td>0.054881</td>
+      <td>0.059407</td>
+      <td>0.052245</td>
+      <td>0.050364</td>
+      <td>0.064296</td>
+      <td>0.057714</td>
+      <td>0.051470</td>
+      <td>0.055691</td>
+      <td>0.051226</td>
+      <td>0.107547</td>
+      <td>0.054090</td>
+      <td>0.053073</td>
+      <td>50.810493</td>
+      <td>0.054914</td>
+      <td>0.059631</td>
+      <td>0.053520</td>
+      <td>0.053873</td>
+      <td>0.059148</td>
+      <td>0.058061</td>
+      <td>2012.0</td>
+      <td>11.0</td>
+      <td>5.0</td>
+      <td>1.352074e+09</td>
+      <td>2012.0</td>
+    </tr>
+    <tr>
+      <th>7270</th>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>...</td>
+      <td>0.052108</td>
+      <td>0.051717</td>
+      <td>0.052676</td>
+      <td>0.053016</td>
+      <td>0.0</td>
+      <td>0.052044</td>
+      <td>0.050107</td>
+      <td>0.057559</td>
+      <td>0.061196</td>
+      <td>0.053443</td>
+      <td>0.060698</td>
+      <td>0.082232</td>
+      <td>0.056583</td>
+      <td>0.050988</td>
+      <td>0.056262</td>
+      <td>0.054536</td>
+      <td>0.061149</td>
+      <td>0.054730</td>
+      <td>0.052791</td>
+      <td>0.055481</td>
+      <td>0.053240</td>
+      <td>0.052825</td>
+      <td>0.050011</td>
+      <td>0.058447</td>
+      <td>0.052833</td>
+      <td>20.883778</td>
+      <td>0.052204</td>
+      <td>0.055315</td>
+      <td>0.058654</td>
+      <td>0.055525</td>
+      <td>0.053278</td>
+      <td>0.051283</td>
+      <td>0.052981</td>
+      <td>0.056578</td>
+      <td>0.053248</td>
+      <td>2014.0</td>
+      <td>6.0</td>
+      <td>16.0</td>
+      <td>1.402877e+09</td>
+      <td>2014.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>7843 rows × 143 columns</p>
+</div>
+</div>
+<br />
+<br /><p>They have more columns than the original dataframe, but not much more:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">X_train_enc</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(7843, 143)
+</pre></div>
+</div>
+<section id="inspecting-the-features-created">
+<h4>Inspecting the features created<a class="headerlink" href="#inspecting-the-features-created" title="Link to this heading">¶</a></h4>
+<p>The <a class="reference external" href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="(in skrub v0.2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TableVectorizer</span></code></a> assigns a transformer for each column. We can inspect this
+choice:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">tab_vec</span><span class="o">.</span><span class="n">transformers_</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;year_first_hired&#39;: PassThrough(), &#39;date_first_hired&#39;: DatetimeEncoder(), &#39;gender&#39;: OneHotEncoder(drop=&#39;if_binary&#39;, dtype=&#39;float32&#39;, handle_unknown=&#39;ignore&#39;,
+              sparse_output=False), &#39;department&#39;: OneHotEncoder(drop=&#39;if_binary&#39;, dtype=&#39;float32&#39;, handle_unknown=&#39;ignore&#39;,
+              sparse_output=False), &#39;department_name&#39;: OneHotEncoder(drop=&#39;if_binary&#39;, dtype=&#39;float32&#39;, handle_unknown=&#39;ignore&#39;,
+              sparse_output=False), &#39;assignment_category&#39;: OneHotEncoder(drop=&#39;if_binary&#39;, dtype=&#39;float32&#39;, handle_unknown=&#39;ignore&#39;,
+              sparse_output=False), &#39;division&#39;: GapEncoder(n_components=30), &#39;employee_position_title&#39;: GapEncoder(n_components=30)}
+</pre></div>
+</div>
+<p>This is what is being passed to transform the different columns under the hood.
+We can notice it classified the columns “gender” and “assignment_category”
+as low cardinality string variables.
+A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OneHotEncoder</span></code></a> will be applied to these columns.</p>
+<p>The vectorizer actually makes the difference between string variables
+(data type <code class="docutils literal notranslate"><span class="pre">object</span></code> and <code class="docutils literal notranslate"><span class="pre">string</span></code>) and categorical variables
+(data type <code class="docutils literal notranslate"><span class="pre">category</span></code>).</p>
+<p>Next, we can have a look at the encoded feature names.</p>
+<p>Before encoding:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;gender&#39;, &#39;department&#39;, &#39;department_name&#39;, &#39;division&#39;, &#39;assignment_category&#39;, &#39;employee_position_title&#39;, &#39;date_first_hired&#39;, &#39;year_first_hired&#39;]
+</pre></div>
+</div>
+<p>After encoding (we only plot the first 8 feature names):</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">feature_names</span> <span class="o">=</span> <span class="n">tab_vec</span><span class="o">.</span><span class="n">get_feature_names_out</span><span class="p">()</span>
+<span class="n">feature_names</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([&#39;gender_F&#39;, &#39;gender_M&#39;, &#39;gender_nan&#39;, &#39;department_BOA&#39;,
+       &#39;department_BOE&#39;, &#39;department_CAT&#39;, &#39;department_CCL&#39;,
+       &#39;department_CEC&#39;], dtype=&#39;&lt;U68&#39;)
+</pre></div>
+</div>
+<p>As we can see, it created a new column for each unique value.
+This is because we used <a class="reference external" href="https://skrub-data.org/stable/generated/skrub.SimilarityEncoder.html#skrub.SimilarityEncoder" title="(in skrub v0.2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimilarityEncoder</span></code></a> on the column “division”,
+which was classified as a high cardinality string variable.
+(default values, see <a class="reference external" href="https://skrub-data.org/stable/generated/skrub.TableVectorizer.html#skrub.TableVectorizer" title="(in skrub v0.2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">TableVectorizer</span></code></a>’s docstring).</p>
+<p>In total, we have reasonnable number of encoded columns.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">feature_names</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>143
+</pre></div>
+</div>
+</section>
+</section>
+<section id="feature-importance-in-the-statistical-model">
+<h3>Feature importance in the statistical model<a class="headerlink" href="#feature-importance-in-the-statistical-model" title="Link to this heading">¶</a></h3>
+<p>In this section, we will train a regressor, and plot the feature importances</p>
+<aside class="topic">
+<p class="topic-title">Note:</p>
+<p>To minimize compute time, use the feature importances computed by the
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestRegressor</span></code></a>, but you should prefer <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.inspection.permutation_importance.html#sklearn.inspection.permutation_importance" title="(in scikit-learn v1.5)"><code class="xref py py-func docutils literal notranslate"><span class="pre">permutation_importance()</span></code></a>
+instead (which are less subject to biases)</p>
+</aside>
+<p>First, let’s train the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestRegressor</span></code></a>,</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor" title="sklearn.ensemble.RandomForestRegressor" class="sphx-glr-backref-module-sklearn-ensemble sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">RandomForestRegressor</span></a>
+<span class="n">regressor</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html#sklearn.ensemble.RandomForestRegressor" title="sklearn.ensemble.RandomForestRegressor" class="sphx-glr-backref-module-sklearn-ensemble sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">RandomForestRegressor</span></a><span class="p">()</span>
+<span class="n">regressor</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_enc</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<style>#sk-container-id-2 {
+  /* Definition of color scheme common for light and dark mode */
+  --sklearn-color-text: black;
+  --sklearn-color-line: gray;
+  /* Definition of color scheme for unfitted estimators */
+  --sklearn-color-unfitted-level-0: #fff5e6;
+  --sklearn-color-unfitted-level-1: #f6e4d2;
+  --sklearn-color-unfitted-level-2: #ffe0b3;
+  --sklearn-color-unfitted-level-3: chocolate;
+  /* Definition of color scheme for fitted estimators */
+  --sklearn-color-fitted-level-0: #f0f8ff;
+  --sklearn-color-fitted-level-1: #d4ebff;
+  --sklearn-color-fitted-level-2: #b3dbfd;
+  --sklearn-color-fitted-level-3: cornflowerblue;
+
+  /* Specific color for light theme */
+  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));
+  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));
+  --sklearn-color-icon: #696969;
+
+  @media (prefers-color-scheme: dark) {
+    /* Redefinition of color scheme for dark theme */
+    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));
+    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));
+    --sklearn-color-icon: #878787;
+  }
+}
+
+#sk-container-id-2 {
+  color: var(--sklearn-color-text);
+}
+
+#sk-container-id-2 pre {
+  padding: 0;
+}
+
+#sk-container-id-2 input.sk-hidden--visually {
+  border: 0;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+#sk-container-id-2 div.sk-dashed-wrapped {
+  border: 1px dashed var(--sklearn-color-line);
+  margin: 0 0.4em 0.5em 0.4em;
+  box-sizing: border-box;
+  padding-bottom: 0.4em;
+  background-color: var(--sklearn-color-background);
+}
+
+#sk-container-id-2 div.sk-container {
+  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`
+     but bootstrap.min.css set `[hidden] { display: none !important; }`
+     so we also need the `!important` here to be able to override the
+     default hidden behavior on the sphinx rendered scikit-learn.org.
+     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */
+  display: inline-block !important;
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-text-repr-fallback {
+  display: none;
+}
+
+div.sk-parallel-item,
+div.sk-serial,
+div.sk-item {
+  /* draw centered vertical line to link estimators */
+  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));
+  background-size: 2px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Parallel-specific style estimator block */
+
+#sk-container-id-2 div.sk-parallel-item::after {
+  content: "";
+  width: 100%;
+  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);
+  flex-grow: 1;
+}
+
+#sk-container-id-2 div.sk-parallel {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  background-color: var(--sklearn-color-background);
+  position: relative;
+}
+
+#sk-container-id-2 div.sk-parallel-item {
+  display: flex;
+  flex-direction: column;
+}
+
+#sk-container-id-2 div.sk-parallel-item:first-child::after {
+  align-self: flex-end;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:last-child::after {
+  align-self: flex-start;
+  width: 50%;
+}
+
+#sk-container-id-2 div.sk-parallel-item:only-child::after {
+  width: 0;
+}
+
+/* Serial-specific style estimator block */
+
+#sk-container-id-2 div.sk-serial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--sklearn-color-background);
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+
+/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is
+clickable and can be expanded/collapsed.
+- Pipeline and ColumnTransformer use this feature and define the default style
+- Estimators will overwrite some part of the style using the `sk-estimator` class
+*/
+
+/* Pipeline and ColumnTransformer style (default) */
+
+#sk-container-id-2 div.sk-toggleable {
+  /* Default theme specific background. It is overwritten whether we have a
+  specific estimator or a Pipeline/ColumnTransformer */
+  background-color: var(--sklearn-color-background);
+}
+
+/* Toggleable label */
+#sk-container-id-2 label.sk-toggleable__label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0.5em;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:before {
+  /* Arrow on the left of the label */
+  content: "▸";
+  float: left;
+  margin-right: 0.25em;
+  color: var(--sklearn-color-icon);
+}
+
+#sk-container-id-2 label.sk-toggleable__label-arrow:hover:before {
+  color: var(--sklearn-color-text);
+}
+
+/* Toggleable content - dropdown */
+
+#sk-container-id-2 div.sk-toggleable__content {
+  max-height: 0;
+  max-width: 0;
+  overflow: hidden;
+  text-align: left;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content pre {
+  margin: 0.2em;
+  border-radius: 0.25em;
+  color: var(--sklearn-color-text);
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-toggleable__content.fitted pre {
+  /* unfitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~div.sk-toggleable__content {
+  /* Expand drop-down */
+  max-height: 200px;
+  max-width: 100%;
+  overflow: auto;
+}
+
+#sk-container-id-2 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {
+  content: "▾";
+}
+
+/* Pipeline/ColumnTransformer-specific style */
+
+#sk-container-id-2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator-specific style */
+
+/* Colorize estimator box */
+#sk-container-id-2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+#sk-container-id-2 div.sk-label label.sk-toggleable__label,
+#sk-container-id-2 div.sk-label label {
+  /* The background is the default theme color */
+  color: var(--sklearn-color-text-on-default-background);
+}
+
+/* On hover, darken the color of the background */
+#sk-container-id-2 div.sk-label:hover label.sk-toggleable__label {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+/* Label box, darken color on hover, fitted */
+#sk-container-id-2 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {
+  color: var(--sklearn-color-text);
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Estimator label */
+
+#sk-container-id-2 div.sk-label label {
+  font-family: monospace;
+  font-weight: bold;
+  display: inline-block;
+  line-height: 1.2em;
+}
+
+#sk-container-id-2 div.sk-label-container {
+  text-align: center;
+}
+
+/* Estimator-specific */
+#sk-container-id-2 div.sk-estimator {
+  font-family: monospace;
+  border: 1px dotted var(--sklearn-color-border-box);
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-0);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-0);
+}
+
+/* on hover */
+#sk-container-id-2 div.sk-estimator:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-2);
+}
+
+#sk-container-id-2 div.sk-estimator.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-2);
+}
+
+/* Specification for estimator info (e.g. "i" and "?") */
+
+/* Common style for "i" and "?" */
+
+.sk-estimator-doc-link,
+a:link.sk-estimator-doc-link,
+a:visited.sk-estimator-doc-link {
+  float: right;
+  font-size: smaller;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1em;
+  height: 1em;
+  width: 1em;
+  text-decoration: none !important;
+  margin-left: 1ex;
+  /* unfitted */
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+  color: var(--sklearn-color-unfitted-level-1);
+}
+
+.sk-estimator-doc-link.fitted,
+a:link.sk-estimator-doc-link.fitted,
+a:visited.sk-estimator-doc-link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+div.sk-estimator:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover,
+div.sk-label-container:hover .sk-estimator-doc-link:hover,
+.sk-estimator-doc-link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover,
+div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,
+.sk-estimator-doc-link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+/* Span, style for the box shown on hovering the info icon */
+.sk-estimator-doc-link span {
+  display: none;
+  z-index: 9999;
+  position: relative;
+  font-weight: normal;
+  right: .2ex;
+  padding: .5ex;
+  margin: .5ex;
+  width: min-content;
+  min-width: 20ex;
+  max-width: 50ex;
+  color: var(--sklearn-color-text);
+  box-shadow: 2pt 2pt 4pt #999;
+  /* unfitted */
+  background: var(--sklearn-color-unfitted-level-0);
+  border: .5pt solid var(--sklearn-color-unfitted-level-3);
+}
+
+.sk-estimator-doc-link.fitted span {
+  /* fitted */
+  background: var(--sklearn-color-fitted-level-0);
+  border: var(--sklearn-color-fitted-level-3);
+}
+
+.sk-estimator-doc-link:hover span {
+  display: block;
+}
+
+/* "?"-specific style due to the `<a>` HTML tag */
+
+#sk-container-id-2 a.estimator_doc_link {
+  float: right;
+  font-size: 1rem;
+  line-height: 1em;
+  font-family: monospace;
+  background-color: var(--sklearn-color-background);
+  border-radius: 1rem;
+  height: 1rem;
+  width: 1rem;
+  text-decoration: none;
+  /* unfitted */
+  color: var(--sklearn-color-unfitted-level-1);
+  border: var(--sklearn-color-unfitted-level-1) 1pt solid;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted {
+  /* fitted */
+  border: var(--sklearn-color-fitted-level-1) 1pt solid;
+  color: var(--sklearn-color-fitted-level-1);
+}
+
+/* On hover */
+#sk-container-id-2 a.estimator_doc_link:hover {
+  /* unfitted */
+  background-color: var(--sklearn-color-unfitted-level-3);
+  color: var(--sklearn-color-background);
+  text-decoration: none;
+}
+
+#sk-container-id-2 a.estimator_doc_link.fitted:hover {
+  /* fitted */
+  background-color: var(--sklearn-color-fitted-level-3);
+}
+</style><div id="sk-container-id-2" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>RandomForestRegressor()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item"><div class="sk-estimator fitted sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-12" type="checkbox" checked><label for="sk-estimator-id-12" class="sk-toggleable__label fitted sk-toggleable__label-arrow fitted">&nbsp;&nbsp;RandomForestRegressor<a class="sk-estimator-doc-link fitted" rel="noreferrer" target="_blank" href="https://scikit-learn.org/1.5/modules/generated/sklearn.ensemble.RandomForestRegressor.html">?<span>Documentation for RandomForestRegressor</span></a><span class="sk-estimator-doc-link fitted">i<span>Fitted</span></span></label><div class="sk-toggleable__content fitted"><pre>RandomForestRegressor()</pre></div> </div></div></div></div>
+</div>
+<br />
+<br /><p>Retrieving the feature importances</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">importances</span> <span class="o">=</span> <span class="n">regressor</span><span class="o">.</span><span class="n">feature_importances_</span>
 <span class="n">std</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.std.html#numpy.std" title="numpy.std" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">std</span></a><span class="p">(</span>
     <span class="p">[</span>
@@ -2156,17 +2573,17 @@ Position Title’ column, as this columns contains 400 different entries.</p>
 <p>We will now experiments with different encoders for dirty columns</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skrub</span> <span class="kn">import</span> <a href="https://skrub-data.org/stable/generated/skrub.SimilarityEncoder.html#skrub.SimilarityEncoder" title="skrub.SimilarityEncoder" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">SimilarityEncoder</span></a><span class="p">,</span> <a href="https://skrub-data.org/stable/generated/skrub.MinHashEncoder.html#skrub.MinHashEncoder" title="skrub.MinHashEncoder" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">MinHashEncoder</span></a><span class="p">,</span>\
     <a href="https://skrub-data.org/stable/generated/skrub.GapEncoder.html#skrub.GapEncoder" title="skrub.GapEncoder" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">GapEncoder</span></a>
-<span class="c1">#TargetEncoder,</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.TargetEncoder.html#sklearn.preprocessing.TargetEncoder" title="sklearn.preprocessing.TargetEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">TargetEncoder</span></a>
 
 <span class="n">similarity</span> <span class="o">=</span> <a href="https://skrub-data.org/stable/generated/skrub.SimilarityEncoder.html#skrub.SimilarityEncoder" title="skrub.SimilarityEncoder" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">SimilarityEncoder</span></a><span class="p">()</span>
-<span class="c1">#target = TargetEncoder(handle_unknown=&#39;ignore&#39;)</span>
+<span class="n">target</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.TargetEncoder.html#sklearn.preprocessing.TargetEncoder" title="sklearn.preprocessing.TargetEncoder" class="sphx-glr-backref-module-sklearn-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">TargetEncoder</span></a><span class="p">()</span>
 <span class="n">minhash</span> <span class="o">=</span> <a href="https://skrub-data.org/stable/generated/skrub.MinHashEncoder.html#skrub.MinHashEncoder" title="skrub.MinHashEncoder" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">MinHashEncoder</span></a><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="n">gap</span> <span class="o">=</span> <a href="https://skrub-data.org/stable/generated/skrub.GapEncoder.html#skrub.GapEncoder" title="skrub.GapEncoder" class="sphx-glr-backref-module-skrub sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">GapEncoder</span></a><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="n">encoders</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;one-hot&#39;</span><span class="p">:</span> <span class="n">one_hot</span><span class="p">,</span>
     <span class="s1">&#39;similarity&#39;</span><span class="p">:</span> <span class="n">similarity</span><span class="p">,</span>
-    <span class="c1">#&#39;target&#39;: target,</span>
+    <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">target</span><span class="p">,</span>
     <span class="s1">&#39;minhash&#39;</span><span class="p">:</span> <span class="n">minhash</span><span class="p">,</span>
     <span class="s1">&#39;gap&#39;</span><span class="p">:</span> <span class="n">gap</span><span class="p">}</span>
 </pre></div>
@@ -2193,11 +2610,14 @@ r2 score:  mean: 0.790; std: 0.035
 similarity encoding
 r2 score:  mean: 0.930; std: 0.011
 
+target encoding
+r2 score:  mean: 0.903; std: 0.016
+
 minhash encoding
 r2 score:  mean: 0.924; std: 0.012
 
 gap encoding
-r2 score:  mean: 0.932; std: 0.009
+r2 score:  mean: 0.923; std: 0.015
 </pre></div>
 </div>
 <section id="plotting-the-results">
@@ -2232,7 +2652,7 @@ it provides interpretable features (see <span class="xref std std-ref">sphx_glr_
 <span class="c1">#</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 23.713 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 19.261 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-gen-notes-02-dirty-categories-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/dirty-data-science/python/gh-pages?filepath=notes/gen_notes/02_dirty_categories.ipynb"><img alt="Launch binder" src="../_images/binder_badge_logo.svg" width="150px" /></a>

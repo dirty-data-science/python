@@ -2,11 +2,11 @@
   "content": [
     {
       "content": null,
-      "created": "2024-07-07T20:27:01.000037Z",
+      "created": "2024-07-07T20:50:15.383887Z",
       "format": null,
       "hash": null,
       "hash_algorithm": null,
-      "last_modified": "2024-07-07T20:27:01.000037Z",
+      "last_modified": "2024-07-07T20:50:15.383887Z",
       "mimetype": null,
       "name": "gen_notes",
       "path": "gen_notes",
@@ -15,11 +15,11 @@
       "writable": true
     }
   ],
-  "created": "2024-07-07T20:27:00.999037Z",
+  "created": "2024-07-07T20:50:15.382887Z",
   "format": "json",
   "hash": null,
   "hash_algorithm": null,
-  "last_modified": "2024-07-07T20:27:00.999037Z",
+  "last_modified": "2024-07-07T20:50:15.382887Z",
   "mimetype": null,
   "name": "",
   "path": "",

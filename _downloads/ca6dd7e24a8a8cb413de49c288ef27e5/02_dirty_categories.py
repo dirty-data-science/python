@@ -86,17 +86,16 @@ results = cross_val_score(model, df, y)
 np.mean(results)
 
 # %%
+# Below the hood, `model` is a pipeline:
+model
+
+# %%
 # Understanding the pipeline
 # =======================================
 #
-# Let's start again from the raw data:
-X = employee_salaries.X.copy()
-y = employee_salaries.y
-
-
-# %%
-# We have a complex and heterogeneous dataframe:
-X
+# The number one difficulty is that our input is a complex and
+# heterogeneous dataframe:
+df
 
 # %%
 # The |SV| can to turn this dataframe into a form suited for
@@ -129,7 +128,7 @@ pipeline = make_pipeline(
 # Let's perform a cross-validation to see how well this model predicts
 
 from sklearn.model_selection import cross_val_score
-scores = cross_val_score(pipeline, X, y, scoring='r2')
+scores = cross_val_score(pipeline, df, y, scoring='r2')
 
 import numpy as np
 print(f'{scores=}')
@@ -152,12 +151,12 @@ tab_vec = TableVectorizer()
 # %%
 # We split the data between train and test, and transform them:
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.15, random_state=42
+df_train, df_test, y_train, y_test = train_test_split(
+    df, y, test_size=0.15, random_state=42
 )
 
-X_train_enc = tab_vec.fit_transform(X_train, y_train)
-X_test_enc = tab_vec.transform(X_test)
+X_train_enc = tab_vec.fit_transform(df_train, y_train)
+X_test_enc = tab_vec.transform(df_test)
 
 # %%
 # The encoded data, X_train_enc and X_test_enc are numerical arrays:
@@ -188,7 +187,7 @@ tab_vec.transformers_
 # Next, we can have a look at the encoded feature names.
 #
 # Before encoding:
-X.columns.to_list()
+df.columns.to_list()
 
 # %%
 # After encoding (we only plot the first 8 feature names):
@@ -225,7 +224,7 @@ regressor.fit(X_train_enc, y_train)
 
 
 # %%
-# Retreiving the feature importances
+# Retrieving the feature importances
 importances = regressor.feature_importances_
 std = np.std(
     [
@@ -308,17 +307,17 @@ one_hot = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
 # We will now experiments with different encoders for dirty columns
 from skrub import SimilarityEncoder, MinHashEncoder,\
     GapEncoder
-#TargetEncoder, 
+from sklearn.preprocessing import TargetEncoder
 
 similarity = SimilarityEncoder()
-#target = TargetEncoder(handle_unknown='ignore')
+target = TargetEncoder()
 minhash = MinHashEncoder(n_components=100)
 gap = GapEncoder(n_components=100)
 
 encoders = {
     'one-hot': one_hot,
     'similarity': similarity,
-    #'target': target,
+    'target': target,
     'minhash': minhash,
     'gap': gap}
 
